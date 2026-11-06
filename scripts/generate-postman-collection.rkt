@@ -120,6 +120,40 @@
                  'url (url-obj "/$sql")
                  'body (hasheq 'mode "raw"
                                'raw (jsexpr->string (list "SELECT * FROM sof.observation ORDER BY id;"))
+                               'options (hasheq 'raw (hasheq 'language "json")))))
+      (hasheq
+       'name "3.4 Generate Summary MeasureReport directly from SQL"
+       'event (list (test-script "pm.test('Status is 200 OK', function () {\n    pm.response.to.have.status(200);\n});\npm.test('Returns valid FHIR MeasureReport', function () {\n    var jsonData = pm.response.json();\n    var report = jsonData[0].measure_report || jsonData[0];\n    pm.expect(report.resourceType).to.eql('MeasureReport');\n    pm.expect(report.type).to.eql('summary');\n    pm.expect(report.group[0].population.length).to.eql(3);\n});"))
+       'request (hasheq
+                 'method "POST"
+                 'header (list (header "Content-Type" "application/json"))
+                 'url (url-obj "/$sql")
+                 'body (hasheq 'mode "raw"
+                               'raw (jsexpr->string (list (string-append
+                                                           "WITH params AS (SELECT TIMESTAMPTZ '2025-01-01T00:00:00.000Z' AS period_start, TIMESTAMPTZ '2025-12-31T23:59:59.999Z' AS period_end), "
+                                                           "mammography (system, code) AS (VALUES ('http://loinc.org', '24606-6'), ('http://snomed.info/sct', '71651007')), "
+                                                           "age_at_end_of_period AS (SELECT p.id AS patient_id, date_part('year', age((params.period_end AT TIME ZONE 'UTC')::date, p.birth_date::date))::int AS age FROM sof.patient p CROSS JOIN params), "
+                                                           "initial_population AS (SELECT p.id AS patient_id, COALESCE(p.gender = 'female' AND a.age BETWEEN 42 AND 74, false) AS v FROM sof.patient p JOIN age_at_end_of_period a ON a.patient_id = p.id), "
+                                                           "mammograms_during_period AS (SELECT DISTINCT replace(o.patient_id, 'Patient/', '') AS patient_id, o.id FROM sof.observation o JOIN mammography vs ON vs.system = o.code_system AND vs.code = o.code CROSS JOIN params WHERE o.status IN ('final', 'amended', 'corrected') AND o.effective::timestamptz BETWEEN params.period_start AND params.period_end), "
+                                                           "numerator AS (SELECT p.id AS patient_id, EXISTS (SELECT 1 FROM mammograms_during_period m WHERE m.patient_id = p.id) AS v FROM sof.patient p), "
+                                                           "cohort AS (SELECT ip.patient_id AS patient_id, ip.v::int AS ip, ip.v::int AS denom, (ip.v AND n.v)::int AS numer FROM initial_population ip JOIN numerator n ON n.patient_id = ip.patient_id), "
+                                                           "counts AS (SELECT SUM(ip) AS ip_count, SUM(denom) AS denom_count, SUM(numer) AS numer_count, ROUND(SUM(numer)::numeric / NULLIF(SUM(denom), 0), 3) AS score FROM cohort) "
+                                                           "SELECT jsonb_build_object("
+                                                           "'resourceType', 'MeasureReport', "
+                                                           "'status', 'complete', "
+                                                           "'type', 'summary', "
+                                                           "'measure', 'http://example.org/fhir/Measure/BreastScreeningDemo', "
+                                                           "'period', jsonb_build_object('start', '2025-01-01', 'end', '2025-12-31'), "
+                                                           "'group', jsonb_build_array(jsonb_build_object("
+                                                           "'id', 'BreastScreening', "
+                                                           "'population', jsonb_build_array("
+                                                           "jsonb_build_object('code', jsonb_build_object('coding', jsonb_build_array(jsonb_build_object('system', 'http://terminology.hl7.org/CodeSystem/measure-population', 'code', 'initial-population'))), 'count', counts.ip_count), "
+                                                           "jsonb_build_object('code', jsonb_build_object('coding', jsonb_build_array(jsonb_build_object('system', 'http://terminology.hl7.org/CodeSystem/measure-population', 'code', 'denominator'))), 'count', counts.denom_count), "
+                                                           "jsonb_build_object('code', jsonb_build_object('coding', jsonb_build_array(jsonb_build_object('system', 'http://terminology.hl7.org/CodeSystem/measure-population', 'code', 'numerator'))), 'count', counts.numer_count)"
+                                                           "), "
+                                                           "'measureScore', jsonb_build_object('value', counts.score)"
+                                                           "))"
+                                                           ") AS measure_report FROM counts;")))
                                'options (hasheq 'raw (hasheq 'language "json")))))))
 
     ;; Folder 4: FHIR Measure Evaluation (Optional / Server-dependent)
