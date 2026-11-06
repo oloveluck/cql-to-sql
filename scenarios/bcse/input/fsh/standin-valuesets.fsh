@@ -537,29 +537,39 @@ Description: "TEST-ONLY stand-in for NCQA's \"Administrative Data Sources\", not
 ValueSet: StandInHedisCoverageTypeCommercial
 Id: hedis-coverage-type-commercial
 Title: "Hedis Coverage Type Commercial (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Commercial\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Commercial\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-commercial"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#PPO "Commercial PPO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#POS "Commercial POS"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#CEP "Commercial EPO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#HMO "Commercial HMO"
 
 ValueSet: StandInHedisCoverageTypeExchange
 Id: hedis-coverage-type-exchange
 Title: "Hedis Coverage Type Exchange (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Exchange\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Exchange\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-exchange"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MMO "Exchange HMO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MOS "Exchange POS"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MPO "Exchange PPO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MEP "Exchange EPO"
 
 ValueSet: StandInHedisCoverageTypeMedicaid
 Id: hedis-coverage-type-medicaid
 Title: "Hedis Coverage Type Medicaid (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicaid\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicaid\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-medicaid"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MDE "Medicaid Dual Eligible HMO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MD "Medicaid Disabled HMO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MLI "Medicaid Low Income HMO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MRB "Medicaid Restricted Benefit HMO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MCD "Medicaid"
 
 ValueSet: StandInHedisCoverageTypeMedicare
 Id: hedis-coverage-type-medicare
@@ -568,7 +578,10 @@ Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicare\", no
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-medicare"
 * ^experimental = true
 * ^status = #draft
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MCR "Medicare Advantage HMO"
 * https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MP "Medicare Advantage PPO"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MC "Medicare Cost"
+* https://ncqa.org/fhir/CodeSystem/hedis-coverage-type#MCS "Medicare Advantage POS"
 
 ValueSet: StandInDentalInsurance
 Id: hedis-dental-insurance-h010
@@ -582,11 +595,13 @@ Description: "TEST-ONLY stand-in for NCQA's \"Dental insurance\", not the NCQA V
 ValueSet: StandInFinalObservation
 Id: hedis-final-observation-h009
 Title: "Final Observation (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Final Observation\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Final Observation\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-final-observation-h009"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/observation-status#final "Final"
+* http://hl7.org/fhir/observation-status#amended "Amended"
+* http://hl7.org/fhir/observation-status#corrected "Corrected"
 
 ValueSet: StandInLaboratoryLocationTypes
 Id: hedis-laboratory-location-types-h007
@@ -672,11 +687,12 @@ Description: "TEST-ONLY stand-in for NCQA's \"PCP\", not the NCQA Value Set Dire
 ValueSet: StandInProfessionalOrInstitutional
 Id: hedis-professional-or-institutional-h002
 Title: "Professional or Institutional (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Professional or Institutional\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Professional or Institutional\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-professional-or-institutional-h002"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://terminology.hl7.org/CodeSystem/claim-type#professional "Professional"
+* http://terminology.hl7.org/CodeSystem/claim-type#institutional "Institutional"
 
 ValueSet: StandInCC1
 Id: hedis-rau-cc-1

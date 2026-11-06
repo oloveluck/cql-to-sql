@@ -192,9 +192,14 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
   - They validate against the HEDIS + CARIN BB profiles: `racket scripts/bcse-check.rkt`, 89
     examples, 0 invalid.
   - `tests/bcse-scenarios-test.rkt` checks that, and that every score key is consistent.
-- **Pending:** evaluating BCSE_Details over the scenarios and comparing with the score keys needs
-  the cql compiler to translate NCQA's libraries (13/43 compile today; Niko). Then the same Bundles
-  and score keys feed phase 6, the per-patient SQL vs. interpreter comparison.
+  - **The measure runs:** with cql at upstream `5b4e5b2` (Niko's parser fixes), all 43 BCS-E
+    libraries compile, and the interpreter's BCSE_Details agrees with **19/19** score keys (the
+    test's floor). With an older cql the test says how many libraries compile and skips this.
+  - 13 stand-ins carry test codes: mammography, the three mastectomies, hospice and palliative
+    care, medical insurance, the four payer coverage types, professional/institutional claims, and
+    final observation status (`final`, `amended`, `corrected`).
+- **Next:** the same Bundles and score keys feed phase 6, the per-patient SQL vs. interpreter
+  comparison.
 - **Found on the way, for the shared repos (not patched here):**
   - fsh fails on an integer literal inside a parameterized RuleSet
     (`regexp-replace*: contract violation … given: 1`; worked around in `rulesets.fsh`).

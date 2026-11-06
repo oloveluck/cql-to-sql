@@ -28,6 +28,10 @@
 (define icd10pcs "http://www.cms.gov/Medicare/Coding/ICD10")
 (define sct "http://snomed.info/sct")
 
+;; coverage-types : (listof (list code display)) -> (listof TestCode)
+(define (coverage-types cds)
+  (for/list ([cd cds]) (list "https://ncqa.org/fhir/CodeSystem/hedis-coverage-type" (car cd) (cadr cd))))
+
 ;; test-codes : hash url -> (listof TestCode)   real codes from standard code systems, chosen for the
 ;; scenarios; NOT the NCQA membership of the set
 (define test-codes
@@ -55,9 +59,27 @@
    ;; Medical insurance: the benefit coding the scenarios' Coverage.type carries
    "https://www.ncqa.org/fhir/ValueSet/hedis-medical-insurance-h006"
    (list (list "http://terminology.hl7.org/CodeSystem/v3-ActCode" "HIP" "health insurance plan policy"))
-   ;; Medicare coverage types
+   ;; coverage types by payer: the HEDIS core package's own hedis-coverage-type codes, grouped by
+   ;; the payer their displays name
+   "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-commercial"
+   (coverage-types '(("PPO" "Commercial PPO") ("POS" "Commercial POS") ("CEP" "Commercial EPO") ("HMO" "Commercial HMO")))
    "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-medicare"
-   (list (list "https://ncqa.org/fhir/CodeSystem/hedis-coverage-type" "MP" "Medicare Advantage PPO"))))
+   (coverage-types '(("MCR" "Medicare Advantage HMO") ("MP" "Medicare Advantage PPO") ("MC" "Medicare Cost") ("MCS" "Medicare Advantage POS")))
+   "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-medicaid"
+   (coverage-types '(("MDE" "Medicaid Dual Eligible HMO") ("MD" "Medicaid Disabled HMO") ("MLI" "Medicaid Low Income HMO")
+                     ("MRB" "Medicaid Restricted Benefit HMO") ("MCD" "Medicaid")))
+   "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-exchange"
+   (coverage-types '(("MMO" "Exchange HMO") ("MOS" "Exchange POS") ("MPO" "Exchange PPO") ("MEP" "Exchange EPO")))
+   ;; observation statuses that count as a result
+   "https://www.ncqa.org/fhir/ValueSet/hedis-final-observation-h009"
+   (list (list "http://hl7.org/fhir/observation-status" "final" "Final")
+         (list "http://hl7.org/fhir/observation-status" "amended" "Amended")
+         (list "http://hl7.org/fhir/observation-status" "corrected" "Corrected"))
+   ;; claims that count as professional or institutional
+   "https://www.ncqa.org/fhir/ValueSet/hedis-professional-or-institutional-h002"
+   (list (list "http://terminology.hl7.org/CodeSystem/claim-type" "professional" "Professional")
+         (list "http://terminology.hl7.org/CodeSystem/claim-type" "institutional" "Institutional"))))
+
 
 ;; declared-value-sets : Path -> (listof (cons name url))   every `valueset "Name": 'url'` in the
 ;; bundle's CQL, first declaration of each url, in url order

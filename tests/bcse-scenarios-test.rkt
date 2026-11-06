@@ -9,9 +9,12 @@
 ;;; - every scenario Bundle carries one scorekey whose values agree with the measure's own
 ;;;   definitions: Denominator = Initial population and not Exclusion, and the same for the Medicare
 ;;;   group.
-;;; Pending: the evaluation of BCS-E itself (BCSE_Details) over each scenario, compared with its
-;;; scorekey. That needs the cql compiler to translate NCQA's libraries (Niko is fixing it); until
-;;; all of them compile, this reports how many do and skips the evaluation.
+;;; - the measure itself: BCSE_Details evaluated by the cql interpreter over each scenario's
+;;;   resources, with the stand-in value sets and the measure's default measurement period (2025),
+;;;   each population define compared with the scorekey (a null define counts as false). The
+;;;   agreements have a floor that only rises, and every disagreement is named.
+;;;   This needs a cql that compiles NCQA's libraries (the parser fixes, cql 2b846aa); with an
+;;;   older one, the test reports how many libraries compile and skips the evaluation.
 ;;;
 ;;; Needs the packages in vendor/packages: run `racket scripts/install-hedis.rkt` first (and one
 ;;; `sushi build scenarios/bcse` before it, so SUSHI's cache holds the dependencies). Without them
@@ -27,6 +30,8 @@
          (only-in fhir/result/result ok? ok-value)
          (only-in cql/parser/parse parse-cql)
          (only-in cql/compile compile-library/errors current-library-resolver)
+         (only-in cql/run load-runtime-library resources->data valuesets->terminology rlib-value)
+         (only-in cql/value cql-null?)
          "../scripts/bcse-check.rkt")
 
 (define-runtime-path repo "..")
@@ -39,16 +44,23 @@
 (define (scorekey-values p)
   (for/hash ([x (hash-ref p 'parameter '())]) (values (hash-ref x 'name) (hash-ref x 'valueBoolean))))
 
-;; libraries-compiling : -> (values Natural Natural)   BCS-E's libraries that compile, of all of them
-(define (libraries-compiling)
+;; bcse-libraries : -> (hash name (Result cql-library))   the measure's libraries, parsed
+(define (bcse-libraries)
   (define b (call-with-input-file (build-path repo "BCSE_Details-2025.3.0.bundle.json") read-json))
-  (define parsed
     (for*/hash ([e (hash-ref b 'entry)] [r (in-value (hash-ref e 'resource))]
                 #:when (equal? (hash-ref r 'resourceType) "Library")
                 [c (hash-ref r 'content '())] #:when (equal? (hash-ref c 'contentType #f) "text/cql"))
       (values (hash-ref r 'name)
               (parse-cql (bytes->string/utf-8 (base64-decode (string->bytes/utf-8 (hash-ref c 'data))))))))
-  (define (resolver name version) (let ([p (hash-ref parsed name #f)]) (and p (ok? p) (ok-value p))))
+
+;; library-resolver : (hash name Result) -> (name version -> (or cql-library #f))   the compiler names
+;; an included library by a symbol
+(define ((library-resolver parsed) name version)
+  (let ([p (hash-ref parsed (format "~a" name) #f)]) (and p (ok? p) (ok-value p))))
+
+;; libraries-compiling : (hash name Result) -> (values Natural Natural)   those that compile, of all
+(define (libraries-compiling parsed)
+  (define resolver (library-resolver parsed))
   (define clean
     (parameterize ([current-library-resolver resolver])
       (for/sum ([(n p) parsed])
@@ -58,6 +70,20 @@
                    (and lib (null? errs))))
             1 0))))
   (values clean (hash-count parsed)))
+
+;; evaluate-scenario : (hash name Result) (listof resource) (listof ValueSet) -> (hash name Boolean)
+;; BCSE_Details's population defines over the scenario's resources (null as false)
+(define (evaluate-scenario parsed resources valuesets)
+  (define rl (load-runtime-library (ok-value (hash-ref parsed "BCSE_Details"))
+                                   #:resolver (library-resolver parsed)
+                                   #:data (resources->data resources)
+                                   #:valuesets (valuesets->terminology valuesets)))
+  (for/hash ([n population-names])
+    (values n (let ([v (with-handlers ([exn:fail? (lambda (e) (list 'error (exn-message e)))]) (rlib-value rl n))])
+                (cond [(eq? v #t) #t] [(or (eq? v #f) (cql-null? v)) #f] [else v])))))
+
+;; the scenarios on which the interpreter agrees with every scorekey value; only rises
+(define agreement-floor 19)
 
 (cond
   [(not (file-exists? packages))
@@ -92,7 +118,27 @@
                      (format "~a: Denominator - Medicare = Initial population and not Exclusion - Medicare" id))))
 
    ;; the measure itself
-   (define-values (clean total) (libraries-compiling))
-   (if (< clean total)
-       (printf "BCS-E evaluation: PENDING, ~a/~a of the measure's libraries compile (the cql compiler work for NCQA's CQL)\n" clean total)
-       (printf "BCS-E evaluation: all ~a libraries compile; evaluate each scenario against its scorekey here next\n" total))])
+   (define parsed (bcse-libraries))
+   (define-values (clean total) (libraries-compiling parsed))
+   (cond
+     [(< clean total)
+      (printf "BCS-E evaluation: PENDING, ~a/~a of the measure's libraries compile (needs cql with the parser fixes, 2b846aa)\n" clean total)]
+     [else
+      (define valuesets (filter (lambda (a) (equal? (hash-ref a 'resourceType) "ValueSet")) artifacts))
+      (define results
+        (for/list ([b (sort bundles string<? #:key (lambda (b) (hash-ref b 'id)))])
+          (define id (hash-ref b 'id))
+          (define resources (for*/list ([e (hash-ref b 'entry '())] [r (in-value (hash-ref e 'resource #f))]
+                                        #:when (and r (not (equal? (hash-ref r 'resourceType) "Parameters"))))
+                              r))
+          (define expected (scorekey-values (hash-ref by-id (cons "Parameters" (string-append id ".scorekey")))))
+          (define got (evaluate-scenario parsed resources valuesets))
+          (define wrong (for/list ([n population-names] #:unless (equal? (hash-ref got n) (hash-ref expected n)))
+                          (list n (hash-ref expected n) (hash-ref got n))))
+          (cons id wrong)))
+      (define agree (count (lambda (r) (null? (cdr r))) results))
+      (printf "BCS-E evaluation: the interpreter agrees with ~a/~a scenario scorekeys\n" agree (length results))
+      (for ([r results] #:when (pair? (cdr r)))
+        (printf "  ~a:~a\n" (car r)
+                (apply string-append (for/list ([w (cdr r)]) (format " ~a expected ~a got ~a;" (car w) (cadr w) (caddr w))))))
+      (check-true (>= agree agreement-floor) (format "fewer scenarios agree than the floor ~a" agreement-floor))])])
