@@ -15,6 +15,7 @@
          (only-in cql/parser/parse parse-cql)
          (only-in cql/compile compile-library)
          (only-in fhir/result/result ok? ok-value)
+         (only-in cql/measure measure-report)
          "types.rkt"
          "sql/ast.rkt"
          "sql/dialect.rkt"
@@ -24,7 +25,10 @@
 (provide
  (contract-out
   [translate-library (->* (elm-library?) (#:dialect dialect? #:measure (or/c hash? #f)) sql-with?)]
-  [cql->sql (->* (string?) (#:dialect dialect? #:measure (or/c hash? #f)) string?)]))
+  [cql->sql (->* (string?) (#:dialect dialect? #:measure (or/c hash? #f)) string?)]
+  [sql-result->measure-reports (->* (hash? (listof string?) (listof vector?) string? string?)
+                                    (#:subject (or/c string? #f))
+                                    any/c)]))
 
 ;; cql->sql : String [#:dialect #:measure] -> String
 (define (cql->sql cql-text #:dialect [d sqlite] #:measure [measure #f])
@@ -196,6 +200,25 @@
     ["Mammograms During Period" "m"]
     [_ (string-downcase (substring (regexp-replace* #px"[^a-zA-Z0-9]" s "") 0 (min 2 (string-length (regexp-replace* #px"[^a-zA-Z0-9]" s "")))))]))
 
+;; sql-result->measure-reports : Measure (listof String) (listof Vector) String String [#:subject] -> (values (hash String MeasureReport) MeasureReport) | MeasureReport
+(define (sql-result->measure-reports measure headers rows period-start period-end #:subject [subject #f])
+  (define pops
+    (for/hash ([row rows])
+      (define cells (map cons headers (vector->list row)))
+      (values (cdr (assoc "patient_id" cells))
+              (for/hash ([cell cells] #:unless (equal? (car cell) "patient_id"))
+                (values (car cell) (if (memv (cdr cell) '(1 #t)) 1 0))))))
+  (define individual-reports
+    (for/hash ([(pid counts) (in-hash pops)])
+      (values pid (measure-report measure (list counts) period-start period-end (string-append "Patient/" pid)))))
+  (define summary-counts
+    (for*/fold ([acc (hash)]) ([(_pid h) (in-hash pops)] [(k v) (in-hash h)])
+      (hash-update acc k (lambda (n) (+ n v)) 0)))
+  (define summary-report (measure-report measure (list summary-counts) period-start period-end #f))
+  (if subject
+      (hash-ref individual-reports (regexp-replace #rx"^Patient/" subject "") #f)
+      (values individual-reports summary-report)))
+
 (module+ test
   (require rackunit
            racket/file
@@ -265,23 +288,16 @@
 
   (define result (query c bound-sql))
   (define names (map (lambda (h) (cdr (assq 'name h))) (rows-result-headers result)))
-  (define pops
-    (for/hash ([row (rows-result-rows result)])
-      (define cells (map cons names (vector->list row)))
-      (values (cdr (assoc "patient_id" cells))
-              (for/hash ([cell cells] #:unless (equal? (car cell) "patient_id"))
-                (values (car cell) (if (memv (cdr cell) '(1 #t)) 1 0))))))
+  (define-values (sql-ind-reports sql-sum-report)
+    (sql-result->measure-reports measure-json names (rows-result-rows result) "2025-01-01" "2025-12-31"))
   (disconnect c)
 
-  ;; 3. Build SQL MeasureReports and assert identical to interpreter
-  (define (sql-report counts subject) (measure-report measure-json (list counts) "2025-01-01" "2025-12-31" subject))
+  ;; 3. Assert SQL MeasureReports are identical to interpreter
   (for ([pid pids])
-    (check-equal? (sql-report (hash-ref pops pid) (string-append "Patient/" pid))
+    (check-equal? (hash-ref sql-ind-reports pid)
                   (hash-ref interp-individual pid)
                   (format "Patient ~a individual report mismatch" pid)))
 
-  (define summary-counts
-    (for*/fold ([acc (hash)]) ([(_pid h) (in-hash pops)] [(k v) (in-hash h)]) (hash-update acc k (lambda (n) (+ n v)) 0)))
-  (check-equal? (sql-report summary-counts #f)
+  (check-equal? sql-sum-report
                 interp-summary
                 "Summary report mismatch"))
