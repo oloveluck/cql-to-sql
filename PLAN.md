@@ -478,6 +478,10 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
     The fix is one clause in `eval-property` (interp.rkt): `[(fp-quantity? v) (case path [("value")
     (fp-quantity-value v)] [("unit") (fp-quantity-unit v)] [else cql-null])]`. Tested in a scratch
     checkout: agreement rises from 894 to 896.
+    On the HEDIS-shaped population (`bcse_hedis_n1000_bulkfhir_aidbox_loaded.zip`,
+    `demo/bcse/hedis-population.rkt`) it matters far more: short gaps between plan years are common
+    there. Without the fix: 177 eligible, 40/85 screened (47.1%). With it: 338 eligible, 100/200
+    (50.0%).
   - **cql (for Niko), performance:** over a data source such as fhir-server's store,
     `cql/measure`'s `include-resolver` is slow for every patient. For every include it:
     - fetches all Libraries from the source (`libraries`);

@@ -229,3 +229,36 @@ with reduced motion it shows each end state.
 `raco test demo/bcse/run.rkt` checks that every member matches and the totals are 14 / 5 / 4. Note
 that `raco test` runs each file in a fresh process, so with an up-to-date cql elsewhere, pass it as
 `PLTCOLLECTS="<its parent directory>:" raco test …` rather than with `-S`.
+
+## A HEDIS-shaped population (no adapter, no answer key)
+
+```sh
+racket demo/bcse/hedis-population.rkt
+```
+
+`bcse_hedis_n1000_bulkfhir_aidbox_loaded.zip` (repo root) is a second Bulk Data export of 1,000
+synthetic members, recorded the way HEDIS data is:
+- Coverage with NCQA's coverage types and benefits;
+- the sex-for-clinical-use extension;
+- mammograms on Claims and ExplanationOfBenefits.
+
+So it needs no adapter. It has no answer key, so the demo reports what NCQA's logic computes and
+where each screening and exclusion was found, and writes the MeasureReports to `demo/out/bcse-hedis/`.
+
+| | All members | Medicare group |
+|---|---|---|
+| eligible | 338 | 338 |
+| excused | 138 | 158 |
+| accountable | 200 | 180 |
+| screened | 100 | 100 |
+| rate | 50.0% | 55.6% |
+
+- **Where screening was found:** on Claims and EOBs (100 of 100).
+- **Where exclusions came from:** bilateral mastectomy claims (96), frailty with advanced illness (35
+  members), gender-affirming surgery (28) and death (20).
+
+**These numbers need the cql Quantity fix (`PLAN.md`).** Members here often have a short gap between
+plan years, such as a coverage ending 2024-12-27 and the next starting 2025-01-01. With today's
+upstream cql every such gap fails continuous enrollment, and the run reports 177 eligible, 85
+accountable, 40 screened (47.1%). With the one-line fix in `eval-property`, the run above gives 338,
+200, 100 (50.0%).

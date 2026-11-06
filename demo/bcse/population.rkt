@@ -43,6 +43,9 @@
   [read-export (-> export?)]
   [export-resources (-> export? (listof hash?))]
   [measure-valuesets (-> (listof hash?))]
+  [zip-entries (-> path-string? hash?)]
+  [references (-> any/c (listof string?))]
+  [shared-types (listof string?)]
   [person-id (-> person? string?)]
   [person-defines (-> person? hash?)]))
 
