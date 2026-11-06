@@ -1,0 +1,102 @@
+name: Build & Deploy IG to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ig/**'
+      - '.github/workflows/ig-pages.yml'
+  pull_request:
+    paths:
+      - 'ig/**'
+      - '.github/workflows/ig-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build Implementation Guide
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install SUSHI
+        run: npm install -g fsh-sushi
+
+      - name: Setup Java (OpenJDK 21)
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Setup Ruby & Jekyll
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.3'
+          bundler-cache: false
+
+      - name: Install Jekyll
+        run: gem install jekyll bundler
+
+      - name: Cache IG Publisher & FHIR packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.fhir/packages
+            ig/input-cache
+          key: fhir-ig-publisher-${{ runner.os }}-${{ hashFiles('ig/sushi-config.yaml') }}
+          restore-keys: |
+            fhir-ig-publisher-${{ runner.os }}-
+
+      - name: Download IG Publisher JAR
+        working-directory: ig
+        run: |
+          mkdir -p input-cache
+          if [ ! -f input-cache/publisher.jar ]; then
+            echo "Downloading latest HL7 FHIR IG Publisher..."
+            curl -L https://github.com/HL7/fhir-ig-publisher/releases/latest/download/publisher.jar -o input-cache/publisher.jar
+          fi
+
+      - name: Run SUSHI
+        working-directory: ig
+        run: sushi .
+
+      - name: Run FHIR IG Publisher
+        working-directory: ig
+        run: |
+          export JAVA_TOOL_OPTIONS="-Dfile.encoding=UTF-8"
+          java -jar input-cache/publisher.jar -ig . -tx n/a
+
+      - name: Upload Pages Artifact
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ig/output
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
