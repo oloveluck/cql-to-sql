@@ -101,7 +101,7 @@
                  'header (list (header "Content-Type" "application/json"))
                  'url (url-obj "/$sql")
                  'body (hasheq 'mode "raw"
-                               'raw (jsexpr->string (hasheq 'query sql-text))
+                               'raw (jsexpr->string (list sql-text))
                                'options (hasheq 'raw (hasheq 'language "json")))))
       (hasheq
        'name "3.2 Query Materialized sof.patient View"
@@ -110,7 +110,7 @@
                  'header (list (header "Content-Type" "application/json"))
                  'url (url-obj "/$sql")
                  'body (hasheq 'mode "raw"
-                               'raw (jsexpr->string (hasheq 'query "SELECT * FROM sof.patient ORDER BY id;"))
+                               'raw (jsexpr->string (list "SELECT * FROM sof.patient ORDER BY id;"))
                                'options (hasheq 'raw (hasheq 'language "json")))))
       (hasheq
        'name "3.3 Query Materialized sof.observation View"
@@ -119,12 +119,13 @@
                  'header (list (header "Content-Type" "application/json"))
                  'url (url-obj "/$sql")
                  'body (hasheq 'mode "raw"
-                               'raw (jsexpr->string (hasheq 'query "SELECT * FROM sof.observation ORDER BY id;"))
+                               'raw (jsexpr->string (list "SELECT * FROM sof.observation ORDER BY id;"))
                                'options (hasheq 'raw (hasheq 'language "json")))))))
 
-    ;; Folder 4: FHIR Measure Evaluation
+    ;; Folder 4: FHIR Measure Evaluation (Optional / Server-dependent)
     (hasheq
-     'name "4. FHIR Measure Evaluation (Comparison)"
+     'name "4. FHIR Measure Evaluation (Optional / CQL Engine)"
+     'description "Note: Standard Aidbox does not have a built-in $evaluate-measure CQL engine. Use Folder 3 (POST /$sql) for native Aidbox SQL-on-FHIR measure evaluation. This folder is for FHIR servers with a dedicated CQL engine plugin."
      'item
      (list
       (hasheq
@@ -136,7 +137,7 @@
                  'body (hasheq 'mode "raw" 'raw (jsexpr->string measure-json)
                                'options (hasheq 'raw (hasheq 'language "json")))))
       (hasheq
-       'name "4.2 Evaluate Measure (Summary)"
+       'name "4.2 Evaluate Measure (Summary - Server Dependent)"
        'event (list (test-script "pm.test('MeasureReport is summary', function () {\n    var jsonData = pm.response.json();\n    pm.expect(jsonData.resourceType).to.eql('MeasureReport');\n    pm.expect(jsonData.type).to.eql('summary');\n});"))
        'request (hasheq
                  'method "GET"
@@ -144,7 +145,7 @@
                                (list (hasheq 'key "periodStart" 'value "{{period_start}}")
                                      (hasheq 'key "periodEnd" 'value "{{period_end}}")))))
       (hasheq
-       'name "4.3 Evaluate Measure (Individual Patient)"
+       'name "4.3 Evaluate Measure (Individual - Server Dependent)"
        'event (list (test-script "pm.test('MeasureReport is individual', function () {\n    var jsonData = pm.response.json();\n    pm.expect(jsonData.resourceType).to.eql('MeasureReport');\n    pm.expect(jsonData.type).to.eql('individual');\n});"))
        'request (hasheq
                  'method "GET"

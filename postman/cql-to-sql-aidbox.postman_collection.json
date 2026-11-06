@@ -270,7 +270,7 @@
                   "language": "json"
                 }
               },
-              "raw": "{\"query\":\"-- BreastScreeningDemo.cql as SQL for PostgreSQL / Aidbox: the same CTEs as\\n-- BreastScreeningDemo.sql (SQLite), over the ViewDefinitions materialized in Aidbox's sof schema\\n-- (POST /fhir/ViewDefinition/$materialize with views/patient.json and views/observation.json).\\n--\\n-- Differences from the SQLite version: the measurement period is a params CTE (Aidbox's console\\n-- and $sql take no :named parameters), age is Postgres's age(), the value set is inline VALUES\\n-- (no valueset_code table in Aidbox), and columns are cast in case the views typed them as text.\\n\\nWITH\\nparams AS (\\n  SELECT TIMESTAMPTZ '2025-01-01T00:00:00.000Z' AS period_start,\\n         TIMESTAMPTZ '2025-12-31T23:59:59.999Z' AS period_end\\n),\\n-- valueset \\\"Mammography\\\": 'http://example.org/fhir/ValueSet/demo-mammography'\\nmammography (system, code) AS (\\n  VALUES ('http://loinc.org', '24606-6'),\\n         ('http://snomed.info/sct', '71651007')\\n),\\n-- define \\\"Age at End of Period\\\": AgeInYearsAt(date from end of \\\"Measurement Period\\\")\\nage_at_end_of_period AS (\\n  SELECT p.id AS patient_id,\\n         date_part('year', age((params.period_end AT TIME ZONE 'UTC')::date, p.birth_date::date))::int AS age\\n  FROM sof.patient p CROSS JOIN params\\n),\\n-- define \\\"Initial Population\\\": Patient.gender = 'female' and \\\"Age at End of Period\\\" in Interval[42, 74]\\ninitial_population AS (\\n  SELECT p.id AS patient_id,\\n         COALESCE(p.gender = 'female' AND a.age BETWEEN 42 AND 74, false) AS v\\n  FROM sof.patient p JOIN age_at_end_of_period a ON a.patient_id = p.id\\n),\\n-- define \\\"Mammograms During Period\\\": [Observation: \\\"Mammography\\\"] O\\n--   where O.status in { 'final', 'amended', 'corrected' } and (O.effective as dateTime) during \\\"Measurement Period\\\"\\nmammograms_during_period AS (\\n  SELECT DISTINCT replace(o.patient_id, 'Patient/', '') AS patient_id, o.id\\n  FROM sof.observation o\\n  JOIN mammography vs ON vs.system = o.code_system AND vs.code = o.code\\n  CROSS JOIN params\\n  WHERE o.status IN ('final', 'amended', 'corrected')\\n    AND o.effective::timestamptz BETWEEN params.period_start AND params.period_end\\n),\\n-- define \\\"Numerator\\\": exists \\\"Mammograms During Period\\\"\\nnumerator AS (\\n  SELECT p.id AS patient_id,\\n         EXISTS (SELECT 1 FROM mammograms_during_period m WHERE m.patient_id = p.id) AS v\\n  FROM sof.patient p\\n)\\n-- populations, patient-based proportion scoring: denominator ⊆ initial population,\\n-- numerator ⊆ denominator (\\\"Denominator\\\" is \\\"Initial Population\\\")\\nSELECT ip.patient_id AS patient_id,\\n       ip.v::int AS \\\"initial-population\\\",\\n       ip.v::int AS \\\"denominator\\\",\\n       (ip.v AND n.v)::int AS \\\"numerator\\\"\\nFROM initial_population ip\\nJOIN numerator n ON n.patient_id = ip.patient_id\\nORDER BY ip.patient_id;\"}"
+              "raw": "[\"-- BreastScreeningDemo.cql as SQL for PostgreSQL / Aidbox: the same CTEs as\\n-- BreastScreeningDemo.sql (SQLite), over the ViewDefinitions materialized in Aidbox's sof schema\\n-- (POST /fhir/ViewDefinition/$materialize with views/patient.json and views/observation.json).\\n--\\n-- Differences from the SQLite version: the measurement period is a params CTE (Aidbox's console\\n-- and $sql take no :named parameters), age is Postgres's age(), the value set is inline VALUES\\n-- (no valueset_code table in Aidbox), and columns are cast in case the views typed them as text.\\n\\nWITH\\nparams AS (\\n  SELECT TIMESTAMPTZ '2025-01-01T00:00:00.000Z' AS period_start,\\n         TIMESTAMPTZ '2025-12-31T23:59:59.999Z' AS period_end\\n),\\n-- valueset \\\"Mammography\\\": 'http://example.org/fhir/ValueSet/demo-mammography'\\nmammography (system, code) AS (\\n  VALUES ('http://loinc.org', '24606-6'),\\n         ('http://snomed.info/sct', '71651007')\\n),\\n-- define \\\"Age at End of Period\\\": AgeInYearsAt(date from end of \\\"Measurement Period\\\")\\nage_at_end_of_period AS (\\n  SELECT p.id AS patient_id,\\n         date_part('year', age((params.period_end AT TIME ZONE 'UTC')::date, p.birth_date::date))::int AS age\\n  FROM sof.patient p CROSS JOIN params\\n),\\n-- define \\\"Initial Population\\\": Patient.gender = 'female' and \\\"Age at End of Period\\\" in Interval[42, 74]\\ninitial_population AS (\\n  SELECT p.id AS patient_id,\\n         COALESCE(p.gender = 'female' AND a.age BETWEEN 42 AND 74, false) AS v\\n  FROM sof.patient p JOIN age_at_end_of_period a ON a.patient_id = p.id\\n),\\n-- define \\\"Mammograms During Period\\\": [Observation: \\\"Mammography\\\"] O\\n--   where O.status in { 'final', 'amended', 'corrected' } and (O.effective as dateTime) during \\\"Measurement Period\\\"\\nmammograms_during_period AS (\\n  SELECT DISTINCT replace(o.patient_id, 'Patient/', '') AS patient_id, o.id\\n  FROM sof.observation o\\n  JOIN mammography vs ON vs.system = o.code_system AND vs.code = o.code\\n  CROSS JOIN params\\n  WHERE o.status IN ('final', 'amended', 'corrected')\\n    AND o.effective::timestamptz BETWEEN params.period_start AND params.period_end\\n),\\n-- define \\\"Numerator\\\": exists \\\"Mammograms During Period\\\"\\nnumerator AS (\\n  SELECT p.id AS patient_id,\\n         EXISTS (SELECT 1 FROM mammograms_during_period m WHERE m.patient_id = p.id) AS v\\n  FROM sof.patient p\\n)\\n-- populations, patient-based proportion scoring: denominator ⊆ initial population,\\n-- numerator ⊆ denominator (\\\"Denominator\\\" is \\\"Initial Population\\\")\\nSELECT ip.patient_id AS patient_id,\\n       ip.v::int AS \\\"initial-population\\\",\\n       ip.v::int AS \\\"denominator\\\",\\n       (ip.v AND n.v)::int AS \\\"numerator\\\"\\nFROM initial_population ip\\nJOIN numerator n ON n.patient_id = ip.patient_id\\nORDER BY ip.patient_id;\"]"
             },
             "header": [
               {
@@ -302,7 +302,7 @@
                   "language": "json"
                 }
               },
-              "raw": "{\"query\":\"SELECT * FROM sof.patient ORDER BY id;\"}"
+              "raw": "[\"SELECT * FROM sof.patient ORDER BY id;\"]"
             },
             "header": [
               {
@@ -334,7 +334,7 @@
                   "language": "json"
                 }
               },
-              "raw": "{\"query\":\"SELECT * FROM sof.observation ORDER BY id;\"}"
+              "raw": "[\"SELECT * FROM sof.observation ORDER BY id;\"]"
             },
             "header": [
               {
@@ -360,6 +360,7 @@
       "name": "3. Run SQL Queries ($sql)"
     },
     {
+      "description": "Note: Standard Aidbox does not have a built-in $evaluate-measure CQL engine. Use Folder 3 (POST /$sql) for native Aidbox SQL-on-FHIR measure evaluation. This folder is for FHIR servers with a dedicated CQL engine plugin.",
       "item": [
         {
           "name": "4.1 Create Measure Resource",
@@ -411,7 +412,7 @@
               }
             }
           ],
-          "name": "4.2 Evaluate Measure (Summary)",
+          "name": "4.2 Evaluate Measure (Summary - Server Dependent)",
           "request": {
             "method": "GET",
             "url": {
@@ -454,7 +455,7 @@
               }
             }
           ],
-          "name": "4.3 Evaluate Measure (Individual Patient)",
+          "name": "4.3 Evaluate Measure (Individual - Server Dependent)",
           "request": {
             "method": "GET",
             "url": {
@@ -486,7 +487,7 @@
           }
         }
       ],
-      "name": "4. FHIR Measure Evaluation (Comparison)"
+      "name": "4. FHIR Measure Evaluation (Optional / CQL Engine)"
     }
   ]
 }
