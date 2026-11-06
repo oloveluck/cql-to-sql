@@ -451,12 +451,20 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
     final observation status (`final`, `amended`, `corrected`).
 - **Demo:** `racket demo/bcse/run.rkt` prints the funnel per member and the rates, and writes the
   MeasureReports (`demo/bcse/README.md`).
+- **Population demo:** `racket demo/bcse/population.rkt` runs the measure over the n=1000 US
+  Quality Core export (`bcse_usqc_testdata_n1000.zip`), with a Coverage adapter (SOPT payer type
+  to HEDIS coverage type, open periods closed at the export date). 894/1000 agree with its answer
+  key, and every other member has a traced cause (91 are mammograms recorded only as a Procedure,
+  which HEDIS's numerator doesn't read).
 - **Next:** the same Bundles and score keys feed the relational model work ("Next: BCS-E over a
   relational model", R1–R5) and phase 6, the per-patient SQL vs. interpreter comparison.
 - **Found on the way, for the shared repos (not patched here):**
   - fsh fails on an integer literal inside a parameterized RuleSet
     (`regexp-replace*: contract violation … given: 1`; worked around in `rulesets.fsh`).
   - fsh writes `compose: {}` for a ValueSet with no rules, where SUSHI writes none.
+  - **cql (for Niko):** property access on a System.Quantity returns null: `(45 days).value` and
+    `(45 days).unit` are null. HEDIS's "Has valid gaps in coverage" reads both, so any member with
+    an allowed coverage gap fails continuous enrollment (3 members in the n=1000 population).
   - `fhir/sd/sd-index` finds conformance resources only by `StructureDefinition-*.json`-style file
     names, so a package with other names (NCQA's) is invisible to fsh and the validator, and
     validation then passes by failing open.

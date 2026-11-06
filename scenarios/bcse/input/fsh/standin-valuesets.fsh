@@ -9,6 +9,7 @@ Description: "TEST-ONLY stand-in for NCQA's \"Bilateral Mastectomy\", not the NC
 * ^experimental = true
 * ^status = #draft
 * http://www.cms.gov/Medicare/Coding/ICD10#0HTV0ZZ "Resection of Bilateral Breast, Open Approach"
+* http://snomed.info/sct#27865001 "Bilateral mastectomy"
 
 ValueSet: StandInColorectalCancer
 Id: 2.16.840.1.113883.3.464.1004.1065
@@ -56,6 +57,8 @@ Description: "TEST-ONLY stand-in for NCQA's \"Mammography\", not the NCQA Value 
 * http://www.ama-assn.org/go/cpt#77067 "Screening mammography, bilateral"
 * http://www.ama-assn.org/go/cpt#77066 "Diagnostic mammography, bilateral"
 * http://www.ama-assn.org/go/cpt#77065 "Diagnostic mammography, unilateral"
+* http://www.ama-assn.org/go/cpt#77063 "Screening digital breast tomosynthesis, bilateral"
+* http://loinc.org#24606-6 "MG Breast Screening"
 
 ValueSet: StandInOrganTransplantOtherThanKidney
 Id: 2.16.840.1.113883.3.464.1004.1195
@@ -69,11 +72,14 @@ Description: "TEST-ONLY stand-in for NCQA's \"Organ Transplant Other Than Kidney
 ValueSet: StandInOutpatient
 Id: 2.16.840.1.113883.3.464.1004.1202
 Title: "Outpatient (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Outpatient\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Outpatient\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1202"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://www.ama-assn.org/go/cpt#99213 "Office or other outpatient visit, established patient, low"
+* http://www.ama-assn.org/go/cpt#99214 "Office or other outpatient visit, established patient, moderate"
+* http://www.ama-assn.org/go/cpt#99395 "Periodic preventive medicine, established patient, 18-39"
+* http://www.ama-assn.org/go/cpt#99396 "Periodic preventive medicine, established patient, 40-64"
 
 ValueSet: StandInPerinatalConditions
 Id: 2.16.840.1.113883.3.464.1004.1209
@@ -105,11 +111,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Telephone Visits\", not the NCQA V
 ValueSet: StandInUnilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1256
 Title: "Unilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1256"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://www.ama-assn.org/go/cpt#19303 "Mastectomy, simple, complete"
 
 ValueSet: StandInAcuteCondition
 Id: 2.16.840.1.113883.3.464.1004.1324
@@ -150,29 +156,29 @@ Description: "TEST-ONLY stand-in for NCQA's \"Rehabilitation\", not the NCQA Val
 ValueSet: StandInAbsenceOfLeftBreast
 Id: 2.16.840.1.113883.3.464.1004.1329
 Title: "Absence of Left Breast (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Absence of Left Breast\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Absence of Left Breast\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1329"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#Z90.12 "Acquired absence of left breast and nipple"
 
 ValueSet: StandInAbsenceOfRightBreast
 Id: 2.16.840.1.113883.3.464.1004.1330
 Title: "Absence of Right Breast (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Absence of Right Breast\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Absence of Right Breast\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1330"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#Z90.11 "Acquired absence of right breast and nipple"
 
 ValueSet: StandInHistoryOfBilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1331
 Title: "History of Bilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"History of Bilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"History of Bilateral Mastectomy\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1331"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#Z90.13 "Acquired absence of bilateral breasts and nipples"
 
 ValueSet: StandInUnilateralMastectomyLeft
 Id: 2.16.840.1.113883.3.464.1004.1334
@@ -213,11 +219,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Nonacute Inpatient Stay\", not the
 ValueSet: StandInPalliativeCareEncounter
 Id: 2.16.840.1.113883.3.464.1004.1450
 Title: "Palliative Care Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1450"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#Z51.5 "Encounter for palliative care"
 
 ValueSet: StandInIntroductionOfAutologousPancreaticCells
 Id: 2.16.840.1.113883.3.464.1004.1459
@@ -249,11 +255,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"CPT CAT II Modifier\", not the NCQ
 ValueSet: StandInAdvancedIllness
 Id: 2.16.840.1.113883.3.464.1004.1465
 Title: "Advanced Illness (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Advanced Illness\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Advanced Illness\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1465"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#I50.9 "Heart failure, unspecified"
 
 ValueSet: StandInSkilledNursingStay
 Id: 2.16.840.1.113883.3.464.1004.1467
@@ -312,11 +318,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Frailty Device\", not the NCQA Val
 ValueSet: StandInFrailtyDiagnosis
 Id: 2.16.840.1.113883.3.464.1004.1531
 Title: "Frailty Diagnosis (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1531"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#R54 "Age-related physical debility"
 
 ValueSet: StandInFrailtyEncounter
 Id: 2.16.840.1.113883.3.464.1004.1532
@@ -348,11 +354,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Dementia Medications\", not the NC
 ValueSet: StandInHospiceEncounter
 Id: 2.16.840.1.113883.3.464.1004.1761
 Title: "Hospice Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hospice Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hospice Encounter\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1761"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets#Q5003 "Hospice care provided in nursing long term care facility"
 
 ValueSet: StandInHospiceIntervention
 Id: 2.16.840.1.113883.3.464.1004.1762
@@ -375,11 +381,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Acute Inpatient\", not the NCQA Va
 ValueSet: StandInClinicalUnilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1948
 Title: "Clinical Unilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Clinical Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Clinical Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1948"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://snomed.info/sct#172043006 "Total mastectomy"
 
 ValueSet: StandInSurgeryProcedure
 Id: 2.16.840.1.113883.3.464.1004.2223
@@ -465,11 +471,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"White Detailed Race\", not the NCQ
 ValueSet: StandInGenderDysphoria
 Id: 2.16.840.1.113883.3.464.1004.2454
 Title: "Gender Dysphoria (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2454"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#F64.0 "Transsexualism"
 
 ValueSet: StandInOutpatientEDTelephoneAcuteInpatientAndNonacuteInpatient
 Id: 2.16.840.1.113883.3.464.1004.2474

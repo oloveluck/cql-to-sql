@@ -12,23 +12,18 @@
 ;;; reporting group, which excuses long-term-care members too.
 ;;;
 ;;; The MeasureReports are built by cql/measure's `measure-report` from those defines, with FHIR's
-;;; population rules: the denominator holds the eligible members and the exclusions are a subset of
-;;; it, subtracted for the score. (NCQA's "Denominator" define already leaves the excluded out, so
-;;; counting the Measure's own criteria the FHIR way reports no exclusions at all; the score is the
-;;; same either way.)
+;;; population rules (measure.rkt says how the exclusions are counted).
 ;;;
 ;;; Needs: `racket scripts/install-hedis.rkt` (the HEDIS packages for fsh) and a cql that compiles
 ;;; NCQA's libraries (upstream 5b4e5b2 or later). With an older cql it says so and stops.
 
 (require racket/contract racket/file racket/format racket/list racket/runtime-path racket/string
-         json net/base64
+         json
          (only-in fsh/check check-report-artifacts check-report-examples check-report-invalid)
-         (only-in fhir/result/result ok? ok-value)
-         (only-in cql/parser/parse parse-cql)
-         (only-in cql/compile compile-library/errors current-library-resolver)
-         (only-in cql/run load-runtime-library resources->data valuesets->terminology rlib-value)
+         (only-in cql/run valuesets->terminology)
          (only-in cql/measure measure-report)
-         "../../scripts/bcse-check.rkt")
+         "../../scripts/bcse-check.rkt"
+         "measure.rkt")
 
 (provide
  (contract-out
@@ -37,41 +32,9 @@
 (define-runtime-path repo "../..")
 (define-runtime-path out-dir "../out/bcse")
 
-(define period-start "2025-01-01")
-(define period-end "2025-12-31")
-
 ;; A MemberResult is (member-result id story patient-id defines expected)
 ;;   defines, expected : (hash define-name Boolean)   the interpreter's and the score key's
 (struct member-result (id story patient defines expected) #:transparent)
-
-(define population-names
-  '("Initial population" "Exclusion" "Denominator" "Numerator" "Exclusion - Medicare" "Denominator - Medicare"))
-
-;; ---- the measure ------------------------------------------------------------------------------
-(define details-bundle (build-path repo "BCSE_Details-2025.3.0.bundle.json"))
-
-(define (bundle-resources f) (for/list ([e (hash-ref (call-with-input-file f read-json) 'entry)]) (hash-ref e 'resource)))
-
-;; measure-libraries : -> (hash name (Result cql-library))   the bundle's CQL, parsed
-(define (measure-libraries)
-  (for*/hash ([r (bundle-resources details-bundle)] #:when (equal? (hash-ref r 'resourceType) "Library")
-              [c (hash-ref r 'content '())] #:when (equal? (hash-ref c 'contentType #f) "text/cql"))
-    (values (hash-ref r 'name)
-            (parse-cql (bytes->string/utf-8 (base64-decode (string->bytes/utf-8 (hash-ref c 'data))))))))
-
-;; the compiler names an included library by a symbol
-(define ((library-resolver parsed) name _version)
-  (let ([p (hash-ref parsed (format "~a" name) #f)]) (and p (ok? p) (ok-value p))))
-
-;; compiling-count : (hash name Result) -> Natural   the libraries that compile without errors
-(define (compiling-count parsed)
-  (parameterize ([current-library-resolver (library-resolver parsed)])
-    (for/sum ([(_n p) parsed])
-      (define-values (lib errs)
-        (if (ok? p)
-            (with-handlers ([exn:fail? (lambda (_) (values #f '(crash)))]) (compile-library/errors (ok-value p)))
-            (values #f '(parse))))
-      (if (and lib (null? errs)) 1 0))))
 
 ;; ---- the members ------------------------------------------------------------------------------
 ;; stories : -> (hash bundle-id String)   each scenario Bundle's FSH Title, "BCS-E NN: " dropped
@@ -82,8 +45,6 @@
                                          (file->string f)))]
               #:when m)
     (values (cadr m) (caddr m))))
-
-(define (truthy v) (eq? v #t))   ; null counts as false
 
 ;; run-bcse : -> (or #f (listof MemberResult))
 (define (run-bcse)
@@ -111,40 +72,21 @@
                                      #:when (and r (not (equal? (hash-ref r 'resourceType) "Parameters"))))
                            r))
        (define patient (hash-ref (findf (lambda (r) (equal? (hash-ref r 'resourceType) "Patient")) resources) 'id))
-       (define rl (load-runtime-library (ok-value (hash-ref parsed "BCSE_Details"))
-                                        #:resolver (library-resolver parsed)
-                                        #:data (resources->data resources)
-                                        #:valuesets terminology))
        (define key (hash-ref by-id (cons "Parameters" (string-append id ".scorekey"))))
        (member-result id (hash-ref titles id id) patient
-                      (for/hash ([n population-names]) (values n (truthy (rlib-value rl n))))
+                      (evaluate-defines parsed terminology resources)
                       (for/hash ([p (hash-ref key 'parameter)]) (values (hash-ref p 'name) (hash-ref p 'valueBoolean)))))]))
 
 ;; ---- MeasureReports ---------------------------------------------------------------------------
-;; group-counts : MemberResult String String -> (hash population-code 0|1)   one member in one group,
-;; by FHIR's rules: exclusions within the denominator, the numerator within what is left
-(define (group-counts r exclusion denominator)
-  (define d (member-result-defines r))
-  (define ip (hash-ref d "Initial population"))
-  (define excl (and ip (hash-ref d exclusion)))
-  (define num (and ip (hash-ref d denominator) (hash-ref d "Numerator")))
-  (define (n b) (if b 1 0))
-  (hash "initial-population" (n ip) "denominator" (n ip) "denominator-exclusion" (n excl) "numerator" (n num)))
-
-(define (member-counts r)
-  (list (group-counts r "Exclusion" "Denominator") (group-counts r "Exclusion - Medicare" "Denominator - Medicare")))
-
-(define (sum-counts hs) (for/fold ([acc (hash)]) ([h hs]) (for/fold ([a acc]) ([(k v) h]) (hash-update a k (lambda (x) (+ x v)) 0))))
-
 ;; write-reports! : (listof MemberResult) -> Path   an individual report per member and the summary
 (define (write-reports! results)
-  (define measure (findf (lambda (r) (equal? (hash-ref r 'resourceType) "Measure")) (bundle-resources details-bundle)))
+  (define measure (bcse-measure))
   (make-directory* out-dir)
   (define (save! name js) (call-with-output-file (build-path out-dir name) #:exists 'replace (lambda (o) (write-json js o))))
   (for ([r results])
     (save! (format "~a.json" (member-result-id r))
-           (measure-report measure (member-counts r) period-start period-end (string-append "Patient/" (member-result-patient r)))))
-  (define per-member (map member-counts results))
+           (measure-report measure (member-counts (member-result-defines r)) period-start period-end (string-append "Patient/" (member-result-patient r)))))
+  (define per-member (map (lambda (r) (member-counts (member-result-defines r))) results))
   (save! "summary.json" (measure-report measure (list (sum-counts (map car per-member)) (sum-counts (map cadr per-member)))
                                         period-start period-end #f))
   (simplify-path out-dir))
@@ -179,7 +121,7 @@
           (~a "accountable" #:width 11 #:align 'right) (~a "screened" #:width 8 #:align 'right) "rate")
   (for ([g (list (list "All members" "Exclusion" "Denominator")
                  (list "Medicare reporting group" "Exclusion - Medicare" "Denominator - Medicare"))])
-    (define c (sum-counts (for/list ([r results]) (group-counts r (cadr g) (caddr g)))))
+    (define c (sum-counts (for/list ([r results]) (group-counts (member-result-defines r) (cadr g) (caddr g)))))
     (define accountable (- (hash-ref c "denominator") (hash-ref c "denominator-exclusion")))
     (define (n k) (~a (hash-ref c k) #:width 8 #:align 'right))
     (printf "~a  ~a  ~a  ~a  ~a  ~a\n" (~a (car g) #:width 26) (n "initial-population")
@@ -208,6 +150,6 @@
   (define results (if (file-exists? (build-path repo "vendor" "packages" "ncqa.hedis.core.main.v2025-2025.1.0.tgz")) (run-bcse) #f))
   (when results
     (check-equal? (length (agreeing results)) (length results) "every member's result matches the score key")
-    (define c (sum-counts (map (lambda (r) (car (member-counts r))) results)))
+    (define c (sum-counts (map (lambda (r) (car (member-counts (member-result-defines r)))) results)))
     (check-equal? (list (hash-ref c "initial-population") (hash-ref c "denominator-exclusion") (hash-ref c "numerator"))
                   '(14 5 4))))

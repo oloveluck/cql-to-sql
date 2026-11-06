@@ -62,6 +62,52 @@ and writes the MeasureReports to `demo/out/bcse/` (`summary.json`, and `bcse-NN.
 lists are TEST-ONLY stand-ins at NCQA's value set urls (NCQA's Value Set Directory is licensed
 separately), holding the codes the members use: a test of the logic, not a HEDIS rate.
 
+## The same measure over 1,000 members
+
+```sh
+racket demo/bcse/population.rkt
+```
+
+`bcse_usqc_testdata_n1000.zip` (repo root) is a synthetic population of 1,000 members: a FHIR Bulk
+Data export on the US Quality Core 0.5.0 profiles, with an answer key giving each member's expected
+populations, written from the generator's scenario design. The demo runs NCQA's measure over every
+member (about 30 seconds) and compares it with the key:
+
+```
+                                    NCQA logic  answer key
+members                                   1000        1000
+eligible (initial population)              409         408
+excused (exclusions)                        20          24
+accountable (denominator)                  389         384
+screened (numerator)                       141         234
+rate                                     36.2%       60.9%
+
+The measure agrees with the answer key on 894 of 1000 members.
+```
+
+Every one of the other 106 is explained, and the demo prints the cause for each:
+
+| Members | Cause |
+|---|---|
+| 91 | **The mammogram is recorded only as a Procedure.** NCQA's digital measure reads screening from claims, EOBs, Observations and DiagnosticReports; this export records most mammograms as a Procedure, the eCQM convention. This is the whole difference in the rate. |
+| 6 | **The answer key's rules differ from MY2025 BCS-E.** It excludes two unilateral mastectomies 14+ days apart (no such rule now) and frailty on one date (NCQA needs two), and it leaves out two members whose own sex-at-birth record qualifies them. |
+| 6 | **The measure doesn't read some status fields.** A cancelled Coverage still counts as enrollment, a refuted diagnosis still excludes, and hospice that was only ordered (a ServiceRequest) doesn't count. |
+| 3 | **A cql bug.** `Quantity.value` and `.unit` come back null, so an allowed 30-day coverage gap fails continuous enrollment. |
+
+So the same measure, run over the same people, gives a very different rate depending on how the
+data records care. That is what evaluating a measure tests.
+
+**The adapter.** Before evaluation each Coverage is mapped the way a health plan's HEDIS load would
+map it, and nothing else is changed:
+- The NAHDO payer type also gets the HEDIS coverage type and the medical benefit, because NCQA finds
+  the product line through a fixed table of HEDIS codes.
+- An open-ended coverage ends on the export's date, because in CQL a closed interval with a null end
+  has an *unknown* end.
+
+The MeasureReports go to `demo/out/bcse-population/`: `summary.json`, and `individual.ndjson` with
+one per member. `raco test demo/bcse/population.rkt` checks that every difference has a known cause
+and that at least 894 members agree.
+
 ## How it runs
 
 - **Members:** fsh compiles the scenarios and validates them against the HEDIS profiles.
@@ -85,4 +131,6 @@ separately), holding the codes the members use: a test of the logic, not a HEDIS
   or later). With an older one the demo says how many libraries compile and stops. With an
   up-to-date checkout elsewhere: `racket -S <its parent directory> demo/bcse/run.rkt`.
 
-`raco test demo/bcse/run.rkt` checks that every member matches and the totals are 14 / 5 / 4.
+`raco test demo/bcse/run.rkt` checks that every member matches and the totals are 14 / 5 / 4. Note
+that `raco test` runs each file in a fresh process, so with an up-to-date cql elsewhere, pass it as
+`PLTCOLLECTS="<its parent directory>:" raco test …` rather than with `-S`.

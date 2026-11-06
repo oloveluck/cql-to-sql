@@ -27,23 +27,48 @@
 (define hcpcs "https://www.cms.gov/Medicare/Coding/HCPCSReleaseCodeSets")
 (define icd10pcs "http://www.cms.gov/Medicare/Coding/ICD10")
 (define sct "http://snomed.info/sct")
+(define icd10cm "http://hl7.org/fhir/sid/icd-10-cm")
+(define loinc "http://loinc.org")
+(define (vs oid) (string-append "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004." oid))
 
 ;; coverage-types : (listof (list code display)) -> (listof TestCode)
 (define (coverage-types cds)
   (for/list ([cd cds]) (list "https://ncqa.org/fhir/CodeSystem/hedis-coverage-type" (car cd) (cadr cd))))
 
 ;; test-codes : hash url -> (listof TestCode)   real codes from standard code systems, chosen for the
-;; scenarios; NOT the NCQA membership of the set
+;; scenarios (scenarios/bcse) and for the n=1000 test population (bcse_usqc_testdata_n1000.zip);
+;; NOT the NCQA membership of the set
 (define test-codes
   (hash
    ;; Mammography
    "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1168"
    (list (list cpt "77067" "Screening mammography, bilateral")
          (list cpt "77066" "Diagnostic mammography, bilateral")
-         (list cpt "77065" "Diagnostic mammography, unilateral"))
+         (list cpt "77065" "Diagnostic mammography, unilateral")
+         (list cpt "77063" "Screening digital breast tomosynthesis, bilateral")
+         (list loinc "24606-6" "MG Breast Screening"))
    ;; Bilateral Mastectomy
    "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1042"
-   (list (list icd10pcs "0HTV0ZZ" "Resection of Bilateral Breast, Open Approach"))
+   (list (list icd10pcs "0HTV0ZZ" "Resection of Bilateral Breast, Open Approach")
+         (list sct "27865001" "Bilateral mastectomy"))
+   ;; Unilateral Mastectomy (any side), and the clinical (SNOMED) form
+   (vs "1256") (list (list cpt "19303" "Mastectomy, simple, complete"))
+   (vs "1948") (list (list sct "172043006" "Total mastectomy"))
+   ;; History of Bilateral Mastectomy; Absence of Left / Right Breast
+   (vs "1331") (list (list icd10cm "Z90.13" "Acquired absence of bilateral breasts and nipples"))
+   (vs "1329") (list (list icd10cm "Z90.12" "Acquired absence of left breast and nipple"))
+   (vs "1330") (list (list icd10cm "Z90.11" "Acquired absence of right breast and nipple"))
+   ;; Hospice Encounter; Palliative Care Encounter
+   (vs "1761") (list (list hcpcs "Q5003" "Hospice care provided in nursing long term care facility"))
+   (vs "1450") (list (list icd10cm "Z51.5" "Encounter for palliative care"))
+   ;; Frailty Diagnosis; Advanced Illness; Outpatient; Gender Dysphoria
+   (vs "1531") (list (list icd10cm "R54" "Age-related physical debility"))
+   (vs "1465") (list (list icd10cm "I50.9" "Heart failure, unspecified"))
+   (vs "1202") (list (list cpt "99213" "Office or other outpatient visit, established patient, low")
+                     (list cpt "99214" "Office or other outpatient visit, established patient, moderate")
+                     (list cpt "99395" "Periodic preventive medicine, established patient, 18-39")
+                     (list cpt "99396" "Periodic preventive medicine, established patient, 40-64"))
+   (vs "2454") (list (list icd10cm "F64.0" "Transsexualism"))
    ;; Unilateral Mastectomy Left
    "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1334"
    (list (list icd10pcs "0HTU0ZZ" "Resection of Left Breast, Open Approach"))
