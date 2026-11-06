@@ -7,7 +7,9 @@ Hackathon context: we work in this repo (oloveluck/cql-to-sql) together with Owe
 keep commits small, follow the conventions in `../fhir/CLAUDE.md` and `../cql/CLAUDE.md` (HTDP
 style, `contract-out`, `module+ test` in every module, floors that only rise).
 
-A diagram of the target architecture will be added later; revise this plan to match it.
+The process as it works today (retargeting the data through ViewDefinitions, translating the ELM
+to one SQL query, the oracles, the limits) is written up in `docs/translation.md`; this file is
+the plan and the decisions behind it.
 
 ## Hackathon demo (`demo/`, done)
 
@@ -333,7 +335,7 @@ All paths are relative to this repo's root; the dependencies are cloned next to 
   `for r in fhir fhirpath cql sql-on-fhir; do git clone https://github.com/oloveluck/$r.git ../$r; done`
 - Install, from this repo's root:
   `raco pkg install --no-docs --link --auto --batch ../fhir/fhir ../fhir/fhir-spec ../fhirpath ../cql ../sql-on-fhir .`
-- Test: `raco test -p cql-to-sql` (the README's `raco test cql-to-sql` does not work).
+- Test: `raco test -p cql-to-sql`.
 - SQL TCK report: `racket tests/tck.rkt -v`.
 
 ## Status
