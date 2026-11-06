@@ -1,0 +1,28 @@
+# SUSHI configuration for the CQL-to-SQL Implementation Guide
+id: io.github.oloveluck.cql-to-sql
+canonical: https://oloveluck.github.io/cql-to-sql
+name: CqlToSqlIG
+title: CQL to SQL Implementation Guide
+status: draft
+version: 0.1.0
+fhirVersion: 4.0.1
+FSHOnly: false
+copyrightYear: 2026
+releaseLabel: "CI Build"
+publisher:
+  name: cql-to-sql
+  url: https://github.com/oloveluck/cql-to-sql
+
+menu:
+  Home: index.html
+  Specification: spec.html
+  Operation: OperationDefinition-Library-cql-to-sql.html
+  Artifacts: artifacts.html
+
+pages:
+  index.md:
+    title: Home
+  spec.md:
+    title: Specification & Architecture
+  operation.md:
+    title: Library/$cql-to-sql Operation
