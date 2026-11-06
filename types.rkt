@@ -74,6 +74,9 @@
     [('Integer 'Long) 'Long] [('Long 'Integer) 'Long]
     [((list 'List x) (list 'List y)) (list 'List (unify x y))]
     [((list 'Interval x) (list 'Interval y)) (list 'Interval (unify x y))]
+    [((list 'Tuple xs) (list 'Tuple ys))
+     #:when (equal? (sort (map car xs) symbol<?) (sort (map car ys) symbol<?))
+     (list 'Tuple (for/list ([x xs]) (cons (car x) (unify (cdr x) (cdr (assq (car x) ys))))))]
     [(_ _) 'Any]))
 
 ;; system-name->type : String -> CqlType   a System type by its qualified or simple name
@@ -91,6 +94,8 @@
   (check-equal? (unify 'Integer 'Decimal) 'Decimal)
   (check-equal? (unify '(List Integer) '(List Decimal)) '(List Decimal))
   (check-equal? (unify 'String 'Integer) 'Any)
+  (check-equal? (unify '(Tuple ((a . Null) (b . String))) '(Tuple ((b . String) (a . Integer)))) '(Tuple ((a . Integer) (b . String))))
+  (check-equal? (unify '(Tuple ((a . Integer))) '(Tuple ((b . Integer)))) 'Any)
   (check-equal? (element-type '(Interval Date)) 'Date)
   (check-equal? (system-name->type "{urn:hl7-org:elm-types:r1}DateTime") 'DateTime)
   (check-equal? (system-name->type "Boolean") 'Boolean)
