@@ -32,7 +32,20 @@ extracted `package/` is ignored by git).
 - **Licensing to confirm:** HEDIS content is NCQA's; this repo is public and MIT. Confirm the
   bundles and PDF may be published, or move them out of the repo (and its history).
 
-### Parser fixes in `../cql` (uncommitted there)
+### MeasureReport fixes in `../cql` (uncommitted there)
+
+- **Every group:** `measure-populations` merged all groups' criteria into one lookup, so BCS-E's
+  Medicare group overwrote the general group's, and the report had one group. Now
+  `measure-group-populations` evaluates each group and the MeasureReport has a group per
+  Measure.group (its id and code carried over, each scored on its own counts).
+  `measure-populations` is the first group's.
+- **Measurement period parameter:** `evaluate-measure` passed `"Measurement Period"`, BCS-E
+  declares `"Measurement period"` (so the CQL silently used its default), and as `Interval<Date>`,
+  not DateTime. The parameter is now found by name without case and given the declared type.
+- BCS-E's `evaluate-measure` returns both groups (summary and individual). All `cql` tests pass:
+  469 (8 new), HL7 suite 1820/1823, eCQM 71/76.
+
+### Parser fixes in `../cql` (pushed, 2b846aa)
 
 The BCS-E libraries exposed misparses where brag, which has no greediness, closed an open term
 early. The grammar now has a closed and an `-open` form per precedence level, so a query or an
@@ -75,6 +88,8 @@ All paths are relative to this repo's root; the dependencies are cloned next to 
 | Retrieve, value sets, FHIR properties in SQL | Missing (Retrieve raises untranslatable) |
 | Whole libraries in SQL (defines, refs, functions, FHIRHelpers, parameters) | Missing |
 | Per-patient comparison SQL vs. interpreter | Missing |
+| MeasureReport from the interpreter | Done: `evaluate-measure`, a report group per Measure.group, the measurement period parameter by its declared name and type |
+| MeasureReport from SQL | Missing (phase 6) |
 | Running the SQL in Aidbox (cloud, PostgreSQL) | Missing: REST connector and PostgreSQL dialect |
 
 Most common untranslatable constructs in the SQL TCK: `elm-timing` (464), `elm-between` (54),
@@ -120,20 +135,31 @@ Collapse, AnyTrue/AllTrue, Today.
    calls → direct SQL. Check with small hand-written libraries against the interpreter.
 5. **Whole libraries.** Defines as CTEs, references and functions inlined, Measurement Period
    as a query parameter; one query, one row per patient, a column per define.
-6. **Measure-level comparison.** For each of the 76 eCQM patients compare the population
-   defines between SQL and the interpreter, in SQLite and in Aidbox; floor that only rises,
-   named known mismatches.
+6. **MeasureReport from SQL, compared with the interpreter's.** Both sides produce a FHIR
+   MeasureReport for the same measure, period and patients, and the reports must be equal:
+   - The SQL's per-patient rows (a column per population define) become an `individual`
+     MeasureReport per patient and a `summary` one (counts per group, measureScore). Counts can be
+     computed in SQL (`SUM(CASE …)`) or, in Aidbox, the report built in SQL (`jsonb_build_object`)
+     so `$sql` returns it directly.
+   - The population rules and the report shape are the interpreter's, reused rather than
+     re-implemented: `cql/run`'s `measure-group-populations` (IP; denominator ⊆ IP; exclusion ⊆
+     denominator; numerator ⊆ denominator minus exclusions) and `cql/measure`'s report builder.
+     Then a difference is a difference in the populations, never in the assembly.
+   - Reference side: `cql/measure`'s `evaluate-measure` (summary, or `#:subject` for individual).
+   - Compare per patient and in summary, in SQLite and in Aidbox, for BCS-E and the eCQM corpus;
+     floor that only rises, named known mismatches.
+   - Not yet: stratifiers (BCS-E has SES, Age, Race, Ethnicity), non-proportion scoring.
 7. **Wrap-up.** DuckDB dialect, output as SQL-on-FHIR SQLQuery/SQLView Library, `ig/` with
    `Library/$cql-to-sql`.
 
 ## Open questions
 
-- What counts as "the same": SQL vs. interpreter per define, or vs. the expected MeasureReport
-  (where the interpreter agrees on 71 of 76)? Not decided yet.
+- What counts as "the same": proposed, the SQL MeasureReport equals the interpreter's (phase 6),
+  per patient and in summary. Comparing with the expected MeasureReports in the test data
+  (where the interpreter agrees on 71 of 76) is a separate check of the interpreter.
 - Which CQL matters most: BCS-E is the target now; the eCQM corpus stays as a second test set.
 - Where do the NCQA value sets come from, and may they be stored in Aidbox / the repo?
 - Licensing of the uploaded NCQA files in this public repo.
-- The `../cql` parser fixes: commit and push to oloveluck/cql (needs Owen's OK / access).
 - Division of phases between team members and Owen.
 - Aidbox: is the cloud instance shared? Tests create ViewDefinitions, `sof.*` tables and load
   76 test patients, so use a dedicated instance or a prefix (e.g. `cql2sql_`) with cleanup.
