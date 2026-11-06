@@ -1,0 +1,286 @@
+<title>BCS-E Population Results</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: summary first (funnel against the answer key, then the causes), then a member explorer:
+   list on the left, the selected member's evidence trail on the right; one column on phones */
+:root {
+  --paper: #f6f7f9; --surface: #ffffff; --ink: #1d2433; --muted: #5d6678; --rule: #dfe3ea; --hover: #eef1f6;
+  --accent: #b23a62; --accent-soft: #f6e3ea;
+  --ours: #3d5a80; --key: #a7b4c8;
+  --p-screened: #b23a62; --p-unscreened: #e9cbd6; --p-excused: #8d97a8; --p-out: transparent;
+  --k-data: #3d5a80; --k-key: #9a6a1f; --k-measure: #5b6b3a; --k-engine: #b23a3a;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #12151c; --surface: #1a1f29; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2c3340; --hover: #222937;
+  --accent: #e57a9d; --accent-soft: #3a2230; --ours: #7d9cc6; --key: #4a5568;
+  --p-screened: #e57a9d; --p-unscreened: #5a3443; --p-excused: #5c6575;
+  --k-data: #7d9cc6; --k-key: #d6a85a; --k-measure: #a3b87a; --k-engine: #ec7c7c; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #12151c; --surface: #1a1f29; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2c3340; --hover: #222937;
+  --accent: #e57a9d; --accent-soft: #3a2230; --ours: #7d9cc6; --key: #4a5568;
+  --p-screened: #e57a9d; --p-unscreened: #5a3443; --p-excused: #5c6575;
+  --k-data: #7d9cc6; --k-key: #d6a85a; --k-measure: #a3b87a; --k-engine: #ec7c7c; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--body); margin: 0; }
+main { max-width: 1180px; margin: 0 auto; padding-block: 32px 64px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 32px; }
+h1, h2 { font-family: var(--display); font-weight: 600; line-height: 1.15; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(1.8rem, 4vw, 2.4rem); }
+h2 { font-size: 1.35rem; }
+p { margin: 0; max-width: 70ch; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); font-size: 0.88em; }
+.panel { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 18px; min-width: 0; }
+
+/* summary */
+.summary { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px; }
+@media (max-width: 860px) { .summary { grid-template-columns: minmax(0, 1fr); } }
+.legend { display: flex; gap: 16px; font-size: 0.82rem; color: var(--muted); margin-bottom: 10px; flex-wrap: wrap; }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.frow { display: grid; grid-template-columns: 8.5rem minmax(0, 1fr); gap: 4px 12px; align-items: center; padding: 6px 0; border-top: 1px solid var(--rule); }
+.frow:first-of-type { border-top: 0; }
+.frow .lbl { font-weight: 500; font-size: 0.92rem; }
+.frow .lbl small { display: block; font: 400 0.72rem/1.3 var(--mono); color: var(--muted); }
+.bars { display: grid; gap: 3px; }
+.bar { display: grid; grid-template-columns: minmax(0, 1fr) 3rem; gap: 8px; align-items: center; }
+.track { height: 12px; background: var(--paper); border-radius: 3px; overflow: hidden; }
+.fill { height: 100%; border-radius: 3px; }
+.n { font: 500 0.85rem/1 var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.rates { display: flex; gap: 28px; flex-wrap: wrap; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--rule); }
+.rate strong { display: block; font: 600 1.9rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.rate span { font-size: 0.82rem; color: var(--muted); }
+.agree { font: 600 2.4rem/1 var(--display); color: var(--accent); }
+.causes { display: grid; gap: 6px; margin-top: 12px; }
+.cause { display: grid; grid-template-columns: 2.6rem minmax(0, 1fr); gap: 10px; align-items: start; text-align: left; width: 100%;
+  background: none; border: 1px solid transparent; border-radius: 8px; padding: 8px; color: inherit; font: inherit; cursor: pointer; }
+.cause:hover { background: var(--hover); }
+.cause[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.cause:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.cause .cn { font: 600 1.05rem/1.4 var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.cause b { font-weight: 600; font-size: 0.92rem; }
+.cause .kind { font: 500 0.68rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; margin-right: 6px; }
+
+/* explorer */
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.controls input, .controls select { font: inherit; font-size: 0.9rem; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 7px;
+  background: var(--surface); color: var(--ink); min-width: 0; }
+.controls input { flex: 1 1 220px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 7px; overflow: hidden; }
+.seg button { font: inherit; font-size: 0.85rem; padding: 7px 12px; border: 0; background: var(--surface); color: var(--muted); cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+.clear { font: inherit; font-size: 0.85rem; border: 0; background: none; color: var(--accent); cursor: pointer; padding: 4px; }
+.explorer { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 860px) { .explorer { grid-template-columns: minmax(0, 1fr); } }
+.listwrap { overflow: auto; max-height: 70vh; padding: 0; }
+table { border-collapse: collapse; width: 100%; font-size: 0.86rem; }
+th { position: sticky; top: 0; background: var(--surface); text-align: left; font: 500 0.68rem/1.2 var(--mono); letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--muted); padding: 10px 10px; border-bottom: 1px solid var(--rule); z-index: 1; }
+td { padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: var(--hover); }
+tbody tr[aria-selected="true"] { background: var(--accent-soft); }
+td.id { font-family: var(--mono); white-space: nowrap; }
+td.story { color: var(--muted); }
+.pill { display: inline-block; font: 500 0.72rem/1.5 var(--mono); padding: 1px 8px; border-radius: 999px; white-space: nowrap; }
+.o-screened { background: var(--p-screened); color: var(--surface); }
+.o-not-screened { background: var(--p-unscreened); color: var(--ink); }
+.o-excused { background: var(--p-excused); color: var(--surface); }
+.o-not-eligible { border: 1px solid var(--rule); color: var(--muted); }
+.diffmark { color: var(--accent); font-weight: 600; }
+.more { padding: 12px; text-align: center; }
+.more button { font: inherit; font-size: 0.85rem; padding: 6px 14px; border: 1px solid var(--rule); border-radius: 7px; background: var(--surface); color: var(--ink); cursor: pointer; }
+
+/* detail */
+.detail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 12px); display: grid; gap: 14px; }
+.detail h3 { margin: 0; font: 600 1.15rem/1.3 var(--mono); }
+.outs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.outs div { border: 1px solid var(--rule); border-radius: 8px; padding: 10px; display: grid; gap: 6px; }
+.outs small { font: 500 0.68rem/1 var(--mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.why { border-left: 3px solid var(--accent); padding-left: 12px; display: grid; gap: 6px; }
+.why b { font-weight: 600; }
+.recs { display: grid; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.recs li, .ev li { font: 0.8rem/1.45 var(--mono); overflow-wrap: anywhere; }
+.ev { display: grid; gap: 10px; }
+.ev h4 { margin: 0; font: 500 0.7rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.ev .def { font-size: 0.85rem; font-weight: 500; margin-top: 4px; }
+.ev ul { margin: 2px 0 0; padding-left: 14px; }
+.empty { color: var(--muted); font-size: 0.9rem; }
+footer { font-size: 0.82rem; color: var(--muted); display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .fill { transition: width .4s ease; } }
+</style>
+
+<main>
+  <header style="display:grid;gap:10px">
+    <span class="eyebrow">NCQA HEDIS · BCS-E · measurement year 2025</span>
+    <h1>Breast cancer screening over 1,000 test members</h1>
+    <p class="muted">NCQA's own measure logic, run member by member over a synthetic population, compared with the population's answer key. Pick a member to see the records behind every decision.</p>
+  </header>
+
+  <section class="summary" aria-label="Summary">
+    <div class="panel">
+      <h2>The funnel</h2>
+      <div class="legend" style="margin-top:10px"><span><i style="background:var(--ours)"></i>NCQA logic</span><span><i style="background:var(--key)"></i>Answer key</span></div>
+      <div id="funnel"></div>
+      <div class="rates" id="rates"></div>
+    </div>
+    <div class="panel">
+      <h2>Where they differ</h2>
+      <p class="muted" style="margin-top:6px"><span class="agree" id="agree"></span> members agree on every population. Each of the others has a traced cause; pick one to list its members.</p>
+      <div class="causes" id="causes"></div>
+    </div>
+  </section>
+
+  <section style="display:grid;gap:12px" aria-label="Members">
+    <h2>Members</h2>
+    <div class="controls">
+      <input id="q" type="search" placeholder="Search by member id or story" aria-label="Search members">
+      <div class="seg" role="group" aria-label="Show">
+        <button type="button" data-show="all" aria-pressed="true">All</button>
+        <button type="button" data-show="differ" aria-pressed="false">Differences</button>
+        <button type="button" data-show="agree" aria-pressed="false">Agreements</button>
+      </div>
+      <select id="outcome" aria-label="NCQA outcome">
+        <option value="">Any NCQA outcome</option>
+        <option>screened</option><option>not screened</option><option>excused</option><option>not eligible</option>
+      </select>
+      <button type="button" class="clear" id="clear" hidden>Clear cause filter</button>
+      <span class="muted mono" id="shown"></span>
+    </div>
+    <div class="explorer">
+      <div class="panel listwrap">
+        <table>
+          <thead><tr><th>Member</th><th>Story</th><th>NCQA</th><th>Key</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table>
+        <div class="more" id="more" hidden><button type="button" id="moreBtn">Show more</button></div>
+      </div>
+      <aside class="panel detail" id="detail" aria-live="polite"></aside>
+    </div>
+  </section>
+
+  <footer>
+    <p>Test data: synthetic members, and TEST-ONLY stand-in code lists in place of NCQA's licensed value sets, so the rate is a test of the logic, not a HEDIS rate. Before evaluation each Coverage is mapped the way a HEDIS data load would map it (payer type to HEDIS coverage type; an open-ended enrollment ends on the export date).</p>
+    <p>Generated by <span class="mono">racket demo/bcse/population.rkt</span> in cql-to-sql.</p>
+  </footer>
+</main>
+
+<script>const DATA = /*BCSE-DATA*/null;</script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pill = (o) => `<span class="pill o-${o.replace(/ /g, "-")}">${esc(o)}</span>`;
+  const KINDS = { data: "How the data records care", key: "Answer key differs", measure: "Not read by the measure", engine: "Evaluator bug" };
+  const pct = (n, d) => (d ? (100 * n / d).toFixed(1) + "%" : "–");
+  const members = DATA.members;
+  const differing = members.filter((m) => m.differs.length);
+
+  // funnel
+  const stages = [["members", "Members", ""], ["eligible", "Eligible", "initial population"], ["excused", "Excused", "exclusions"],
+                  ["accountable", "Accountable", "denominator"], ["screened", "Screened", "numerator"]];
+  const max = DATA.ours.members;
+  $("funnel").innerHTML = stages.map(([k, label, sub]) => `
+    <div class="frow"><div class="lbl">${label}${sub ? `<small>${sub}</small>` : ""}</div>
+      <div class="bars">
+        <div class="bar"><div class="track"><div class="fill" style="width:${100 * DATA.ours[k] / max}%;background:var(--ours)"></div></div><div class="n">${DATA.ours[k]}</div></div>
+        <div class="bar"><div class="track"><div class="fill" style="width:${100 * DATA.key[k] / max}%;background:var(--key)"></div></div><div class="n">${DATA.key[k]}</div></div>
+      </div></div>`).join("");
+  $("rates").innerHTML = `
+    <div class="rate"><strong style="color:var(--ours)">${pct(DATA.ours.screened, DATA.ours.accountable)}</strong><span>NCQA logic: ${DATA.ours.screened} of ${DATA.ours.accountable} screened</span></div>
+    <div class="rate"><strong class="muted">${pct(DATA.key.screened, DATA.key.accountable)}</strong><span>Answer key: ${DATA.key.screened} of ${DATA.key.accountable}</span></div>`;
+
+  // causes
+  $("agree").textContent = `${members.length - differing.length} of ${members.length}`;
+  let causeFilter = null;
+  const causes = DATA.causes.filter((c) => c.count > 0);
+  const unexplained = differing.filter((m) => m.cause === "unexplained").length;
+  $("causes").innerHTML = causes.map((c, i) => `
+    <button type="button" class="cause" data-cause="${i}" aria-pressed="false">
+      <span class="cn">${c.count}</span>
+      <span><span class="kind" style="color:var(--k-${c.kind})">${KINDS[c.kind]}</span><br><b>${esc(c.label)}</b><br><span class="muted" style="font-size:.84rem">${esc(c.explanation)}</span></span>
+    </button>`).join("") + (unexplained ? `<p class="mono" style="color:var(--k-engine)">${unexplained} unexplained</p>` : "");
+  document.querySelectorAll(".cause").forEach((b) => b.addEventListener("click", () => {
+    const c = causes[+b.dataset.cause].label;
+    causeFilter = causeFilter === c ? null : c;
+    document.querySelectorAll(".cause").forEach((x) => x.setAttribute("aria-pressed", String(causes[+x.dataset.cause].label === causeFilter)));
+    $("clear").hidden = !causeFilter;
+    if (causeFilter) setShow("differ");
+    render(true);
+    if (causeFilter) document.querySelector(".explorer").scrollIntoView({ behavior: "smooth", block: "start" });
+  }));
+  $("clear").addEventListener("click", () => { causeFilter = null; document.querySelectorAll(".cause").forEach((x) => x.setAttribute("aria-pressed", "false")); $("clear").hidden = true; render(true); });
+
+  // filters
+  let show = "all", limit = 150, selected = null;
+  function setShow(s) { show = s; document.querySelectorAll("[data-show]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.show === s))); }
+  document.querySelectorAll("[data-show]").forEach((b) => b.addEventListener("click", () => { setShow(b.dataset.show); render(true); }));
+  $("q").addEventListener("input", () => render(true));
+  $("outcome").addEventListener("change", () => render(true));
+  $("moreBtn").addEventListener("click", () => { limit += 150; render(false); });
+
+  function filtered() {
+    const q = $("q").value.trim().toLowerCase(), o = $("outcome").value;
+    return members.filter((m) =>
+      (show === "all" || (show === "differ") === (m.differs.length > 0)) &&
+      (!o || m.ours === o) && (!causeFilter || m.cause === causeFilter) &&
+      (!q || m.id.toLowerCase().includes(q) || m.story.toLowerCase().includes(q) || m.edge.toLowerCase().includes(q)));
+  }
+  function render(reset) {
+    if (reset) limit = 150;
+    const list = filtered();
+    $("shown").textContent = `${list.length} member${list.length === 1 ? "" : "s"}`;
+    $("rows").innerHTML = list.slice(0, limit).map((m) => `
+      <tr tabindex="0" data-id="${m.id}" aria-selected="${m.id === selected}">
+        <td class="id">${m.id}${m.differs.length ? ' <span class="diffmark" title="differs from the answer key">≠</span>' : ""}</td>
+        <td class="story">${esc(m.story)}${m.edge ? ` <span class="mono">${esc(m.edge)}</span>` : ""}</td>
+        <td>${pill(m.ours)}</td><td>${pill(m.key)}</td></tr>`).join("") ||
+      `<tr><td colspan="4" class="empty">No members match these filters.</td></tr>`;
+    $("more").hidden = list.length <= limit;
+    $("rows").querySelectorAll("tr[data-id]").forEach((tr) => {
+      const open = () => select(tr.dataset.id, true);
+      tr.addEventListener("click", open);
+      tr.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); open(); } });
+    });
+    if (!selected && list.length) select(list[0].id, false);
+  }
+
+  const SECTIONS = [["eligible", "Eligible"], ["excused", "Excused"], ["screened", "Screened"]];
+  function select(id, fromUser) {
+    const m = members.find((x) => x.id === id);
+    if (!m) return;
+    selected = id;
+    $("rows").querySelectorAll("tr[data-id]").forEach((tr) => tr.setAttribute("aria-selected", String(tr.dataset.id === id)));
+    const cause = m.differs.length ? DATA.causes.find((c) => c.label === m.cause) : null;
+    const ev = SECTIONS.map(([s, title]) => {
+      const items = m.evidence.filter((e) => e.section === s);
+      return items.length ? `<div><h4>${title}</h4>${items.map((e) => `<div class="def">${esc(e.define)}</div><ul>${e.items.map((i) => `<li>${esc(i)}</li>`).join("")}</ul>`).join("")}</div>` : "";
+    }).join("");
+    $("detail").innerHTML = `
+      <div style="display:grid;gap:4px"><h3>${m.id}</h3><p class="muted">${esc(m.story)}${m.edge ? ` · <span class="mono">${esc(m.edge)}</span>` : ""}</p>
+        <p class="muted mono" style="font-size:.78rem">${esc(m.gender)} · age ${esc(m.age)} at the end of 2025</p></div>
+      <div class="outs"><div><small>NCQA logic</small>${pill(m.ours)}</div><div><small>Answer key</small>${pill(m.key)}</div></div>
+      ${m.differs.length ? `<div class="why"><b>${cause ? esc(cause.label) : "Unexplained difference"}</b>
+          ${cause ? `<span class="muted" style="font-size:.88rem">${esc(cause.explanation)}</span>` : `<span class="muted">Differs on: ${m.differs.join(", ")}</span>`}
+          ${m.records.length ? `<ul class="recs">${m.records.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}</div>`
+        : `<p class="muted">The measure and the answer key agree on every population.</p>`}
+      <div class="ev"><h4 style="color:var(--muted)">Evidence the measure found</h4>${ev || `<p class="empty">None: no record met any of the measure's criteria.</p>`}</div>`;
+    if (fromUser) {
+      try { history.replaceState(null, "", "#" + id); } catch (e) { /* the hash is a convenience */ }
+      if (window.matchMedia("(max-width: 860px)").matches) $("detail").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  const fromHash = () => { const h = decodeURIComponent(location.hash.slice(1)); if (h && members.some((m) => m.id === h)) { $("q").value = ""; setShow("all"); select(h, false); } };
+  window.addEventListener("hashchange", fromHash);
+  fromHash();
+  render(false);
+})();
+</script>

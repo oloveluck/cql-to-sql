@@ -104,9 +104,47 @@ map it, and nothing else is changed:
 - An open-ended coverage ends on the export's date, because in CQL a closed interval with a null end
   has an *unknown* end.
 
+**Why each member landed where they did.** NCQA tags the defines that hold the evidence for each
+population (`@supportingEvidence` in BCSE_Details). `evidence.rkt` reads those tags from the
+measure's own CQL, evaluates each define for the member, and renders the records it holds, one line
+each: type, code, date. For a difference, the demo also points at the record it turns on, including
+records the measure never reads.
+
+```sh
+racket demo/bcse/population.rkt bcse-0092 bcse-0001     # these members, with their evidence
+```
+```
+bcse-0092  Age 70, frailty diagnosis + advanced illness (two outpatient visits with CHF): excluded  [EXC-16]
+  NCQA logic: not screened    answer key: excused
+  why they differ: key: frailty on one date
+    NCQA's frailty needs indications on at least two dates in the measurement year; the member has one
+    the record: Condition e241471d…: ICD-10-CM R54 (Age-related physical debility), 2025-02-01
+  evidence the measure found
+    eligible
+      Eligible coverages with continuous enrollment
+        Coverage 1127ed25…: SOPT 5 (PRIVATE HEALTH INSURANCE); HEDIS coverage PPO (Commercial PPO); …
+    excused
+      Frailty Event conditions during measurement period for persons 66 years and older
+        Condition e241471d…: ICD-10-CM R54 (Age-related physical debility), 2025-02-01
+      Advanced Illness Event conditions during measurement period or year prior for persons 66 years and older
+        Condition e45ae45e…: ICD-10-CM I50.9 (Heart failure, unspecified), 2025-03-12
+        Condition 4b94eb7e…: ICD-10-CM I50.9 (Heart failure, unspecified), 2024-11-05
+```
+
+**The interactive report.** A full run also writes `demo/out/bcse-population/report.html`, a
+single page with everything inlined:
+- the funnel against the answer key;
+- the causes, each a filter;
+- every member, searchable and filterable by outcome or by agreement, with the selected member's
+  outcomes, cause, the records it turns on, and the evidence trail.
+
+`#bcse-0092` in the address opens that member. The page is filled from `report-template.html`.
+
 The MeasureReports go to `demo/out/bcse-population/`: `summary.json`, and `individual.ndjson` with
-one per member. `raco test demo/bcse/population.rkt` checks that every difference has a known cause
-and that at least 894 members agree.
+one per member. `raco test demo/bcse/population.rkt` checks:
+- every difference has a known cause;
+- at least 894 members agree;
+- every excused member has exclusion evidence, and every screened member a mammography record.
 
 ## How it runs
 

@@ -33,21 +33,23 @@
          (only-in cql/run valuesets->terminology)
          (only-in cql/measure measure-report)
          "../../scripts/bcse-check.rkt"
-         "measure.rkt")
+         "measure.rkt"
+         "evidence.rkt")
 
 (provide
  (contract-out
-  [run-population (-> (or/c #f (listof person?)))]))   ; #f when the cql cannot compile BCS-E
+  [run-population (->* () (#:only (or/c #f (listof string?))) (or/c #f (listof person?)))]))   ; #f when the cql cannot compile BCS-E
 
 (define-runtime-path repo "../..")
 (define-runtime-path out-dir "../out/bcse-population")
 (define population-zip (build-path repo "bcse_usqc_testdata_n1000.zip"))
 
-;; A Person is (person id key defines resources)
+;; A Person is (person id key defines evidence resources)
 ;;   key : (hash column String)   its answer-key row
 ;;   defines : Defines            the measure's populations for it
+;;   evidence : (listof Evidence)  the records behind them (evidence.rkt)
 ;;   resources : (listof resource) its records, after the adapter
-(struct person (id key defines resources) #:transparent)
+(struct person (id key defines evidence resources) #:transparent)
 
 ;; ---- reading the export -----------------------------------------------------------------------
 ;; zip-entries : Path -> (hash name bytes)
@@ -101,7 +103,8 @@
   (for/list ([l (cdr lines)]) (for/hash ([h header] [v (fields l)]) (values h v))))
 
 ;; ---- running ----------------------------------------------------------------------------------
-(define (run-population)
+;; run-population : [#:only (or #f (listof id))] -> (or #f (listof Person))   every member, or those named
+(define (run-population #:only [only #f])
   (define parsed (measure-libraries))
   (define clean (compiling-count parsed))
   (cond
@@ -126,10 +129,13 @@
                        (hash-update! by-patient p (lambda (l) (cons r l)) '()))])))
      (define terminology
        (valuesets->terminology (filter (lambda (a) (equal? (hash-ref a 'resourceType) "ValueSet")) (check-report-artifacts (check-scenarios)))))
-     (for/list ([k (csv-rows (bytes->string/utf-8 (entry entries "answer_key_bcse_my2025.csv")))])
+     (define evidence (evidence-defines))
+     (for/list ([k (csv-rows (bytes->string/utf-8 (entry entries "answer_key_bcse_my2025.csv")))]
+                #:when (or (not only) (member (hash-ref k "patient_id") only)))
        (define id (hash-ref k "patient_id"))
        (define rs (hash-ref by-patient id '()))
-       (person id k (evaluate-defines parsed terminology (append rs shared)) rs))]))
+       (define rl (member-library parsed terminology (append rs shared)))
+       (person id k (library-defines rl) (member-evidence rl evidence) rs))]))
 
 ;; ---- comparing --------------------------------------------------------------------------------
 ;; the four populations, as the measure has them and as the key does
@@ -148,42 +154,60 @@
 (define (coded? r codes) (for/or ([c (in-list codes)]) (regexp-match? (regexp (string-append "\"code\":\"" (regexp-quote c) "\"")) (jsexpr->string r))))
 (define (of-type m t) (filter (lambda (r) (equal? (hash-ref r 'resourceType) t)) (person-resources m)))
 
-;; A Cause is (cause label explanation matches?), matches? : Member -> Boolean
-(struct cause (label explanation matches?))
+;; A Cause is (cause kind label explanation matches? records)
+;;   kind : "data" | "key" | "measure" | "engine"   whose side the difference is on
+;;   matches? : Person -> Boolean
+;;   records : Person -> (listof String)   the member's records the difference turns on
+(struct cause (kind label explanation matches? records))
 (define (edge . ids) (lambda (m) (and (member (hash-ref (person-key m) "edge_case") ids) #t)))
+;; lines : String (listof code) [resource -> String] -> Person -> (listof String)   records of a type with any of the codes
+(define ((lines type codes [note (lambda (_r) "")]) m)
+  (for/list ([r (of-type m type)] #:when (coded? r codes)) (string-append (resource-line r) (note r))))
+(define (verification r)
+  (let ([v (for*/first ([c (hash-ref (hash-ref r 'verificationStatus (hasheq)) 'coding '())]) (hash-ref c 'code #f))])
+    (if v (format " (verification: ~a)" v) "")))
+(define (coverages m) (map resource-line (of-type m "Coverage")))
 
 (define causes
   (list
-   (cause "mammogram only as a Procedure"
+   (cause "data" "mammogram only as a Procedure"
           "NCQA's numerator reads mammograms from claims, EOBs, Observations and DiagnosticReports, not from Procedure; this export records most screenings as a Procedure (the eCQM convention)"
           (lambda (m) (and (equal? (differs m) '(screened))
                            (for/or ([r (of-type m "Procedure")]) (coded? r mammography-codes))
                            (not (for/or ([t '("Claim" "DiagnosticReport" "Observation")])
-                                  (for/or ([r (of-type m t)]) (coded? r mammography-codes)))))))
-   (cause "key ignores its own sex-at-birth record"
+                                  (for/or ([r (of-type m t)]) (coded? r mammography-codes))))))
+          (lines "Procedure" mammography-codes))
+   (cause "key" "key ignores its own sex-at-birth record"
           "the member's gender is unknown but a final sex-assigned-at-birth Observation says female, which the key's stated rule counts; the key leaves it out"
           (lambda (m) (and (equal? (hash-ref (person-key m) "sex_assigned_at_birth") "")
-                           (for/or ([r (of-type m "Observation")]) (and (coded? r '("76689-9")) (coded? r '("LA3-6")))))))
-   (cause "key: two unilateral mastectomies 14+ days apart"
+                           (for/or ([r (of-type m "Observation")]) (and (coded? r '("76689-9")) (coded? r '("LA3-6"))))))
+          (lines "Observation" '("76689-9") (lambda (_r) " = female (LA3-6)")))
+   (cause "key" "key: two unilateral mastectomies 14+ days apart"
           "the key excludes two unilateral mastectomies without laterality; MY2025 BCS-E has no such rule (bilateral modifier, left plus right, history or absence of both breasts)"
-          (edge "EXC-06"))
-   (cause "key: frailty on one date"
+          (edge "EXC-06")
+          (lines "Procedure" '("19303")))
+   (cause "key" "key: frailty on one date"
           "NCQA's frailty needs indications on at least two dates in the measurement year; the member has one"
-          (edge "EXC-16"))
-   (cause "measure ignores Coverage.status"
+          (edge "EXC-16")
+          (lines "Condition" '("R54")))
+   (cause "measure" "measure ignores Coverage.status"
           "a cancelled coverage still counts as enrollment: NCQA's logic reads the period, not the status"
-          (edge "ENR-05"))
-   (cause "measure ignores Condition.verificationStatus"
+          (edge "ENR-05")
+          coverages)
+   (cause "measure" "measure ignores Condition.verificationStatus"
           "a refuted history of bilateral mastectomy still excludes: NCQA's logic does not read verification status"
-          (edge "EXC-10"))
-   (cause "measure does not read ServiceRequest"
+          (edge "EXC-10")
+          (lines "Condition" '("Z90.13") verification))
+   (cause "measure" "measure does not read ServiceRequest"
           "hospice recorded only as a ServiceRequest is not hospice to NCQA's logic"
-          (edge "EXC-13"))
-   (cause "cql: Quantity.value / .unit are null"
+          (edge "EXC-13")
+          (lines "ServiceRequest" '("385763009")))
+   (cause "engine" "cql: Quantity.value / .unit are null"
           "the interpreter returns null for (45 days).value and .unit, so an allowed coverage gap fails continuous enrollment (a cql bug)"
-          (edge "ENR-01"))))
+          (edge "ENR-01")
+          coverages)))
 
-;; explain : Member -> (or Cause #f)
+;; explain : Person -> (or Cause #f)
 (define (explain m) (for/first ([c causes] #:when ((cause-matches? c) m)) c))
 
 ;; ---- reporting --------------------------------------------------------------------------------
@@ -229,14 +253,92 @@
                   (newline o))))
   (simplify-path out-dir))
 
+;; outcome : (hash population Boolean) -> String   where a member lands in the funnel
+(define (outcome p)
+  (cond [(not (hash-ref p 'eligible)) "not eligible"]
+        [(hash-ref p 'excused) "excused"]
+        [(hash-ref p 'screened) "screened"]
+        [else "not screened"]))
+
+(define section-titles '(("eligible" . "eligible") ("excused" . "excused") ("screened" . "screened")))
+
+;; print-person : Person -> Void   one member: the key's story, both outcomes, the cause, the evidence
+(define (print-person m)
+  (define k (person-key m))
+  (printf "~a  ~a~a\n" (person-id m) (hash-ref k "description")
+          (let ([e (hash-ref k "edge_case")]) (if (equal? e "") "" (format "  [~a]" e))))
+  (printf "  NCQA logic: ~a    answer key: ~a\n" (outcome (ours m)) (outcome (theirs m)))
+  (define c (and (pair? (differs m)) (explain m)))
+  (cond [c (printf "  why they differ: ~a\n    ~a\n" (cause-label c) (cause-explanation c))
+           (for ([l ((cause-records c) m)]) (printf "    the record: ~a\n" l))]
+        [(pair? (differs m)) (printf "  why they differ: UNEXPLAINED (~a)\n" (differs m))])
+  (define ev (person-evidence m))
+  (printf "  evidence the measure found~a\n" (if (null? ev) ": none" ""))
+  (for ([s section-titles])
+    (define these (filter (lambda (e) (equal? (hash-ref e 'section) (car s))) ev))
+    (unless (null? these)
+      (printf "    ~a\n" (cdr s))
+      (for ([e these])
+        (printf "      ~a\n" (hash-ref e 'define))
+        (for ([i (hash-ref e 'items)]) (printf "        ~a\n" i)))))
+  (newline))
+
+;; ---- the interactive report -------------------------------------------------------------------
+(define-runtime-path report-template "report-template.html")
+
+;; report-data : (listof Person) -> jsexpr   what the report page shows
+(define (report-data ms)
+  (define (funnel f) (hasheq 'members (length ms) 'eligible (count-of ms 'eligible f) 'excused (count-of ms 'excused f)
+                             'accountable (count-of ms 'accountable f) 'screened (count-of ms 'screened f)))
+  (hasheq
+   'title "Breast Cancer Screening (NCQA HEDIS BCS-E), measurement year 2025"
+   'ours (funnel ours) 'key (funnel theirs)
+   'causes (for/list ([c causes])
+             (hasheq 'kind (cause-kind c) 'label (cause-label c) 'explanation (cause-explanation c)
+                     'count (count (lambda (m) (and (pair? (differs m)) (eq? (explain m) c))) ms)))
+   'members
+   (for/list ([m ms])
+     (define k (person-key m))
+     (define c (and (pair? (differs m)) (explain m)))
+     (hasheq 'id (person-id m) 'edge (hash-ref k "edge_case") 'story (hash-ref k "description")
+             'gender (hash-ref k "gender") 'age (hash-ref k "age_at_mp_end")
+             'ours (outcome (ours m)) 'key (outcome (theirs m))
+             'differs (map symbol->string (differs m))
+             'cause (if c (cause-label c) (if (pair? (differs m)) "unexplained" 'null))
+             'records (if c ((cause-records c) m) '())
+             'evidence (person-evidence m)))))
+
+;; write-report! : (listof Person) -> Path   report.html: the template with the data inlined
+(define (write-report! ms)
+  (make-directory* out-dir)
+  (define page (string-replace (file->string report-template) "/*BCSE-DATA*/null"
+                               ;; </ inside the JSON would end the <script>
+                               (string-replace (jsexpr->string (report-data ms)) "</" "<\\/")))
+  (define out (build-path out-dir "report.html"))
+  (call-with-output-file out #:exists 'replace (lambda (o) (write-string page o)))
+  (simplify-path out))
+
+;;   racket demo/bcse/population.rkt                 the whole population: tables, reports, report.html
+;;   racket demo/bcse/population.rkt bcse-0092 …     those members, each with its evidence
 (module+ main
+  (define ids (vector->list (current-command-line-arguments)))
   (printf "Breast Cancer Screening (NCQA HEDIS BCS-E), measurement year 2025, over a synthetic population\n\n")
-  (define ms (run-population))
-  (when ms
-    (print-funnel ms)
-    (print-differences ms)
-    (printf "\nFHIR MeasureReports (the summary, and one per member): ~a\n" (write-reports! ms))
-    (printf "\nTest data: synthetic members and TEST-ONLY stand-in code lists, not NCQA's; the rate is not a HEDIS rate.\n")))
+  (cond
+    [(pair? ids)
+     (define ms (run-population #:only ids))
+     (when ms
+       (for ([m ms]) (print-person m))
+       (define missing (filter (lambda (id) (not (findf (lambda (m) (equal? (person-id m) id)) ms))) ids))
+       (unless (null? missing) (printf "Not in the population: ~a\n" (string-join missing ", "))))]
+    [else
+     (define ms (run-population))
+     (when ms
+       (print-funnel ms)
+       (print-differences ms)
+       (printf "\nFHIR MeasureReports (the summary, and one per member): ~a\n" (write-reports! ms))
+       (printf "Interactive report (every member, with the evidence behind each decision): ~a\n" (write-report! ms))
+       (printf "One member in detail: racket demo/bcse/population.rkt bcse-0092\n")
+       (printf "\nTest data: synthetic members and TEST-ONLY stand-in code lists, not NCQA's; the rate is not a HEDIS rate.\n"))]))
 
 (module+ test
   (require rackunit)
@@ -245,4 +347,13 @@
     (check-equal? (length ms) 1000)
     (check-equal? (filter-map (lambda (m) (and (pair? (differs m)) (not (explain m)) (person-id m))) ms) '()
                   "every disagreement with the answer key has a known cause")
-    (check-true (>= (count (lambda (m) (null? (differs m))) ms) 894) "fewer members agree than the floor")))
+    (check-true (>= (count (lambda (m) (null? (differs m))) ms) 894) "fewer members agree than the floor")
+    ;; the evidence trail backs every decision: an excused member shows exclusion evidence, a screened
+    ;; one a mammography record (not only the window)
+    (define (has-evidence? m section)
+      (for/or ([e (person-evidence m)])
+        (and (equal? (hash-ref e 'section) section) (not (equal? (hash-ref e 'define) "Mammography screening period")))))
+    (check-equal? (filter-map (lambda (m) (and (hash-ref (ours m) 'excused) (not (has-evidence? m "excused")) (person-id m))) ms) '()
+                  "every excused member has exclusion evidence")
+    (check-equal? (filter-map (lambda (m) (and (hash-ref (ours m) 'screened) (not (has-evidence? m "screened")) (person-id m))) ms) '()
+                  "every screened member has a mammography record")))

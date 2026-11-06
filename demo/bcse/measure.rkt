@@ -25,6 +25,9 @@
   [measure-libraries (-> hash?)]
   [compiling-count (-> hash? exact-nonnegative-integer?)]
   [bcse-measure (-> hash?)]
+  [library-text (-> string? (or/c #f string?))]
+  [member-library (-> hash? procedure? (listof hash?) any/c)]
+  [library-defines (-> any/c hash?)]
   [evaluate-defines (-> hash? procedure? (listof hash?) hash?)]
   [group-counts (-> hash? string? string? hash?)]
   [member-counts (-> hash? (listof hash?))]
@@ -65,14 +68,26 @@
             (values #f '(parse))))
       (if (and lib (null? errs)) 1 0))))
 
-;; evaluate-defines : (hash name Result) terminology (listof resource) -> Defines   one member's
-;; records (and any shared resources) through BCSE_Details, with its default measurement period
+;; library-text : String -> String   a library's CQL, as the bundle carries it
+(define (library-text name)
+  (for*/first ([r (bundle-resources)] #:when (equal? (hash-ref r 'name #f) name)
+               [c (hash-ref r 'content '())] #:when (equal? (hash-ref c 'contentType #f) "text/cql"))
+    (bytes->string/utf-8 (base64-decode (string->bytes/utf-8 (hash-ref c 'data))))))
+
+;; member-library : (hash name Result) terminology (listof resource) -> rlib   BCSE_Details over one
+;; member's records (and any shared resources), with its default measurement period
+(define (member-library parsed terminology resources)
+  (load-runtime-library (ok-value (hash-ref parsed "BCSE_Details"))
+                        #:resolver (library-resolver parsed)
+                        #:data (resources->data resources)
+                        #:valuesets terminology))
+
+;; library-defines : rlib -> Defines
+(define (library-defines rl) (for/hash ([n population-names]) (values n (eq? (rlib-value rl n) #t))))
+
+;; evaluate-defines : (hash name Result) terminology (listof resource) -> Defines
 (define (evaluate-defines parsed terminology resources)
-  (define rl (load-runtime-library (ok-value (hash-ref parsed "BCSE_Details"))
-                                   #:resolver (library-resolver parsed)
-                                   #:data (resources->data resources)
-                                   #:valuesets terminology))
-  (for/hash ([n population-names]) (values n (eq? (rlib-value rl n) #t))))
+  (library-defines (member-library parsed terminology resources)))
 
 ;; group-counts : Defines String String -> (hash population-code 0|1)   one member in one group
 (define (group-counts d exclusion denominator)
