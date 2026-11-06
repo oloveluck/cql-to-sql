@@ -35,6 +35,7 @@ All paths are relative to this repo's root; the dependencies are cloned next to 
 | Retrieve, value sets, FHIR properties in SQL | Missing (Retrieve raises untranslatable) |
 | Whole libraries in SQL (defines, refs, functions, FHIRHelpers, parameters) | Missing |
 | Per-patient comparison SQL vs. interpreter | Missing |
+| Running the SQL in Aidbox (cloud, PostgreSQL) | Missing: REST connector and PostgreSQL dialect |
 
 Most common untranslatable constructs in the SQL TCK: `elm-timing` (464), `elm-between` (54),
 `+`/`-` on Any (65), Expand, Intersect, Except, aggregate clause, `elm-minmax`, ToDateTime,
@@ -51,14 +52,34 @@ Collapse, AnyTrue/AllTrue, Today.
    sql-on-fhir's shared suite (144 tests) gives the same rows from SQLite as in memory.
    Risk: sql-on-fhir parses against R6, the test data is R4; R4-only elements may be dropped.
    Independent of `translate.rkt`, so a good parallel task.
-3. **Retrieve and properties.** `[Condition: "VS"]` → select on the view table joined to the
+3. **Aidbox connector (cloud, over REST).** Aidbox stores FHIR in PostgreSQL and implements
+   SQL on FHIR: a ViewDefinition plus
+   [`$materialize`](https://www.health-samurai.io/docs/aidbox/modules/sql-on-fhir/operation-materialize)
+   becomes a table or view in the `sof` schema. Our instance is in the cloud, so everything goes
+   over REST rather than a direct Postgres connection:
+   - `POST /fhir/ViewDefinition/$materialize` with the Phase 2 ViewDefinitions → `sof.*` tables.
+   - `POST /fhir` (transaction bundle) to load test patients; value set codes into a table.
+   - `POST /$sql` to run the translated SQL; results come back as JSON.
+   - **PostgreSQL dialect** in `sql/dialect.rkt`: `jsonb_build_array`/`jsonb_build_object`/
+     `jsonb_array_elements`/`jsonb_agg`, a real boolean type (types.rkt encodes Boolean as 0/1),
+     typed view columns (`date`, `timestamptz`, `boolean`) cast to our encodings at the table
+     boundary, `$1` positional parameters in `sql/print.rkt`, and a way to raise runtime errors.
+   - Credentials from the environment (`AIDBOX_URL`, `AIDBOX_CLIENT_ID`, `AIDBOX_CLIENT_SECRET`),
+     never in the repo; Aidbox tests skip when they are unset, so `raco test` works offline.
+   - Requires Aidbox 2508+ in fhir-schema mode. First step is a smoke check: version, `SELECT 1`
+     through `$sql`, materialize and query one small view.
+   - Bonus check: Aidbox's `sof.*` rows equal `eval-view`'s rows for the same data.
+   SQLite stays the fast local oracle; Aidbox is a second place the same SQL must give the same
+   answer.
+4. **Retrieve and properties.** `[Condition: "VS"]` → select on the view table joined to the
    value set table, filtered to the current patient; property paths → view columns; FHIRHelpers
    calls → direct SQL. Check with small hand-written libraries against the interpreter.
-4. **Whole libraries.** Defines as CTEs, references and functions inlined, Measurement Period
+5. **Whole libraries.** Defines as CTEs, references and functions inlined, Measurement Period
    as a query parameter; one query, one row per patient, a column per define.
-5. **Measure-level comparison.** For each of the 76 eCQM patients compare the population
-   defines between SQL and the interpreter; floor that only rises, named known mismatches.
-6. **Wrap-up.** DuckDB dialect, output as SQL-on-FHIR SQLQuery/SQLView Library, `ig/` with
+6. **Measure-level comparison.** For each of the 76 eCQM patients compare the population
+   defines between SQL and the interpreter, in SQLite and in Aidbox; floor that only rises,
+   named known mismatches.
+7. **Wrap-up.** DuckDB dialect, output as SQL-on-FHIR SQLQuery/SQLView Library, `ig/` with
    `Library/$cql-to-sql`.
 
 ## Open questions
@@ -67,3 +88,6 @@ Collapse, AnyTrue/AllTrue, Today.
   (where the interpreter agrees on 71 of 76)? Not decided yet.
 - Which CQL matters most: the eCQM corpus, or EBMEDS rules?
 - Division of phases between team members and Owen.
+- Aidbox: is the cloud instance shared? Tests create ViewDefinitions, `sof.*` tables and load
+  76 test patients, so use a dedicated instance or a prefix (e.g. `cql2sql_`) with cleanup.
+- Aidbox: which Client and access policy may call `$sql` and `$materialize`?
