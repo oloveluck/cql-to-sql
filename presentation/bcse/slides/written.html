@@ -1,0 +1,26 @@
+<section id="written" data-transition="fade" style="background:#F4F5F7;color:#1D2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:56px">
+<h2 style="font-family:Newsreader, Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">NCQA publishes the measure as rules a computer can run</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:56px">
+<div style="display:flex;flex-direction:column;gap:32px">
+<div style="display:flex;flex-direction:column;gap:8px;border-left:4px solid #B23A62;padding:0 0 0 28px">
+<h3 style="font-size:36px;font-weight:600">What to count</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">The four checks, for all members and separately for Medicare members</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;border-left:4px solid #3D5A80;padding:0 0 0 28px">
+<h3 style="font-size:36px;font-weight:600">The rules, in CQL</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">Clinical Quality Language, a standard language for these rules: 43 files of it, most shared across NCQA’s measures</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;border-left:4px solid #8D97A8;padding:0 0 0 28px">
+<h3 style="font-size:36px;font-weight:600">Code lists</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">Which billing and clinical codes count: “mammogram” alone is 162 codes</p>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px;background:#1D2433;border-radius:16px;padding:48px">
+<p style="font-size:24px;color:#BFC7D5">The “screened?” rule, as NCQA wrote it</p>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:28px;line-height:1.6;color:#F4F5F7">define "Numerator":<br>  exists("Observations for mammography")<br>  or exists("Reports for mammography")<br>  or exists("Claims for mammography")<br>  or exists("Eobs for mammography")</p>
+<p style="font-size:24px;line-height:1.5;color:#BFC7D5">A mammogram in a test result, an imaging report, a claim or a claim payment.</p>
+<p style="font-size:24px;line-height:1.5;color:#E57A9D">Not on the list: a procedure entry in the clinical record.</p>
+</div>
+</div>
+<aside>NCQA publishes the measure as computable rules in a standard format, so any compliant system can run it. The rules are readable: the screening rule looks for a mammogram in four kinds of record. It never looks at procedure entries in the clinical record. Keep that in mind; it explains most of the results later.</aside>
+</section>

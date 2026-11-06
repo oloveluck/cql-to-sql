@@ -1,0 +1,33 @@
+<section id="cql-sql-arch" data-transition="fade" style="background:#F4F5F7;color:#1D2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:40px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#B23A62">Method B · A database query</p>
+<h2 style="font-family:Newsreader, Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">The same rules, translated into one query over tables</h2>
+<div style="display:flex;gap:20px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:28px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#B23A62">The rules</p>
+<div style="display:flex;gap:12px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">NCQA’s rules</p><p style="font-size:24px;line-height:1.3;color:#4F586B">the same CQL as Method A</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1.4;display:flex;flex-direction:column;gap:6px;background:#F6E3EA;border:2px solid #B23A62;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">Translator</p><p style="font-size:24px;line-height:1.3;color:#4F586B">rewrites each rule as a step of a database query</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">One SQL query</p><p style="font-size:24px;line-height:1.3;color:#4F586B">for any standard database</p></div>
+</div>
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#3D5A80">The records</p>
+<div style="display:flex;gap:12px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">Health records</p><p style="font-size:24px;line-height:1.3;color:#4F586B">the same FHIR data</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1.4;display:flex;flex-direction:column;gap:6px;background:#E3EAF3;border:2px solid #3D5A80;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">Flattened</p><p style="font-size:24px;line-height:1.3;color:#4F586B">with standard FHIR-to-table definitions; nothing lost</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:18px"><p style="font-size:26px;font-weight:600">Tables</p><p style="font-size:24px;line-height:1.3;color:#4F586B">patients, claims, diagnoses …</p></div>
+</div>
+</div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:48px;height:24px"></x-shape>
+<div style="width:400px;display:flex;flex-direction:column;gap:16px;align-items:stretch">
+<div style="display:flex;flex-direction:column;gap:6px;background:#1D2433;border-radius:12px;padding:20px"><p style="font-size:26px;font-weight:600;color:#F4F5F7">Database</p><p style="font-size:24px;line-height:1.3;color:#BFC7D5">runs the query over all members at once</p></div>
+<div style="display:flex;justify-content:center"><x-shape kind="arrow-down" style="background:#8D97A8;width:20px;height:40px"></x-shape></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px"><p style="font-size:26px;font-weight:600">A row per member</p><p style="font-size:24px;line-height:1.3;color:#4F586B">yes or no for each check</p></div>
+<div style="display:flex;justify-content:center"><x-shape kind="arrow-down" style="background:#8D97A8;width:20px;height:40px"></x-shape></div>
+<div style="display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:2px solid #B23A62;border-radius:12px;padding:20px"><p style="font-size:26px;font-weight:600">Results report</p><p style="font-size:24px;line-height:1.3;color:#4F586B">must match Method A’s</p></div>
+</div>
+</div>
+<aside>Method B computes the same measure inside a database. Two things meet there. The rules: a translator rewrites each of NCQA's rules as a step of one SQL query. The records: standard definitions flatten the FHIR health records into ordinary tables, with checks that nothing is lost. The database answers the checks for every member at once, which scales to millions. The result is the same standard report, so we can compare it with Method A member by member.</aside>
+</section>

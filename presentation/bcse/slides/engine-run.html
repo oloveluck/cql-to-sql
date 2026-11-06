@@ -1,0 +1,25 @@
+<section id="engine-run" data-transition="fade" style="background:#F4F5F7;color:#1D2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px;display:flex;flex-direction:column;gap:36px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#3D5A80">Method A · A rules engine</p>
+<h2 style="font-family:Newsreader, Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">The engine applies NCQA’s rules to one member at a time</h2>
+<div style="display:flex;gap:24px">
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px 24px"><p style="font-size:26px;font-weight:600">NCQA’s rules</p><p style="font-size:24px;color:#4F586B">the measure, in CQL</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px 24px"><p style="font-size:26px;font-weight:600">NCQA’s code lists</p><p style="font-size:24px;color:#4F586B">which codes count</p></div>
+<div style="flex:1;display:flex;flex-direction:column;gap:6px;background:#E3EAF3;border:1px solid #3D5A80;border-radius:12px;padding:20px 24px"><p style="font-size:26px;font-weight:600">Health records</p><p style="font-size:24px;color:#4F586B">in FHIR, the standard format</p></div>
+</div>
+<div style="display:flex;justify-content:center"><x-shape kind="arrow-down" style="background:#8D97A8;width:24px;height:48px"></x-shape></div>
+<div style="display:flex;gap:12px;align-items:center">
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#3D5A80">1 Prepare</p><p style="font-size:24px;line-height:1.35;color:#4F586B">turn the rules into a program</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#3D5A80">2 Set the year</p><p style="font-size:24px;line-height:1.35;color:#4F586B">measurement year 2025</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1.4;display:flex;flex-direction:column;gap:8px;background:#E3EAF3;border:2px solid #3D5A80;border-radius:12px;padding:20px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#3D5A80">3 Each member</p><p style="font-size:24px;line-height:1.35;color:#4F586B">read their records and answer the four checks: yes or no</p></div>
+<x-shape kind="arrow-right" style="background:#8D97A8;width:32px;height:16px"></x-shape>
+<div style="flex:1;display:flex;flex-direction:column;gap:8px;background:#FFFFFF;border:1px solid #DDE1E8;border-radius:12px;padding:20px"><p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;color:#3D5A80">4 Count</p><p style="font-size:24px;line-height:1.35;color:#4F586B">add up the answers</p></div>
+</div>
+<div style="display:flex;justify-content:center"><x-shape kind="arrow-down" style="background:#8D97A8;width:24px;height:48px"></x-shape></div>
+<div style="display:flex;gap:24px;align-items:center;background:#1D2433;border-radius:12px;padding:24px 32px">
+<p style="font-size:28px;font-weight:600;color:#F4F5F7">A standard results report</p>
+<p style="font-size:24px;color:#BFC7D5">for each member, and for the whole population: the counts and the rate</p>
+</div>
+<aside>Method A is how quality measures are usually computed. A rules engine takes NCQA's published rules and code lists, prepares them once, then goes through the members one at a time: it reads each member's health records and answers the four checks. Adding up the answers gives the counts and the rate, written as a standard FHIR results report. Our engine runs this way in memory, and also behind our own FHIR server.</aside>
+</section>

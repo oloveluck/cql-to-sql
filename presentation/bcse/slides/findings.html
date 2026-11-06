@@ -1,0 +1,23 @@
+<section id="findings" data-transition="fade" style="background:#F4F5F7;color:#1D2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<h2 style="font-family:Newsreader, Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">Conclusions</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:40px">
+<div style="display:flex;flex-direction:column;gap:12px;border-left:4px solid #3D5A80;padding:0 0 0 28px">
+<h3 style="font-size:34px;font-weight:600">The engine computes the measure correctly</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">All 19 hand-built members match. Every difference from the answer key on 1,000 members has a known cause.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-left:4px solid #B23A62;padding:0 0 0 28px">
+<h3 style="font-size:34px;font-weight:600">How data records care decides the rate</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">The same clinical records score 36.1% as delivered and 60.4% with mammograms sent as test results. Claims-style data: 50.0%.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-left:4px solid #8D97A8;padding:0 0 0 28px">
+<h3 style="font-size:34px;font-weight:600">Expected results need checking too</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">The answer key was wrong for 8 members; we wrote these up, with the records, for its author.</p>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px;border-left:4px solid #2F7D5B;padding:0 0 0 28px">
+<h3 style="font-size:34px;font-weight:600">A database query can match the engine</h3>
+<p style="font-size:28px;line-height:1.4;color:#4F586B">Identical results on the simplified measure. The full measure needs the translator to handle NCQA’s shared building blocks.</p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4F586B">Next: extend the translator and run Method B on all three populations · release the engine bug fix · build test data in insurance-claims style.</p>
+<aside>Four conclusions. First, Method A computes NCQA's measure correctly: it matches every hand-built member, and every disagreement with the answer key has a known cause. Second, and most useful for anyone doing quality reporting: the rate depends on how the data records care. Clinical records lose screenings NCQA's rules cannot see; the same mammograms sent as test results restore the expected rate, and claims-style data runs cleanly. Third, expected results are data too, and can be wrong. Fourth, Method B, the database query, reproduces the engine exactly where it can translate today; the full measure needs the translator to handle the building blocks NCQA shares across its measures.</aside>
+</section>

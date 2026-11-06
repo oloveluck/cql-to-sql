@@ -1,0 +1,21 @@
+<section id="hedis-population" data-transition="fade" style="background:#F4F5F7;color:#1D2433;font-family:'IBM Plex Sans', Arial, sans-serif;padding:128px 128px 160px;display:flex;flex-direction:column;gap:44px">
+<p style="font-family:'IBM Plex Mono', 'Courier New', monospace;font-size:24px;letter-spacing:2px;text-transform:uppercase;color:#2F7D5B">Method A · Dataset: 1,000 members, insurance-claims style</p>
+<h2 style="font-family:Newsreader, Georgia, serif;font-size:72px;font-weight:600;line-height:1.1">NCQA’s rules on insurance-claims data: 50.0%</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:56px">
+<table style="font-size:28px;color:#1D2433">
+<tr><th style="width:46%">1,000 members</th><th style="width:27%;text-align:right">All</th><th style="width:27%;text-align:right">Medicare</th></tr>
+<tr><td>Eligible</td><td style="text-align:right">338</td><td style="text-align:right">338</td></tr>
+<tr><td>Excused</td><td style="text-align:right">138</td><td style="text-align:right">158</td></tr>
+<tr><td>Accountable</td><td style="text-align:right">200</td><td style="text-align:right">180</td></tr>
+<tr><td>Screened</td><td style="text-align:right">100</td><td style="text-align:right">100</td></tr>
+<tr style="background:#E3EAF3"><td><b>Rate</b></td><td style="text-align:right"><b>50.0%</b></td><td style="text-align:right"><b>55.6%</b></td></tr>
+</table>
+<div style="display:flex;flex-direction:column;gap:24px">
+<p style="font-size:30px;line-height:1.4"><b>Usable as delivered.</b> <span style="color:#4F586B">Insurance and member details are recorded the way NCQA expects.</span></p>
+<p style="font-size:30px;line-height:1.4"><b>Every screening found where NCQA looks:</b> <span style="color:#4F586B">100 of 100 on insurance claims.</span></p>
+<p style="font-size:30px;line-height:1.4"><b>Every exclusion has its record:</b> <span style="color:#4F586B">mastectomy of both breasts 96, frailty with advanced illness 35, gender-affirming surgery 28, death 20.</span></p>
+</div>
+</div>
+<p style="position:absolute;left:128px;bottom:64px;width:1664px;font-size:24px;color:#4F586B">After fixing a bug in our engine that treated short gaps between insurance plans, which NCQA allows, as breaks in coverage. Before the fix: 47.1%.</p>
+<aside>A teammate generated a second population, recorded the way health plans report to NCQA: insurance claims and NCQA's own insurance categories. It runs as delivered, and every screening is found on an insurance claim. The round numbers, 100 of 200, suggest a designed test set. It also showed how much one small engine bug matters: these members often have a few days between insurance plans, which NCQA allows, and before the fix our engine dropped them, giving 47.1% instead of 50.0%.</aside>
+</section>
