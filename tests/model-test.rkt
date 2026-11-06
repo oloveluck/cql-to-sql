@@ -5,8 +5,9 @@
 ;;; independent walk of the data gives (PLAN.md R1-R4). Floors that only rise.
 ;;;
 ;;; Corpora: the 1,000-member BCS-E test population (bcse_usqc_testdata_n1000.zip, US Quality
-;;; Core, valid FHIR) and the eCQM test patients vendored in cql (zone-less dateTimes: built with the
-;;; eCQM harness's offset, -07:00, as the interpreter evaluates them).
+;;; Core, valid FHIR), the 19 BCS-E scenarios on the HEDIS core profiles (when built), and the eCQM
+;;; test patients vendored in cql (zone-less dateTimes: built with the eCQM harness's offset,
+;;; -07:00, as the interpreter evaluates them).
 
 (require rackunit
          racket/file
@@ -48,6 +49,17 @@
   (parameterize ([current-directory tmp]) (unzip n1000-zip))
   (check-corpus "n1000" (read-resources (list tmp)) #f 309)
   (delete-directory/files tmp))
+
+;; the 19 BCS-E scenarios, as SUSHI builds them (scenarios/bcse/fsh-generated, gitignored: run
+;; `racket scripts/install-hedis.rkt`, `sushi build scenarios/bcse`, install-hedis again)
+(define scenarios (build-path root "scenarios" "bcse" "fsh-generated" "resources"))
+(define scenario-bundles
+  (if (directory-exists? scenarios)
+      (for/list ([f (directory-list scenarios #:build? #t)] #:when (regexp-match? #rx"/Bundle-bcse-[^/]*[.]json$" (path->string f))) f)
+      '()))
+(if (null? scenario-bundles)
+    (printf "model, BCS-E scenarios: SKIPPED, not built (scenarios/bcse: install-hedis, sushi build)\n")
+    (check-corpus "BCS-E scenarios" (read-resources scenario-bundles) #f 309))
 
 ;; the eCQM test patients
 (define ecqm (with-handlers ([exn:fail? (lambda (_) #f)]) (collection-file-path "tests" "cql" "tests" "vendor" "ecqm")))

@@ -74,9 +74,12 @@ reports such values instead.
 | Corpus | Resources | Rows | Columns equal to the data | Repairs |
 |---|---|---|---|---|
 | BCS-E test population, n = 1,000 (`bcse_usqc_testdata_n1000.zip`) | 11,770 | 31,064 | 309 / 309 | none |
+| BCS-E scenarios, 19 members on the HEDIS core profiles (`scenarios/bcse`, built by SUSHI) | 88 | 111 | 309 / 309 | none |
 | eCQM test patients (cql's vendored corpus) | 267 | 895 | 309 / 309 | 253 dateTimes, 1 boolean |
 
-R4 → R6 → R4 round trip: lossless on both. `requirements.rkt` over BCSE_Details: 143 elements
+R4 → R6 → R4 round trip: lossless on all three. The scenarios need a build first:
+`racket scripts/install-hedis.rkt`, `cd scenarios/bcse && npx fsh-sushi build .`, install-hedis
+again; the model test skips them until then. `requirements.rkt` over BCSE_Details: 143 elements
 read, all covered by the model.
 
 ## Example

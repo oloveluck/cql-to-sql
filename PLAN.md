@@ -49,11 +49,11 @@ FHIR data ──ViewDefinitions (R1–R2)──▶ relational model (tables)
   and a data dictionary (`model/SCHEMA.md`): normalized child tables, R6 paths, keys, positions,
   statuses and negations, extensions, data source.
 - **R3** `model/r4-to-r6.rkt` (lossless, with its inverse) and `model/build.rkt` (data → SQLite,
-  indexed). Loaded: the 1,000-member BCS-E population (11,770 resources, 31,064 rows) and the
-  eCQM test patients. The 19 scenarios are next (they need `scripts/install-hedis.rkt` and a
-  SUSHI or fsh build first).
-- **R4** `model/check.rkt`: R4 → R6 → R4 round trip lossless on both corpora; all 309 columns
-  equal an independent walk of the data on both. It found that the view engine drops invalid
+  indexed). Loaded: the 1,000-member BCS-E population (11,770 resources, 31,064 rows), the 19
+  BCS-E scenarios (88 resources: NCQA coverage codes, the LTI extension, claims, procedures; built
+  by `install-hedis.rkt` + `npx fsh-sushi build`) and the eCQM test patients.
+- **R4** `model/check.rkt`: R4 → R6 → R4 round trip lossless on all three corpora; all 309
+  columns equal an independent walk of the data on all three. It found that the view engine drops invalid
   FHIR values the interpreter tolerates (zone-less dateTimes, `"true"` strings in the eCQM data):
   `model/repair.rkt` repairs them, opt-in and counted.
 - `tests/model-test.rkt` runs all of it (about 5 s).
