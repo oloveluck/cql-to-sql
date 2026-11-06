@@ -198,6 +198,8 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
   - 13 stand-ins carry test codes: mammography, the three mastectomies, hospice and palliative
     care, medical insurance, the four payer coverage types, professional/institutional claims, and
     final observation status (`final`, `amended`, `corrected`).
+- **Demo:** `racket demo/bcse/run.rkt` prints the funnel per member and the rates, and writes the
+  MeasureReports (`demo/bcse/README.md`).
 - **Next:** the same Bundles and score keys feed phase 6, the per-patient SQL vs. interpreter
   comparison.
 - **Found on the way, for the shared repos (not patched here):**
