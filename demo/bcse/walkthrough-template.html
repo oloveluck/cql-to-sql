@@ -1,0 +1,353 @@
+<title>How a Measure Is Evaluated</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a stage in three lanes (the FHIR store, the CQL engine's checks, the MeasureReport) that a
+   member's evaluation moves through step by step; a last scene drops all 1,000 members through the
+   funnel. One column on phones. */
+:root {
+  --paper: #f6f7f9; --surface: #ffffff; --ink: #1d2433; --muted: #5d6678; --rule: #dfe3ea; --hover: #eef1f6;
+  --accent: #b23a62; --accent-soft: #f6e3ea; --store: #3d5a80; --store-soft: #e3eaf3;
+  --pass: #2f7d5b; --pass-soft: #def0e7; --fail: #8d97a8; --fail-soft: #eceff3; --warn: #9a6a1f;
+  --d-out: #c3cad6; --d-excused: #8d97a8; --d-unscreened: #e2b9c8; --d-screened: #b23a62;
+  --display: "Newsreader", Georgia, "Times New Roman", serif;
+  --body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --paper: #12151c; --surface: #1a1f29; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2c3340; --hover: #222937;
+  --accent: #e57a9d; --accent-soft: #3a2230; --store: #7d9cc6; --store-soft: #1f2a3a;
+  --pass: #6cc49b; --pass-soft: #183026; --fail: #7c8596; --fail-soft: #20252f; --warn: #d6a85a;
+  --d-out: #3a4252; --d-excused: #5c6575; --d-unscreened: #6b3c4e; --d-screened: #e57a9d; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --paper: #12151c; --surface: #1a1f29; --ink: #e6e9ef; --muted: #9aa3b4; --rule: #2c3340; --hover: #222937;
+  --accent: #e57a9d; --accent-soft: #3a2230; --store: #7d9cc6; --store-soft: #1f2a3a;
+  --pass: #6cc49b; --pass-soft: #183026; --fail: #7c8596; --fail-soft: #20252f; --warn: #d6a85a;
+  --d-out: #3a4252; --d-excused: #5c6575; --d-unscreened: #6b3c4e; --d-screened: #e57a9d; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { background: var(--paper); color: var(--ink); font: 15px/1.55 var(--body); margin: 0; }
+main { max-width: 1180px; margin: 0 auto; padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 20px; }
+h1 { font: 600 clamp(1.7rem, 4vw, 2.3rem)/1.15 var(--display); margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 72ch; }
+.eyebrow { font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.muted { color: var(--muted); }
+.mono { font-family: var(--mono); }
+button { font: inherit; color: inherit; }
+button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.picker button { border: 1px solid var(--rule); background: var(--surface); border-radius: 999px; padding: 6px 14px; cursor: pointer; font-size: 0.88rem; }
+.picker button[aria-pressed="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.picker .all { border-color: var(--accent); color: var(--accent); }
+.picker .all[aria-pressed="true"] { background: var(--accent); color: var(--surface); }
+
+.caption { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 18px; display: grid; gap: 4px; min-height: 5.2em; }
+.caption .step { font: 500 0.7rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+.caption .say { font-size: 1.02rem; }
+
+.controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.controls button { border: 1px solid var(--rule); background: var(--surface); border-radius: 8px; padding: 7px 14px; cursor: pointer; font-size: 0.9rem; }
+.controls button.primary { background: var(--accent); color: var(--surface); border-color: var(--accent); min-width: 6.5rem; }
+.controls button:disabled { opacity: .4; cursor: default; }
+.dots { display: flex; gap: 6px; margin-left: 4px; }
+.dots span { width: 8px; height: 8px; border-radius: 50%; background: var(--rule); }
+.dots span.on { background: var(--accent); }
+
+/* the stage */
+.stage { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(0, 0.8fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .stage { grid-template-columns: minmax(0, 1fr); } }
+.lane { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px; display: grid; gap: 10px; min-width: 0; transition: border-color .3s; }
+.lane.live { border-color: var(--accent); }
+.lane h2 { margin: 0; font: 500 0.72rem/1 var(--mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; gap: 8px; }
+.lane h2 b { color: var(--ink); font-weight: 500; }
+.who { display: grid; gap: 2px; border-bottom: 1px solid var(--rule); padding-bottom: 10px; }
+.who strong { font: 600 1.05rem/1.3 var(--mono); }
+.who span { font-size: 0.86rem; color: var(--muted); }
+.cards { display: grid; gap: 6px; }
+.card { border: 1px solid var(--rule); border-left: 3px solid var(--store); border-radius: 6px; padding: 6px 9px; font: 0.76rem/1.4 var(--mono);
+  overflow-wrap: anywhere; background: var(--surface); transition: opacity .45s, transform .45s, background .45s, border-color .45s; }
+.card .t { font-weight: 500; color: var(--store); }
+.card.dim { opacity: .38; }
+.card.pulled { background: var(--store-soft); transform: translateX(6px); }
+.more { font: 0.76rem/1.4 var(--mono); color: var(--muted); }
+.vs { font: 0.74rem/1.45 var(--mono); color: var(--muted); border: 1px dashed var(--rule); border-radius: 6px; padding: 6px 9px; }
+
+.gate { border: 1px solid var(--rule); border-radius: 8px; padding: 10px 12px; display: grid; gap: 6px; transition: background .4s, border-color .4s, opacity .4s; }
+.gate header { display: flex; align-items: center; gap: 10px; }
+.gate .mark { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--rule); font: 600 0.9rem/1 var(--mono); flex: none; transition: background .4s, color .4s, transform .4s; }
+.gate .q { font-weight: 600; }
+.gate .rule { font-size: 0.8rem; color: var(--muted); }
+.gate .ev { display: none; font: 0.74rem/1.45 var(--mono); overflow-wrap: anywhere; }
+.gate .ev div { color: var(--muted); }
+.gate .ev ul { margin: 2px 0 4px; padding-left: 14px; }
+.gate.pending { opacity: .55; }
+.gate.skipped { opacity: .45; }
+.gate.done .ev { display: block; }
+.gate.yes { background: var(--pass-soft); border-color: var(--pass); }
+.gate.yes .mark { background: var(--pass); color: var(--surface); border-color: var(--pass); transform: scale(1.08); }
+.gate.no { background: var(--fail-soft); border-color: var(--fail); }
+.gate.no .mark { background: var(--fail); color: var(--surface); border-color: var(--fail); }
+
+.report { border: 1px solid var(--rule); border-radius: 8px; padding: 12px; display: grid; gap: 8px; font-size: 0.86rem; transition: opacity .4s; }
+.report.pending { opacity: .4; }
+.report .kv { display: flex; justify-content: space-between; border-bottom: 1px solid var(--rule); padding: 3px 0; font-family: var(--mono); font-size: 0.8rem; }
+.report .kv b { font-weight: 600; transition: color .3s; }
+.report .kv b.one { color: var(--accent); }
+.outcome { display: grid; gap: 8px; }
+.pill { display: inline-block; font: 500 0.74rem/1.5 var(--mono); padding: 1px 9px; border-radius: 999px; white-space: nowrap; }
+.o-screened { background: var(--d-screened); color: var(--surface); }
+.o-not-screened { background: var(--d-unscreened); color: var(--ink); }
+.o-excused { background: var(--d-excused); color: var(--surface); }
+.o-not-eligible { border: 1px solid var(--rule); color: var(--muted); }
+.compare { display: grid; grid-template-columns: auto 1fr; gap: 6px 10px; align-items: center; font-size: 0.84rem; }
+.why { border-left: 3px solid var(--warn); padding-left: 10px; display: grid; gap: 4px; font-size: 0.82rem; }
+.why b { color: var(--warn); }
+.why li { font: 0.74rem/1.45 var(--mono); overflow-wrap: anywhere; }
+.why ul { margin: 0; padding-left: 14px; }
+.hidden-step { display: none; }
+
+/* the population scene */
+.pop { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+@media (max-width: 900px) { .pop { grid-template-columns: minmax(0, 1fr); } }
+.canvaswrap { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 10px; }
+canvas { width: 100%; height: auto; display: block; aspect-ratio: 760 / 420; }
+.tally { display: grid; gap: 10px; }
+.tally .row { display: grid; grid-template-columns: 1fr auto auto; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--rule); padding: 6px 0; font-size: 0.92rem; }
+.tally .row .n { font: 500 1rem/1 var(--mono); text-align: right; font-variant-numeric: tabular-nums; min-width: 3.5rem; }
+.tally .row .k { color: var(--muted); }
+.tally .sw { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+.rates { display: flex; gap: 24px; flex-wrap: wrap; }
+.rates strong { display: block; font: 600 2.2rem/1 var(--display); font-variant-numeric: tabular-nums; }
+.rates span { font-size: 0.82rem; color: var(--muted); }
+footer { font-size: 0.8rem; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { .card, .gate, .gate .mark, .report, .lane { transition: none; } }
+</style>
+
+<main>
+  <header style="display:grid;gap:8px">
+    <span class="eyebrow">NCQA HEDIS · Breast Cancer Screening · 2025</span>
+    <h1>How a measure is evaluated</h1>
+    <p class="muted">Follow one member at a time from the FHIR store, through NCQA's CQL logic, to a MeasureReport. Then watch the whole population of 1,000 members go through the same checks.</p>
+  </header>
+
+  <nav class="picker" id="picker" aria-label="Choose a member"></nav>
+  <div class="caption" aria-live="polite"><span class="step" id="stepName"></span><span class="say" id="say"></span></div>
+  <div class="controls">
+    <button type="button" id="back">Back</button>
+    <button type="button" id="play" class="primary">Play</button>
+    <button type="button" id="next">Next</button>
+    <div class="dots" id="dots" aria-hidden="true"></div>
+  </div>
+
+  <section class="stage" id="stage" aria-label="One member's evaluation">
+    <div class="lane" id="laneStore">
+      <h2><span>1 · FHIR store</span><b id="recCount"></b></h2>
+      <div class="who" id="who"></div>
+      <div class="cards" id="cards"></div>
+    </div>
+    <div class="lane" id="laneEngine">
+      <h2><span>2 · CQL engine</span><b>BCSE_Details</b></h2>
+      <div class="vs" id="vs">Measurement period 2025-01-01 to 2025-12-31 · NCQA's value sets: Mammography (162 codes), Bilateral Mastectomy, Hospice, Frailty …</div>
+      <div id="gates" style="display:grid;gap:8px"></div>
+    </div>
+    <div class="lane" id="laneReport">
+      <h2><span>3 · MeasureReport</span><b>individual</b></h2>
+      <div class="report pending" id="report"></div>
+      <div class="outcome hidden-step" id="outcome"></div>
+    </div>
+  </section>
+
+  <section class="pop hidden-step" id="pop" aria-label="The whole population">
+    <div class="canvaswrap"><canvas id="canvas" width="1520" height="840" role="img" aria-label="1,000 members fall into four groups: not eligible, excused, not screened, screened"></canvas></div>
+    <div class="tally">
+      <div id="tally"></div>
+      <div class="rates" id="rates"></div>
+      <p class="muted" style="font-size:.86rem">The answer key expects 60.9%. Almost all of the gap is members whose mammogram is recorded only as a Procedure, a record type NCQA's HEDIS logic doesn't read.</p>
+    </div>
+  </section>
+
+  <footer>Synthetic members, evaluated with NCQA's MY2025 value sets: the members are not real, so this is not a plan's HEDIS rate. Generated by <span class="mono">racket demo/bcse/population.rkt</span>.</footer>
+</main>
+
+<script>const WALK = /*BCSE-WALKTHROUGH*/null;</script>
+<script>
+(function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  const pill = (o) => `<span class="pill o-${o.replace(/ /g, "-")}">${esc(o)}</span>`;
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const members = WALK.members;
+
+  const GATES = [
+    ["eligible", "Eligible?", "A woman aged 42 to 74 at the end of 2025, continuously enrolled with medical coverage"],
+    ["excused", "Excused?", "Bilateral mastectomy, hospice, palliative care, death, or 66+ with advanced illness and frailty"],
+    ["screened", "Screened?", "A mammogram from 1 October 2023 to 31 December 2025, on a claim or a result"]];
+  const STEPS = ["The records", "Retrieve", "Eligible?", "Excused?", "Screened?", "The MeasureReport", "Against the answer key"];
+
+  let current = 0, step = 0, timer = null;
+
+  // picker
+  $("picker").innerHTML = members.map((m, i) => `<button type="button" data-i="${i}" aria-pressed="false">${esc(m.title)}</button>`).join("") +
+    `<button type="button" class="all" data-i="all" aria-pressed="false">All ${WALK.funnel.ours.members.toLocaleString("en-US")} members</button>`;
+  $("picker").querySelectorAll("button").forEach((b) => b.addEventListener("click", () => {
+    stop(); if (b.dataset.i === "all") showPopulation(); else { current = +b.dataset.i; step = 0; showMember(); }
+  }));
+  const press = (key) => $("picker").querySelectorAll("button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.i === String(key))));
+
+  function caption(name, text) { $("stepName").textContent = name; $("say").innerHTML = text; }
+  function dots(n, at) { $("dots").innerHTML = Array.from({ length: n }, (_, i) => `<span class="${i <= at ? "on" : ""}"></span>`).join(""); }
+
+  // ---- one member ------------------------------------------------------------------------------
+  function showMember() {
+    press(current);
+    $("stage").classList.remove("hidden-step"); $("pop").classList.add("hidden-step");
+    const m = members[current];
+    $("who").innerHTML = `<strong>${esc(m.id)}</strong><span>${esc(m.story)}</span><span class="mono" style="font-size:.76rem">${esc(m.gender)} · age ${esc(m.age)} at the end of 2025</span>`;
+    $("recCount").textContent = `${m.records.length + m.more} records`;
+    $("cards").innerHTML = m.records.map((r, i) => {
+      const [head, ...rest] = r.line.split(": ");
+      return `<div class="card" data-used="${r.used}" style="transition-delay:${still ? 0 : i * 60}ms"><span class="t">${esc(head)}</span>${rest.length ? ": " + esc(rest.join(": ")) : ""}</div>`;
+    }).join("") + (m.more ? `<div class="more">… and ${m.more} other record${m.more === 1 ? "" : "s"} (visits, labs, immunizations)</div>` : "");
+    $("gates").innerHTML = GATES.map(([k, q, rule]) => {
+      const g = m.gates[k];
+      const ev = g.evidence.length
+        ? g.evidence.map((e) => `<div>${esc(e.define)}</div><ul>${e.items.map((x) => `<li>${esc(x)}</li>`).join("")}</ul>`).join("")
+        : `<div>No record met these criteria.</div>`;
+      return `<div class="gate pending" id="gate-${k}"><header><span class="mark" aria-hidden="true">?</span><span><span class="q">${q}</span><br><span class="rule">${rule}</span></span></header><div class="ev">${ev}</div></div>`;
+    }).join("");
+    const rep = m.report;
+    $("report").innerHTML = [["initial-population", "Initial population"], ["denominator", "Denominator"], ["denominator-exclusion", "Exclusion"], ["numerator", "Numerator"]]
+      .map(([k, l]) => `<div class="kv"><span>${l}</span><b data-k="${k}">–</b></div>`).join("");
+    $("report").dataset.counts = JSON.stringify(rep);
+    const agree = m.ours === m.key;
+    $("outcome").innerHTML = `
+      <div class="compare"><span class="muted">NCQA logic</span><span>${pill(m.ours)}</span><span class="muted">Answer key</span><span>${pill(m.key)}</span></div>
+      ${agree ? `<p class="muted" style="font-size:.84rem">They agree.</p>` : `<div class="why"><b>${esc(m.cause ? m.cause.label : "They differ")}</b><span>${esc(m.cause ? m.cause.explanation : "")}</span>
+        ${m.cause && m.cause.records.length ? `<ul>${m.cause.records.map((r) => `<li>${esc(r)}</li>`).join("")}</ul>` : ""}</div>`}`;
+    render();
+  }
+
+  function gateState(k) {
+    const m = members[current], idx = GATES.findIndex((g) => g[0] === k);
+    const reached = idx === 0 || (idx === 1 && m.gates.eligible.pass) || (idx === 2 && m.gates.eligible.pass && !m.gates.excused.pass);
+    return reached ? (m.gates[k].pass ? "yes" : "no") : "skipped";
+  }
+
+  function render() {
+    const m = members[current];
+    dots(STEPS.length, step);
+    $("back").disabled = step === 0;
+    $("next").disabled = false;
+    const cards = [...$("cards").querySelectorAll(".card")];
+    cards.forEach((c) => { c.classList.toggle("pulled", step >= 1 && c.dataset.used === "true"); c.classList.toggle("dim", step >= 1 && c.dataset.used !== "true"); });
+    ["laneStore", "laneEngine", "laneReport"].forEach((l, i) => $(l).classList.toggle("live", (i === 0 && step <= 1) || (i === 1 && step >= 1 && step <= 4) || (i === 2 && step >= 5)));
+    GATES.forEach(([k], i) => {
+      const el = $("gate-" + k), shown = step >= i + 2, s = gateState(k);
+      el.className = "gate " + (shown ? (s === "skipped" ? "skipped done" : s + " done") : "pending");
+      el.querySelector(".mark").textContent = shown ? (s === "yes" ? "✓" : s === "no" ? "✕" : "–") : "?";
+      if (shown && s === "skipped") el.querySelector(".ev").innerHTML = `<div>Not reached: the member left the funnel at an earlier check.</div>`;
+    });
+    const counts = JSON.parse($("report").dataset.counts);
+    $("report").classList.toggle("pending", step < 5);
+    $("report").querySelectorAll("b[data-k]").forEach((b) => { const v = step >= 5 ? counts[b.dataset.k] : "–"; b.textContent = v; b.classList.toggle("one", v === 1); });
+    $("outcome").classList.toggle("hidden-step", step < 6);
+    const n = m.records.length + m.more, used = m.records.filter((r) => r.used).length;
+    const says = [
+      `${esc(m.id)} has ${n} records in the FHIR store: a Patient, their insurance Coverage, and claims, procedures, conditions and results. Each is a FHIR resource.`,
+      `The engine asks the store for this member's resources by type (<span class="mono">[Coverage]</span>, <span class="mono">[Claim]</span>, <span class="mono">[Condition]</span> …), and value sets decide which codes count. ${used} of the records shown matter to this measure.`,
+      gateState("eligible") === "yes" ? "Eligible: the right age and sex, and continuously enrolled with medical coverage. These are the records that proved it." : "Not eligible: the measure's eligibility rule fails, so the member leaves the funnel here.",
+      gateState("excused") === "yes" ? "Excused: the member has a valid reason screening doesn't apply, shown with the record behind it." : gateState("excused") === "no" ? "Not excused: nothing in the record removes the member from the measure." : "Not reached.",
+      gateState("screened") === "yes" ? "Screened: a mammogram in the window, found on a claim or a result." : gateState("screened") === "no" ? "Not screened: the measure found no mammogram it reads." : "Not reached.",
+      "The engine writes an individual MeasureReport: a 1 or 0 for each population. Summed over every member, these reports give the plan's rate.",
+      m.ours === m.key ? "The measure's result matches the answer key written for this test population." : `The measure says <b>${esc(m.ours)}</b>, the answer key <b>${esc(m.key)}</b>. Here is why.`];
+    caption(`${step + 1} / ${STEPS.length} · ${STEPS[step]}`, says[step]);
+    if (step === STEPS.length - 1) $("play").textContent = current < members.length - 1 ? "Next member" : "All 1,000";
+    else $("play").textContent = timer ? "Pause" : "Play";
+  }
+
+  function advance() {
+    if (step < STEPS.length - 1) { step++; render(); return true; }
+    if (current < members.length - 1) { current++; step = 0; showMember(); return true; }
+    showPopulation(); return false;
+  }
+  function stop() { if (timer) { clearInterval(timer); timer = null; } }
+  $("next").addEventListener("click", () => { stop(); advance(); });
+  $("back").addEventListener("click", () => { stop(); if (!$("pop").classList.contains("hidden-step")) { current = members.length - 1; step = STEPS.length - 1; showMember(); } else if (step > 0) { step--; render(); } });
+  $("play").addEventListener("click", () => {
+    if (!$("pop").classList.contains("hidden-step")) { stop(); current = 0; step = 0; showMember(); return; }
+    if (timer) { stop(); render(); return; }
+    if (step === STEPS.length - 1) { advance(); return; }
+    timer = setInterval(() => { if (step >= STEPS.length - 1) { stop(); render(); } else advance(); }, 2600);
+    render();
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.target.closest && e.target.closest("button") && (e.key === " " || e.key === "Enter")) return;
+    if (e.key === "ArrowRight") { stop(); advance(); }
+    if (e.key === "ArrowLeft") $("back").click();
+  });
+
+  // ---- the whole population ----------------------------------------------------------------------
+  function showPopulation() {
+    press("all"); stop();
+    $("stage").classList.add("hidden-step"); $("pop").classList.remove("hidden-step");
+    $("back").disabled = false; $("next").disabled = true; $("play").textContent = "Replay members";
+    dots(0, 0);
+    const f = WALK.funnel.ours, k = WALK.funnel.key;
+    const groups = [
+      ["not eligible", f.members - f.eligible, "--d-out"], ["excused", f.excused, "--d-excused"],
+      ["not screened", f.accountable - f.screened, "--d-unscreened"], ["screened", f.screened, "--d-screened"]];
+    caption("All members", `The same checks for all ${f.members.toLocaleString("en-US")} members, one MeasureReport each. ${f.accountable} are accountable and ${f.screened} were screened.`);
+    $("tally").innerHTML = `<div class="row"><span class="muted" style="font-size:.8rem">Group</span><span class="muted mono" style="font-size:.72rem">NCQA logic</span><span class="muted mono" style="font-size:.72rem">answer key</span></div>` +
+      [["not eligible", f.members - f.eligible, k.members - k.eligible], ["excused", f.excused, k.excused],
+       ["not screened", f.accountable - f.screened, k.accountable - k.screened], ["screened", f.screened, k.screened]]
+        .map(([l, n, kn], i) => `<div class="row"><span><span class="sw" style="background:var(${groups[i][2]})"></span>${l}</span><span class="n">${n}</span><span class="n k">${kn}</span></div>`).join("");
+    $("rates").innerHTML = `<div><strong style="color:var(--accent)">${(100 * f.screened / f.accountable).toFixed(1)}%</strong><span>NCQA logic: ${f.screened} of ${f.accountable}</span></div>
+      <div><strong class="muted">${(100 * k.screened / k.accountable).toFixed(1)}%</strong><span>answer key: ${k.screened} of ${k.accountable}</span></div>`;
+    rain(groups);
+  }
+
+  let raf = null;
+  function rain(groups) {
+    if (raf) cancelAnimationFrame(raf);
+    const cv = $("canvas"), ctx = cv.getContext("2d"), W = cv.width, H = cv.height;
+    const css = getComputedStyle(document.documentElement);
+    const color = (v) => css.getPropertyValue(v).trim();
+    const ink = color("--ink"), muted = color("--muted"), rule = color("--rule");
+    // four buckets along the bottom, each a grid of dots
+    const cols = 4, bw = W / cols, r = 6.5, pitch = 15.5, perRow = Math.floor((bw - 40) / pitch);
+    const dots = [];
+    groups.forEach(([label, n, v], g) => {
+      for (let i = 0; i < n; i++) {
+        const row = Math.floor(i / perRow), col = i % perRow;
+        dots.push({ g, tx: g * bw + 20 + col * pitch + r, ty: H - 70 - row * pitch, x: W / 2 + (Math.random() - 0.5) * 120, y: -20 - Math.random() * 900, c: color(v) });
+      }
+    });
+    dots.sort((a, b) => a.y - b.y);
+    const start = performance.now(), dur = still ? 0 : 3200;
+    function frame(t) {
+      const p = dur ? Math.min(1, (t - start) / dur) : 1;
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = rule; ctx.lineWidth = 2;
+      for (let g = 0; g < cols; g++) { ctx.beginPath(); ctx.moveTo(g * bw + 10, H - 50); ctx.lineTo(g * bw + bw - 10, H - 50); ctx.stroke(); }
+      dots.forEach((d, i) => {
+        const delay = (i / dots.length) * 0.55, q = Math.max(0, Math.min(1, (p - delay) / 0.45)), e = 1 - Math.pow(1 - q, 3);
+        const x = d.x + (d.tx - d.x) * e, y = d.y + (d.ty - d.y) * e;
+        ctx.fillStyle = d.c; ctx.beginPath(); ctx.arc(x, y, r, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.textAlign = "center";
+      groups.forEach(([label, n], g) => {
+        ctx.fillStyle = ink; ctx.font = "600 30px IBM Plex Mono, monospace"; ctx.fillText(String(n), g * bw + bw / 2, H - 14);
+        ctx.fillStyle = muted; ctx.font = "26px IBM Plex Sans, sans-serif"; ctx.fillText(label, g * bw + bw / 2, 36);
+      });
+      if (p < 1) raf = requestAnimationFrame(frame);
+    }
+    raf = requestAnimationFrame(frame);
+  }
+
+  showMember();
+})();
+</script>

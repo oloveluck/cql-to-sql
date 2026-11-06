@@ -32,7 +32,8 @@
          (only-in cql/compile compile-library/errors current-library-resolver)
          (only-in cql/run load-runtime-library resources->data valuesets->terminology rlib-value)
          (only-in cql/value cql-null?)
-         "../scripts/bcse-check.rkt")
+         "../scripts/bcse-check.rkt"
+         "../scripts/ncqa-valuesets.rkt")
 
 (define-runtime-path repo "..")
 (define packages (build-path repo "vendor" "packages" "ncqa.hedis.core.main.v2025-2025.1.0.tgz"))
@@ -124,7 +125,7 @@
      [(< clean total)
       (printf "BCS-E evaluation: PENDING, ~a/~a of the measure's libraries compile (needs cql with the parser fixes, 2b846aa)\n" clean total)]
      [else
-      (define valuesets (filter (lambda (a) (equal? (hash-ref a 'resourceType) "ValueSet")) artifacts))
+      (define-values (valuesets vs-source) (bcse-valuesets))   ; NCQA's sets (2025.3.0.zip), else the stand-ins
       (define results
         (for/list ([b (sort bundles string<? #:key (lambda (b) (hash-ref b 'id)))])
           (define id (hash-ref b 'id))
@@ -137,7 +138,7 @@
                           (list n (hash-ref expected n) (hash-ref got n))))
           (cons id wrong)))
       (define agree (count (lambda (r) (null? (cdr r))) results))
-      (printf "BCS-E evaluation: the interpreter agrees with ~a/~a scenario scorekeys\n" agree (length results))
+      (printf "BCS-E evaluation (~a value sets): the interpreter agrees with ~a/~a scenario scorekeys\n" vs-source agree (length results))
       (for ([r results] #:when (pair? (cdr r)))
         (printf "  ~a:~a\n" (car r)
                 (apply string-append (for/list ([w (cdr r)]) (format " ~a expected ~a got ~a;" (car w) (cadr w) (caddr w))))))

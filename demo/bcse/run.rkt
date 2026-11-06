@@ -6,7 +6,7 @@
 ;;;   racket demo/bcse/run.rkt      prints the table, writes demo/out/bcse/*.json
 ;;;
 ;;; For each member, the measure's own CQL (BCSE_Details and the 42 libraries it includes) is run by
-;;; the cql interpreter over the member's records, with the stand-in value sets and measurement year
+;;; the cql interpreter over the member's records, with NCQA's value sets (2025.3.0.zip) and measurement year
 ;;; 2025; its population defines place the member in the funnel: eligible (Initial population),
 ;;; excused (Exclusion), accountable (Denominator), screened (Numerator). The same for the Medicare
 ;;; reporting group, which excuses long-term-care members too.
@@ -23,6 +23,7 @@
          (only-in cql/run valuesets->terminology)
          (only-in cql/measure measure-report)
          "../../scripts/bcse-check.rkt"
+         "../../scripts/ncqa-valuesets.rkt"
          "measure.rkt")
 
 (provide
@@ -62,7 +63,7 @@
              (check-report-examples report) (check-report-invalid report))
      (define artifacts (check-report-artifacts report))
      (define (of-type t) (filter (lambda (a) (equal? (hash-ref a 'resourceType) t)) artifacts))
-     (define terminology (valuesets->terminology (of-type "ValueSet")))
+     (define terminology (valuesets->terminology (let-values ([(vss _source) (bcse-valuesets)]) vss)))
      (define by-id (for/hash ([a artifacts]) (values (cons (hash-ref a 'resourceType) (hash-ref a 'id)) a)))
      (define titles (stories))
      (for/list ([b (sort (filter (lambda (b) (regexp-match? #rx"^bcse-[0-9]+$" (hash-ref b 'id))) (of-type "Bundle"))
@@ -143,7 +144,7 @@
     (print-totals results)
     (printf "\nThe measure's result matches the expected result for ~a of ~a members.\n" (length (agreeing results)) (length results))
     (printf "FHIR MeasureReports (one per member, and the summary): ~a\n" (write-reports! results))
-    (printf "\nTest data: synthetic members and TEST-ONLY stand-in code lists, not NCQA's; the rate is not a HEDIS rate.\n")))
+    (printf "\nTest data: synthetic members, with NCQA's MY2025 value sets; the members are not real, so the rate is not a plan's HEDIS rate.\n")))
 
 (module+ test
   (require rackunit)

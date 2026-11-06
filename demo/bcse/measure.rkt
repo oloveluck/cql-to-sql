@@ -25,6 +25,7 @@
   [measure-libraries (-> hash?)]
   [compiling-count (-> hash? exact-nonnegative-integer?)]
   [bcse-measure (-> hash?)]
+  [measure-resources (-> (listof hash?))]
   [library-text (-> string? (or/c #f string?))]
   [member-library (-> hash? procedure? (listof hash?) any/c)]
   [library-defines (-> any/c hash?)]
@@ -46,6 +47,10 @@
 
 ;; bcse-measure : -> Measure
 (define (bcse-measure) (findf (lambda (r) (equal? (hash-ref r 'resourceType) "Measure")) (bundle-resources)))
+
+;; measure-resources : -> (listof resource)   the Measure and its 43 Libraries, as a FHIR server holds them
+(define (measure-resources)
+  (filter (lambda (r) (member (hash-ref r 'resourceType) '("Measure" "Library"))) (bundle-resources)))
 
 ;; measure-libraries : -> (hash name (Result cql-library))   the bundle's CQL, parsed
 (define (measure-libraries)

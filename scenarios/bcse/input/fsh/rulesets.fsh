@@ -54,7 +54,7 @@ RuleSet: Enrollment(member, start, end, product)
 * identifier[0].value = "{member}"
 * status = #active
 * type.coding[0] = $CoverageType#{product}
-* type.coding[1] = $ActCode#HIP "health insurance plan policy"
+* type.coding[1] = $ActCode#MCPOL "managed care policy"
 * subscriberId = "{member}"
 * subscriber = Reference({member})
 * beneficiary = Reference({member})

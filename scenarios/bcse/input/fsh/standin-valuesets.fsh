@@ -219,11 +219,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Nonacute Inpatient Stay\", not the
 ValueSet: StandInPalliativeCareEncounter
 Id: 2.16.840.1.113883.3.464.1004.1450
 Title: "Palliative Care Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
+Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1450"
 * ^experimental = true
 * ^status = #draft
-* http://hl7.org/fhir/sid/icd-10-cm#Z51.5 "Encounter for palliative care"
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInIntroductionOfAutologousPancreaticCells
 Id: 2.16.840.1.113883.3.464.1004.1459
@@ -318,11 +318,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Frailty Device\", not the NCQA Val
 ValueSet: StandInFrailtyDiagnosis
 Id: 2.16.840.1.113883.3.464.1004.1531
 Title: "Frailty Diagnosis (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1531"
 * ^experimental = true
 * ^status = #draft
-* http://hl7.org/fhir/sid/icd-10-cm#R54 "Age-related physical debility"
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFrailtyEncounter
 Id: 2.16.840.1.113883.3.464.1004.1532
@@ -336,11 +336,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"Frailty Encounter\", not the NCQA 
 ValueSet: StandInFrailtySymptom
 Id: 2.16.840.1.113883.3.464.1004.1533
 Title: "Frailty Symptom (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Symptom\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Symptom\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1533"
 * ^experimental = true
 * ^status = #draft
-* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
+* http://hl7.org/fhir/sid/icd-10-cm#R54 "Age-related physical debility"
 
 ValueSet: StandInDementiaMedications
 Id: 2.16.840.1.113883.3.464.1004.1729
@@ -471,11 +471,11 @@ Description: "TEST-ONLY stand-in for NCQA's \"White Detailed Race\", not the NCQ
 ValueSet: StandInGenderDysphoria
 Id: 2.16.840.1.113883.3.464.1004.2454
 Title: "Gender Dysphoria (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: the codes the BCS-E scenarios use."
+Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2454"
 * ^experimental = true
 * ^status = #draft
-* http://hl7.org/fhir/sid/icd-10-cm#F64.0 "Transsexualism"
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOutpatientEDTelephoneAcuteInpatientAndNonacuteInpatient
 Id: 2.16.840.1.113883.3.464.1004.2474
@@ -625,7 +625,7 @@ Description: "TEST-ONLY stand-in for NCQA's \"Medical insurance\", not the NCQA 
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-medical-insurance-h006"
 * ^experimental = true
 * ^status = #draft
-* http://terminology.hl7.org/CodeSystem/v3-ActCode#HIP "health insurance plan policy"
+* http://terminology.hl7.org/CodeSystem/v3-ActCode#MCPOL "managed care policy"
 
 ValueSet: StandInMentalHealthSpecialty
 Id: hedis-mental-health-specialty-h005

@@ -58,44 +58,53 @@ The measure's result matches the expected result for 19 of 19 members.
 
 and writes the MeasureReports to `demo/out/bcse/` (`summary.json`, and `bcse-NN.json` per member).
 
-**Caveats.** The members are synthetic, one per path, so the rate says nothing clinical. The code
-lists are TEST-ONLY stand-ins at NCQA's value set urls (NCQA's Value Set Directory is licensed
-separately), holding the codes the members use: a test of the logic, not a HEDIS rate.
+**Caveats.** The members are synthetic, one per path, so the rate says nothing clinical. The value
+sets are NCQA's own MY2025 expansions (`2025.3.0.zip`, read by `scripts/ncqa-valuesets.rkt`); without
+that zip the TEST-ONLY stand-ins (`scripts/standin-valuesets.rkt`) take their place.
 
 ## The same measure over 1,000 members
 
 ```sh
 racket demo/bcse/population.rkt
+racket demo/bcse/population.rkt --supplemental   # the what-if below
 ```
 
 `bcse_usqc_testdata_n1000.zip` (repo root) is a synthetic population of 1,000 members: a FHIR Bulk
 Data export on the US Quality Core 0.5.0 profiles, with an answer key giving each member's expected
-populations, written from the generator's scenario design. The demo runs NCQA's measure over every
-member (about 30 seconds) and compares it with the key:
+populations, written from the generator's scenario design. The demo runs NCQA's measure, with NCQA's
+value sets, over every member (about 40 seconds) and compares it with the key:
 
 ```
-                                    NCQA logic  answer key
-members                                   1000        1000
-eligible (initial population)              409         408
-excused (exclusions)                        20          24
-accountable (denominator)                  389         384
-screened (numerator)                       141         234
-rate                                     36.2%       60.9%
+                                      NCQA logic  + supplemental      answer key
+eligible (initial population)                409             409             408
+excused (exclusions)                          18              18              24
+accountable (denominator)                    391             391             384
+screened (numerator)                         141             236             234
+rate                                       36.1%           60.4%           60.9%
 
-The measure agrees with the answer key on 894 of 1000 members.
+As delivered, the measure agrees with the answer key on 892 of 1000 members; with the supplemental feed, 983.
 ```
 
-Every one of the other 106 is explained, and the demo prints the cause for each:
+Every one of the other 108 is explained, and the demo prints the cause for each:
 
 | Members | Cause |
 |---|---|
 | 91 | **The mammogram is recorded only as a Procedure.** NCQA's digital measure reads screening from claims, EOBs, Observations and DiagnosticReports; this export records most mammograms as a Procedure, the eCQM convention. This is the whole difference in the rate. |
 | 6 | **The answer key's rules differ from MY2025 BCS-E.** It excludes two unilateral mastectomies 14+ days apart (no such rule now) and frailty on one date (NCQA needs two), and it leaves out two members whose own sex-at-birth record qualifies them. |
+| 2 | **A code NCQA's set doesn't hold.** The gender dysphoria diagnosis is coded F64.0, which NCQA's Gender Dysphoria value set does not contain. |
 | 6 | **The measure doesn't read some status fields.** A cancelled Coverage still counts as enrollment, a refuted diagnosis still excludes, and hospice that was only ordered (a ServiceRequest) doesn't count. |
 | 3 | **A cql bug.** `Quantity.value` and `.unit` come back null, so an allowed 30-day coverage gap fails continuous enrollment. |
 
 So the same measure, run over the same people, gives a very different rate depending on how the
-data records care. That is what evaluating a measure tests.
+data records care. That is what evaluating a measure tests. `ANSWER-KEY-FINDINGS.md` writes these up,
+with the records, for the data's author.
+
+**The what-if: a supplemental data feed.** With `--supplemental`, each completed Procedure whose code
+is in NCQA's Mammography value set also appears as a final Observation (same code and date), the
+way a plan sends clinical data to HEDIS as supplemental data. This is a data transformation, not
+NCQA's rule, and the default run reads the data as delivered. It closes the gap: 60.4% against the
+key's 60.9%, and 983 members agree. The proper fix is in the data: record screening as a claim or a
+result.
 
 **The adapter.** Before evaluation each Coverage is mapped the way a health plan's HEDIS load would
 map it, and nothing else is changed:
@@ -143,8 +152,56 @@ single page with everything inlined:
 The MeasureReports go to `demo/out/bcse-population/`: `summary.json`, and `individual.ndjson` with
 one per member. `raco test demo/bcse/population.rkt` checks:
 - every difference has a known cause;
-- at least 894 members agree;
+- at least 892 members agree (983 with the supplemental feed);
 - every excused member has exclusion evidence, and every screened member a mammography record.
+
+## Through a FHIR server
+
+```sh
+racket demo/bcse/server.rkt                # load the store once, then $evaluate-measure
+racket demo/bcse/server.rkt --serve 8080   # … and keep the server up for curl or a browser
+```
+
+The same measure, the way a measure-calculation service runs it.
+- **The server.** `fhir-server` (in `../fhir`) is a SQLite FHIR store behind the CQF Measures
+  guide's measure-calculation-service CapabilityStatement. Its `$evaluate-measure` is cql/measure
+  over the store.
+- **Loading.** Everything goes in through the server's own transaction endpoint (`POST /`):
+  - the Measure and its 43 Libraries;
+  - NCQA's 167 ValueSets that BCS-E declares;
+  - the population's 11,770 resources, after the Coverage adapter.
+
+  Each resource is indexed for search, so the first load takes a while. The store is kept in
+  `demo/out/bcse-server.db` and reused; `--fresh` reloads it.
+- **Evaluating.** `GET /Measure/BCSE-Details/$evaluate-measure?periodStart=2025-01-01&periodEnd=2025-12-31`
+  returns the summary MeasureReport, and `&subject=Patient/bcse-0092` one member's.
+- **The check.** The script compares the server's counts with the in-memory run (`population.rkt`).
+  The server applies FHIR's population rules to the Measure's own criteria, so it reports no
+  exclusions: NCQA's `"Denominator"` already leaves the excused out. Its denominator is the
+  accountable members, and the rate is the same.
+
+Run it with an up-to-date cql, and keep compiled files out of the fhir and cql checkouts:
+`PLTCOLLECTS="<cql checkout's parent>:" PLTCOMPILEDROOTS="<scratch dir>:same" racket demo/bcse/server.rkt`.
+
+## The animated walkthrough
+
+`racket demo/bcse/population.rkt` also writes `demo/out/bcse-population/walkthrough.html` from
+`walkthrough-template.html`. It follows five real members, step by step:
+1. their records in the FHIR store;
+2. the engine retrieving them;
+3. the three checks, each with the evidence it used;
+4. the MeasureReport;
+5. the answer key.
+
+The members:
+- one screened by a claim;
+- one screened only on a Procedure;
+- one too young;
+- one excused by a bilateral mastectomy;
+- the one-date frailty case.
+
+Then all 1,000 members fall through the funnel. It has Play, Next and Back, the arrow keys work, and
+with reduced motion it shows each end state.
 
 ## How it runs
 

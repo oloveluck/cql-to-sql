@@ -2,8 +2,12 @@
 
 ;;; standin-valuesets.rkt — TEST-ONLY stand-ins for the NCQA value sets the BCS-E measure names.
 ;;;
+;;; The demos and tests now use NCQA's own value sets (`2025.3.0.zip`, scripts/ncqa-valuesets.rkt);
+;;; these stand-ins are the fallback when that zip is missing, and their test codes follow NCQA's
+;;; membership (R54 is a frailty symptom; Z51.5 and F64.0 are in no NCQA set).
+;;;
 ;;; BCS-E's CQL declares its value sets by NCQA url (`https://www.ncqa.org/fhir/ValueSet/…`); their
-;;; expansions are NCQA's Value Set Directory, which is licensed separately and not in this repo. So
+;;; expansions are NCQA's Value Set Directory, which is licensed separately. So
 ;;; that the scenarios (scenarios/bcse) can be evaluated end to end, this writes one FSH ValueSet per
 ;;; declared url: the codes the scenarios use where a scenario reaches the set (the `test-codes`
 ;;; table), otherwise a single placeholder code from this project's own code system, which no scenario's
@@ -58,17 +62,15 @@
    (vs "1331") (list (list icd10cm "Z90.13" "Acquired absence of bilateral breasts and nipples"))
    (vs "1329") (list (list icd10cm "Z90.12" "Acquired absence of left breast and nipple"))
    (vs "1330") (list (list icd10cm "Z90.11" "Acquired absence of right breast and nipple"))
-   ;; Hospice Encounter; Palliative Care Encounter
+   ;; Hospice Encounter (Z51.5, palliative care, is in no NCQA set)
    (vs "1761") (list (list hcpcs "Q5003" "Hospice care provided in nursing long term care facility"))
-   (vs "1450") (list (list icd10cm "Z51.5" "Encounter for palliative care"))
-   ;; Frailty Diagnosis; Advanced Illness; Outpatient; Gender Dysphoria
-   (vs "1531") (list (list icd10cm "R54" "Age-related physical debility"))
+   ;; Frailty Symptom (R54, as NCQA classes it); Advanced Illness; Outpatient (F64.0 is in no NCQA set)
+   (vs "1533") (list (list icd10cm "R54" "Age-related physical debility"))
    (vs "1465") (list (list icd10cm "I50.9" "Heart failure, unspecified"))
    (vs "1202") (list (list cpt "99213" "Office or other outpatient visit, established patient, low")
                      (list cpt "99214" "Office or other outpatient visit, established patient, moderate")
                      (list cpt "99395" "Periodic preventive medicine, established patient, 18-39")
                      (list cpt "99396" "Periodic preventive medicine, established patient, 40-64"))
-   (vs "2454") (list (list icd10cm "F64.0" "Transsexualism"))
    ;; Unilateral Mastectomy Left
    "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1334"
    (list (list icd10pcs "0HTU0ZZ" "Resection of Left Breast, Open Approach"))
@@ -83,7 +85,7 @@
    (list (list sct "103735009" "Palliative care (regime/therapy)"))
    ;; Medical insurance: the benefit coding the scenarios' Coverage.type carries
    "https://www.ncqa.org/fhir/ValueSet/hedis-medical-insurance-h006"
-   (list (list "http://terminology.hl7.org/CodeSystem/v3-ActCode" "HIP" "health insurance plan policy"))
+   (list (list "http://terminology.hl7.org/CodeSystem/v3-ActCode" "MCPOL" "managed care policy"))
    ;; coverage types by payer: the HEDIS core package's own hedis-coverage-type codes, grouped by
    ;; the payer their displays name
    "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-commercial"

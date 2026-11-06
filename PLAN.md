@@ -454,9 +454,18 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
   MeasureReports (`demo/bcse/README.md`).
 - **Population demo:** `racket demo/bcse/population.rkt` runs the measure over the n=1000 US
   Quality Core export (`bcse_usqc_testdata_n1000.zip`), with a Coverage adapter (SOPT payer type
-  to HEDIS coverage type, open periods closed at the export date). 894/1000 agree with its answer
-  key, and every other member has a traced cause (91 are mammograms recorded only as a Procedure,
-  which HEDIS's numerator doesn't read).
+  to HEDIS coverage type, medical benefit ActCode MCPOL, open periods closed at the export date).
+  - With NCQA's MY2025 value sets (`2025.3.0.zip`, `scripts/ncqa-valuesets.rkt`; the stand-ins are
+    now only the fallback), 892/1000 agree with its answer key: 36.1% against 60.9%.
+  - Every other member has a traced cause. 91 of them are mammograms recorded only as a Procedure,
+    which HEDIS's numerator doesn't read.
+  - `--supplemental` (those Procedures also sent as results, a labelled what-if) gives 60.4% and
+    983/1000.
+  - `demo/bcse/ANSWER-KEY-FINDINGS.md` writes the key's errors up for the data's author.
+  - It also writes an interactive report and an animated walkthrough.
+- **Through a FHIR server:** `racket demo/bcse/server.rkt` loads the population, the Measure, its
+  Libraries and NCQA's value sets into fhir-server's store through `POST /` (27 s for 11,770
+  resources), then calls `Measure/$evaluate-measure`.
 - **Next:** the same Bundles and score keys feed the relational model work ("Next: BCS-E over a
   relational model", R1–R5) and phase 6, the per-patient SQL vs. interpreter comparison.
 - **Found on the way, for the shared repos (not patched here):**
@@ -466,6 +475,18 @@ NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E m
   - **cql (for Niko):** property access on a System.Quantity returns null: `(45 days).value` and
     `(45 days).unit` are null. HEDIS's "Has valid gaps in coverage" reads both, so any member with
     an allowed coverage gap fails continuous enrollment (3 members in the n=1000 population).
+    The fix is one clause in `eval-property` (interp.rkt): `[(fp-quantity? v) (case path [("value")
+    (fp-quantity-value v)] [("unit") (fp-quantity-unit v)] [else cql-null])]`. Tested in a scratch
+    checkout: agreement rises from 894 to 896.
+  - **cql (for Niko), performance:** over a data source such as fhir-server's store,
+    `cql/measure`'s `include-resolver` is slow for every patient. For every include it:
+    - fetches all Libraries from the source (`libraries`);
+    - base64-decodes and re-parses the CQL;
+    - misses the compile cache, which is keyed by AST identity.
+
+    So BCS-E's 43 libraries are re-parsed and recompiled per patient, about a minute each, and
+    `$evaluate-measure` over 1,000 members takes hours. Caching the parse by CQL text helps but isn't
+    enough; the Library list needs caching per evaluation too.
   - `fhir/sd/sd-index` finds conformance resources only by `StructureDefinition-*.json`-style file
     names, so a package with other names (NCQA's) is invisible to fsh and the validator, and
     validation then passes by failing open.
