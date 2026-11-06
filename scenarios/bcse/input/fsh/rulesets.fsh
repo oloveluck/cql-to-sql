@@ -3,7 +3,8 @@
 //   2023; at most one gap of up to 45 days in 2024 and in 2025)
 // - mammography window: 2023-10-01 .. 2025-12-31 (27 months ending the measurement period)
 // - age: 42..74 on 2025-12-31
-// RuleSet arguments are comma-separated: a comma inside one (a display) is written \,
+// RuleSet arguments are comma-separated: a comma or a closing parenthesis inside one (a display)
+// is written \, or \) (an opening parenthesis needs no escape)
 
 Alias: $CPT = http://www.ama-assn.org/go/cpt
 Alias: $ICD10PCS = http://www.cms.gov/Medicare/Coding/ICD10

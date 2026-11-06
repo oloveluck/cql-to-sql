@@ -13,34 +13,38 @@ Description: "TEST-ONLY stand-in for NCQA's \"Bilateral Mastectomy\", not the NC
 ValueSet: StandInColorectalCancer
 Id: 2.16.840.1.113883.3.464.1004.1065
 Title: "Colorectal Cancer (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Colorectal Cancer\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Colorectal Cancer\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1065"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInED
 Id: 2.16.840.1.113883.3.464.1004.1086
 Title: "ED (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"ED\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"ED\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1086"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInKidneyTransplant
 Id: 2.16.840.1.113883.3.464.1004.1141
 Title: "Kidney Transplant (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Kidney Transplant\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Kidney Transplant\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1141"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInMalignantNeoplasms
 Id: 2.16.840.1.113883.3.464.1004.1167
 Title: "Malignant Neoplasms (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Malignant Neoplasms\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Malignant Neoplasms\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1167"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInMammography
 Id: 2.16.840.1.113883.3.464.1004.1168
@@ -56,106 +60,119 @@ Description: "TEST-ONLY stand-in for NCQA's \"Mammography\", not the NCQA Value 
 ValueSet: StandInOrganTransplantOtherThanKidney
 Id: 2.16.840.1.113883.3.464.1004.1195
 Title: "Organ Transplant Other Than Kidney (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Organ Transplant Other Than Kidney\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Organ Transplant Other Than Kidney\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1195"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOutpatient
 Id: 2.16.840.1.113883.3.464.1004.1202
 Title: "Outpatient (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Outpatient\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Outpatient\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1202"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPerinatalConditions
 Id: 2.16.840.1.113883.3.464.1004.1209
 Title: "Perinatal Conditions (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Perinatal Conditions\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Perinatal Conditions\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1209"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPregnancy
 Id: 2.16.840.1.113883.3.464.1004.1219
 Title: "Pregnancy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Pregnancy\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Pregnancy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1219"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInTelephoneVisits
 Id: 2.16.840.1.113883.3.464.1004.1246
 Title: "Telephone Visits (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Telephone Visits\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Telephone Visits\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1246"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInUnilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1256
 Title: "Unilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1256"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAcuteCondition
 Id: 2.16.840.1.113883.3.464.1004.1324
 Title: "Acute Condition (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Acute Condition\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Acute Condition\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1324"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInBoneMarrowTransplant
 Id: 2.16.840.1.113883.3.464.1004.1325
 Title: "Bone Marrow Transplant (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Bone Marrow Transplant\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Bone Marrow Transplant\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1325"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPotentiallyPlannedProcedures
 Id: 2.16.840.1.113883.3.464.1004.1327
 Title: "Potentially Planned Procedures (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Potentially Planned Procedures\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Potentially Planned Procedures\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1327"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInRehabilitation
 Id: 2.16.840.1.113883.3.464.1004.1328
 Title: "Rehabilitation (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Rehabilitation\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Rehabilitation\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1328"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAbsenceOfLeftBreast
 Id: 2.16.840.1.113883.3.464.1004.1329
 Title: "Absence of Left Breast (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Absence of Left Breast\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Absence of Left Breast\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1329"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAbsenceOfRightBreast
 Id: 2.16.840.1.113883.3.464.1004.1330
 Title: "Absence of Right Breast (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Absence of Right Breast\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Absence of Right Breast\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1330"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHistoryOfBilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1331
 Title: "History of Bilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"History of Bilateral Mastectomy\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"History of Bilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1331"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInUnilateralMastectomyLeft
 Id: 2.16.840.1.113883.3.464.1004.1334
@@ -178,146 +195,164 @@ Description: "TEST-ONLY stand-in for NCQA's \"Unilateral Mastectomy Right\", not
 ValueSet: StandInInpatientStay
 Id: 2.16.840.1.113883.3.464.1004.1395
 Title: "Inpatient Stay (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Inpatient Stay\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Inpatient Stay\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1395"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInNonacuteInpatientStay
 Id: 2.16.840.1.113883.3.464.1004.1398
 Title: "Nonacute Inpatient Stay (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Nonacute Inpatient Stay\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Nonacute Inpatient Stay\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1398"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPalliativeCareEncounter
 Id: 2.16.840.1.113883.3.464.1004.1450
 Title: "Palliative Care Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1450"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInIntroductionOfAutologousPancreaticCells
 Id: 2.16.840.1.113883.3.464.1004.1459
 Title: "Introduction of Autologous Pancreatic Cells (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Introduction of Autologous Pancreatic Cells\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Introduction of Autologous Pancreatic Cells\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1459"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInObservationStay
 Id: 2.16.840.1.113883.3.464.1004.1461
 Title: "Observation Stay (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Observation Stay\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Observation Stay\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1461"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCPTCATIIModifier
 Id: 2.16.840.1.113883.3.464.1004.1464
 Title: "CPT CAT II Modifier (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CPT CAT II Modifier\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CPT CAT II Modifier\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1464"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAdvancedIllness
 Id: 2.16.840.1.113883.3.464.1004.1465
 Title: "Advanced Illness (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Advanced Illness\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Advanced Illness\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1465"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInSkilledNursingStay
 Id: 2.16.840.1.113883.3.464.1004.1467
 Title: "Skilled Nursing Stay (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Skilled Nursing Stay\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Skilled Nursing Stay\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1467"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPotentiallyPlannedPostAcuteCareHospitalization
 Id: 2.16.840.1.113883.3.464.1004.1496
 Title: "Potentially Planned Post Acute Care Hospitalization (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Potentially Planned Post Acute Care Hospitalization\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Potentially Planned Post Acute Care Hospitalization\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1496"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInChemotherapyEncounter
 Id: 2.16.840.1.113883.3.464.1004.1519
 Title: "Chemotherapy Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Chemotherapy Encounter\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Chemotherapy Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1519"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAbsenceOfCervixDiagnosis
 Id: 2.16.840.1.113883.3.464.1004.1522
 Title: "Absence of Cervix Diagnosis (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Absence of Cervix Diagnosis\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Absence of Cervix Diagnosis\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1522"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHysterectomyWithNoResidualCervix
 Id: 2.16.840.1.113883.3.464.1004.1523
 Title: "Hysterectomy With No Residual Cervix (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hysterectomy With No Residual Cervix\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hysterectomy With No Residual Cervix\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1523"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFrailtyDevice
 Id: 2.16.840.1.113883.3.464.1004.1530
 Title: "Frailty Device (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Device\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Device\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1530"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFrailtyDiagnosis
 Id: 2.16.840.1.113883.3.464.1004.1531
 Title: "Frailty Diagnosis (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Diagnosis\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1531"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFrailtyEncounter
 Id: 2.16.840.1.113883.3.464.1004.1532
 Title: "Frailty Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Encounter\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1532"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFrailtySymptom
 Id: 2.16.840.1.113883.3.464.1004.1533
 Title: "Frailty Symptom (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Frailty Symptom\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Frailty Symptom\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1533"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInDementiaMedications
 Id: 2.16.840.1.113883.3.464.1004.1729
 Title: "Dementia Medications (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Dementia Medications\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Dementia Medications\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1729"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHospiceEncounter
 Id: 2.16.840.1.113883.3.464.1004.1761
 Title: "Hospice Encounter (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hospice Encounter\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hospice Encounter\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1761"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHospiceIntervention
 Id: 2.16.840.1.113883.3.464.1004.1762
@@ -331,26 +366,29 @@ Description: "TEST-ONLY stand-in for NCQA's \"Hospice Intervention\", not the NC
 ValueSet: StandInAcuteInpatient
 Id: 2.16.840.1.113883.3.464.1004.1810
 Title: "Acute Inpatient (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Acute Inpatient\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Acute Inpatient\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1810"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInClinicalUnilateralMastectomy
 Id: 2.16.840.1.113883.3.464.1004.1948
 Title: "Clinical Unilateral Mastectomy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Clinical Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Clinical Unilateral Mastectomy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.1948"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInSurgeryProcedure
 Id: 2.16.840.1.113883.3.464.1004.2223
 Title: "Surgery Procedure (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Surgery Procedure\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Surgery Procedure\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2223"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPalliativeCareIntervention
 Id: 2.16.840.1.113883.3.464.1004.2224
@@ -364,146 +402,164 @@ Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Intervention\", no
 ValueSet: StandInPalliativeCareAssessment
 Id: 2.16.840.1.113883.3.464.1004.2225
 Title: "Palliative Care Assessment (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Assessment\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Palliative Care Assessment\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2225"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAmericanIndianOrAlaskaNativeDetailedRace
 Id: 2.16.840.1.113883.3.464.1004.2365
 Title: "American Indian or Alaska Native Detailed Race (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"American Indian or Alaska Native Detailed Race\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"American Indian or Alaska Native Detailed Race\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2365"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAsianDetailedRace
 Id: 2.16.840.1.113883.3.464.1004.2366
 Title: "Asian Detailed Race (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Asian Detailed Race\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Asian Detailed Race\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2366"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInBlackOrAfricanAmericanDetailedRace
 Id: 2.16.840.1.113883.3.464.1004.2367
 Title: "Black or African American Detailed Race (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Black or African American Detailed Race\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Black or African American Detailed Race\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2367"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHispanicOrLatinoDetailedEthnicity
 Id: 2.16.840.1.113883.3.464.1004.2368
 Title: "Hispanic or Latino Detailed Ethnicity (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hispanic or Latino Detailed Ethnicity\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hispanic or Latino Detailed Ethnicity\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2368"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInNativeHawaiianOrOtherPacificIslanderDetailedRace
 Id: 2.16.840.1.113883.3.464.1004.2369
 Title: "Native Hawaiian or Other Pacific Islander Detailed Race (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Native Hawaiian or Other Pacific Islander Detailed Race\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Native Hawaiian or Other Pacific Islander Detailed Race\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2369"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInWhiteDetailedRace
 Id: 2.16.840.1.113883.3.464.1004.2370
 Title: "White Detailed Race (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"White Detailed Race\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"White Detailed Race\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2370"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInGenderDysphoria
 Id: 2.16.840.1.113883.3.464.1004.2454
 Title: "Gender Dysphoria (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Gender Dysphoria\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2454"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOutpatientEDTelephoneAcuteInpatientAndNonacuteInpatient
 Id: 2.16.840.1.113883.3.464.1004.2474
 Title: "Outpatient, ED, Telephone, Acute Inpatient and Nonacute Inpatient (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Outpatient, ED, Telephone, Acute Inpatient and Nonacute Inpatient\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Outpatient, ED, Telephone, Acute Inpatient and Nonacute Inpatient\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2474"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInBIRADSAssessment
 Id: 2.16.840.1.113883.3.464.1004.2503
 Title: "BIRADS Assessment (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"BIRADS Assessment\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"BIRADS Assessment\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2503"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHighRiskBIRADS
 Id: 2.16.840.1.113883.3.464.1004.2504
 Title: "High Risk BIRADS (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"High Risk BIRADS\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"High Risk BIRADS\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2504"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInBreastBiopsy
 Id: 2.16.840.1.113883.3.464.1004.2505
 Title: "Breast Biopsy (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Breast Biopsy\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Breast Biopsy\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2505"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInBreastUltrasound
 Id: 2.16.840.1.113883.3.464.1004.2533
 Title: "Breast Ultrasound (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Breast Ultrasound\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Breast Ultrasound\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2533"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInInconclusiveBIRADS
 Id: 2.16.840.1.113883.3.464.1004.2602
 Title: "Inconclusive BIRADS (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Inconclusive BIRADS\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Inconclusive BIRADS\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/2.16.840.1.113883.3.464.1004.2602"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInAdministrativeDataSources
 Id: hedis-administrative-data-sources-h015
 Title: "Administrative Data Sources (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Administrative Data Sources\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Administrative Data Sources\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-administrative-data-sources-h015"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHedisCoverageTypeCommercial
 Id: hedis-coverage-type-commercial
 Title: "Hedis Coverage Type Commercial (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Commercial\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Commercial\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-commercial"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHedisCoverageTypeExchange
 Id: hedis-coverage-type-exchange
 Title: "Hedis Coverage Type Exchange (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Exchange\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Exchange\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-exchange"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHedisCoverageTypeMedicaid
 Id: hedis-coverage-type-medicaid
 Title: "Hedis Coverage Type Medicaid (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicaid\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicaid\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-coverage-type-medicaid"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInHedisCoverageTypeMedicare
 Id: hedis-coverage-type-medicare
@@ -517,26 +573,29 @@ Description: "TEST-ONLY stand-in for NCQA's \"Hedis Coverage Type Medicare\", no
 ValueSet: StandInDentalInsurance
 Id: hedis-dental-insurance-h010
 Title: "Dental insurance (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Dental insurance\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Dental insurance\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-dental-insurance-h010"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInFinalObservation
 Id: hedis-final-observation-h009
 Title: "Final Observation (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Final Observation\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Final Observation\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-final-observation-h009"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInLaboratoryLocationTypes
 Id: hedis-laboratory-location-types-h007
 Title: "Laboratory Location Types (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Laboratory Location Types\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Laboratory Location Types\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-laboratory-location-types-h007"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInMedicalInsurance
 Id: hedis-medical-insurance-h006
@@ -550,800 +609,900 @@ Description: "TEST-ONLY stand-in for NCQA's \"Medical insurance\", not the NCQA 
 ValueSet: StandInMentalHealthSpecialty
 Id: hedis-mental-health-specialty-h005
 Title: "Mental Health Specialty (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Mental Health Specialty\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Mental Health Specialty\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-mental-health-specialty-h005"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOBGYN
 Id: hedis-obgyn-h016
 Title: "OB/GYN (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"OB/GYN\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"OB/GYN\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-obgyn-h016"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOphthalmologyAndOptometry
 Id: hedis-ophthalmology-optometry-h021
 Title: "Ophthalmology and Optometry (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Ophthalmology and Optometry\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Ophthalmology and Optometry\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-ophthalmology-optometry-h021"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInOtherPrenatalCare
 Id: hedis-other-prenatal-care-h017
 Title: "Other Prenatal Care (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Other Prenatal Care\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Other Prenatal Care\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-other-prenatal-care-h017"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPhysicianAssistantsAndAdvancedPracticeNursing
 Id: hedis-pa-advanced-practice-nursing-h018
 Title: "Physician Assistants and Advanced Practice Nursing (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Physician Assistants and Advanced Practice Nursing\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Physician Assistants and Advanced Practice Nursing\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-pa-advanced-practice-nursing-h018"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInClinicalPharmacist
 Id: hedis-pharmacy-service-h019
 Title: "Clinical Pharmacist (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Clinical Pharmacist\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Clinical Pharmacist\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-pharmacy-service-h019"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInPCP
 Id: hedis-primary-care-h003
 Title: "PCP (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"PCP\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"PCP\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-primary-care-h003"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInProfessionalOrInstitutional
 Id: hedis-professional-or-institutional-h002
 Title: "Professional or Institutional (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Professional or Institutional\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Professional or Institutional\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-professional-or-institutional-h002"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC1
 Id: hedis-rau-cc-1
 Title: "CC-1 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-1\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-1\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-1"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC10
 Id: hedis-rau-cc-10
 Title: "CC-10 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-10\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-10\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-10"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC100
 Id: hedis-rau-cc-100
 Title: "CC-100 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-100\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-100\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-100"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC103
 Id: hedis-rau-cc-103
 Title: "CC-103 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-103\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-103\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-103"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC104
 Id: hedis-rau-cc-104
 Title: "CC-104 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-104\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-104\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-104"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC106
 Id: hedis-rau-cc-106
 Title: "CC-106 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-106\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-106\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-106"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC107
 Id: hedis-rau-cc-107
 Title: "CC-107 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-107\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-107\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-107"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC108
 Id: hedis-rau-cc-108
 Title: "CC-108 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-108\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-108\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-108"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC11
 Id: hedis-rau-cc-11
 Title: "CC-11 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-11\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-11\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-11"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC110
 Id: hedis-rau-cc-110
 Title: "CC-110 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-110\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-110\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-110"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC111
 Id: hedis-rau-cc-111
 Title: "CC-111 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-111\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-111\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-111"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC112
 Id: hedis-rau-cc-112
 Title: "CC-112 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-112\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-112\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-112"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC114
 Id: hedis-rau-cc-114
 Title: "CC-114 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-114\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-114\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-114"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC115
 Id: hedis-rau-cc-115
 Title: "CC-115 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-115\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-115\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-115"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC12
 Id: hedis-rau-cc-12
 Title: "CC-12 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-12\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-12\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-12"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC122
 Id: hedis-rau-cc-122
 Title: "CC-122 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-122\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-122\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-122"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC124
 Id: hedis-rau-cc-124
 Title: "CC-124 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-124\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-124\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-124"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC134
 Id: hedis-rau-cc-134
 Title: "CC-134 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-134\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-134\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-134"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC135
 Id: hedis-rau-cc-135
 Title: "CC-135 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-135\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-135\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-135"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC136
 Id: hedis-rau-cc-136
 Title: "CC-136 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-136\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-136\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-136"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC137
 Id: hedis-rau-cc-137
 Title: "CC-137 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-137\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-137\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-137"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC138
 Id: hedis-rau-cc-138
 Title: "CC-138 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-138\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-138\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-138"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC139
 Id: hedis-rau-cc-139
 Title: "CC-139 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-139\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-139\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-139"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC140
 Id: hedis-rau-cc-140
 Title: "CC-140 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-140\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-140\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-140"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC141
 Id: hedis-rau-cc-141
 Title: "CC-141 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-141\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-141\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-141"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC157
 Id: hedis-rau-cc-157
 Title: "CC-157 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-157\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-157\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-157"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC158
 Id: hedis-rau-cc-158
 Title: "CC-158 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-158\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-158\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-158"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC159
 Id: hedis-rau-cc-159
 Title: "CC-159 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-159\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-159\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-159"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC160
 Id: hedis-rau-cc-160
 Title: "CC-160 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-160\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-160\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-160"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC161
 Id: hedis-rau-cc-161
 Title: "CC-161 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-161\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-161\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-161"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC162
 Id: hedis-rau-cc-162
 Title: "CC-162 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-162\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-162\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-162"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC166
 Id: hedis-rau-cc-166
 Title: "CC-166 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-166\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-166\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-166"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC167
 Id: hedis-rau-cc-167
 Title: "CC-167 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-167\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-167\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-167"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC169
 Id: hedis-rau-cc-169
 Title: "CC-169 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-169\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-169\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-169"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC17
 Id: hedis-rau-cc-17
 Title: "CC-17 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-17\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-17\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-17"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC170
 Id: hedis-rau-cc-170
 Title: "CC-170 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-170\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-170\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-170"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC173
 Id: hedis-rau-cc-173
 Title: "CC-173 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-173\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-173\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-173"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC176
 Id: hedis-rau-cc-176
 Title: "CC-176 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-176\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-176\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-176"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC18
 Id: hedis-rau-cc-18
 Title: "CC-18 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-18\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-18\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-18"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC186
 Id: hedis-rau-cc-186
 Title: "CC-186 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-186\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-186\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-186"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC188
 Id: hedis-rau-cc-188
 Title: "CC-188 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-188\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-188\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-188"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC189
 Id: hedis-rau-cc-189
 Title: "CC-189 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-189\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-189\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-189"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC19
 Id: hedis-rau-cc-19
 Title: "CC-19 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-19\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-19\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-19"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC2
 Id: hedis-rau-cc-2
 Title: "CC-2 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-2\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-2\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-2"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC21
 Id: hedis-rau-cc-21
 Title: "CC-21 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-21\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-21\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-21"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC22
 Id: hedis-rau-cc-22
 Title: "CC-22 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-22\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-22\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-22"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC23
 Id: hedis-rau-cc-23
 Title: "CC-23 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-23\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-23\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-23"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC27
 Id: hedis-rau-cc-27
 Title: "CC-27 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-27\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-27\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-27"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC28
 Id: hedis-rau-cc-28
 Title: "CC-28 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-28\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-28\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-28"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC29
 Id: hedis-rau-cc-29
 Title: "CC-29 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-29\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-29\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-29"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC33
 Id: hedis-rau-cc-33
 Title: "CC-33 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-33\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-33\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-33"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC34
 Id: hedis-rau-cc-34
 Title: "CC-34 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-34\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-34\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-34"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC35
 Id: hedis-rau-cc-35
 Title: "CC-35 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-35\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-35\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-35"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC39
 Id: hedis-rau-cc-39
 Title: "CC-39 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-39\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-39\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-39"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC40
 Id: hedis-rau-cc-40
 Title: "CC-40 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-40\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-40\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-40"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC46
 Id: hedis-rau-cc-46
 Title: "CC-46 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-46\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-46\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-46"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC47
 Id: hedis-rau-cc-47
 Title: "CC-47 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-47\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-47\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-47"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC48
 Id: hedis-rau-cc-48
 Title: "CC-48 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-48\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-48\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-48"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC51
 Id: hedis-rau-cc-51
 Title: "CC-51 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-51\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-51\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-51"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC52
 Id: hedis-rau-cc-52
 Title: "CC-52 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-52\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-52\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-52"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC54
 Id: hedis-rau-cc-54
 Title: "CC-54 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-54\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-54\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-54"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC55
 Id: hedis-rau-cc-55
 Title: "CC-55 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-55\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-55\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-55"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC56
 Id: hedis-rau-cc-56
 Title: "CC-56 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-56\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-56\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-56"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC57
 Id: hedis-rau-cc-57
 Title: "CC-57 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-57\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-57\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-57"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC58
 Id: hedis-rau-cc-58
 Title: "CC-58 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-58\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-58\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-58"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC59
 Id: hedis-rau-cc-59
 Title: "CC-59 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-59\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-59\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-59"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC6
 Id: hedis-rau-cc-6
 Title: "CC-6 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-6\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-6\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-6"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC60
 Id: hedis-rau-cc-60
 Title: "CC-60 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-60\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-60\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-60"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC70
 Id: hedis-rau-cc-70
 Title: "CC-70 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-70\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-70\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-70"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC71
 Id: hedis-rau-cc-71
 Title: "CC-71 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-71\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-71\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-71"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC72
 Id: hedis-rau-cc-72
 Title: "CC-72 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-72\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-72\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-72"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC73
 Id: hedis-rau-cc-73
 Title: "CC-73 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-73\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-73\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-73"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC74
 Id: hedis-rau-cc-74
 Title: "CC-74 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-74\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-74\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-74"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC75
 Id: hedis-rau-cc-75
 Title: "CC-75 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-75\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-75\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-75"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC76
 Id: hedis-rau-cc-76
 Title: "CC-76 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-76\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-76\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-76"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC77
 Id: hedis-rau-cc-77
 Title: "CC-77 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-77\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-77\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-77"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC78
 Id: hedis-rau-cc-78
 Title: "CC-78 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-78\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-78\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-78"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC79
 Id: hedis-rau-cc-79
 Title: "CC-79 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-79\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-79\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-79"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC8
 Id: hedis-rau-cc-8
 Title: "CC-8 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-8\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-8\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-8"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC80
 Id: hedis-rau-cc-80
 Title: "CC-80 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-80\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-80\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-80"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC82
 Id: hedis-rau-cc-82
 Title: "CC-82 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-82\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-82\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-82"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC83
 Id: hedis-rau-cc-83
 Title: "CC-83 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-83\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-83\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-83"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC84
 Id: hedis-rau-cc-84
 Title: "CC-84 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-84\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-84\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-84"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC85
 Id: hedis-rau-cc-85
 Title: "CC-85 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-85\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-85\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-85"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC86
 Id: hedis-rau-cc-86
 Title: "CC-86 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-86\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-86\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-86"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC87
 Id: hedis-rau-cc-87
 Title: "CC-87 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-87\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-87\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-87"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC88
 Id: hedis-rau-cc-88
 Title: "CC-88 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-88\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-88\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-88"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC9
 Id: hedis-rau-cc-9
 Title: "CC-9 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-9\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-9\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-9"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC96
 Id: hedis-rau-cc-96
 Title: "CC-96 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-96\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-96\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-96"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInCC99
 Id: hedis-rau-cc-99
 Title: "CC-99 (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"CC-99\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"CC-99\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rau-cc-99"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInRegisteredNurse
 Id: hedis-rn-h020
 Title: "Registered Nurse (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Registered Nurse\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Registered Nurse\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-rn-h020"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
 ValueSet: StandInSupplementalDataSources
 Id: hedis-supplemental-data-sources-h001
 Title: "Supplemental Data Sources (TEST-ONLY stand-in)"
-Description: "TEST-ONLY stand-in for NCQA's \"Supplemental Data Sources\", not the NCQA Value Set Directory expansion: empty (no scenario reaches it)."
+Description: "TEST-ONLY stand-in for NCQA's \"Supplemental Data Sources\", not the NCQA Value Set Directory expansion: a placeholder code only (no scenario reaches it)."
 * ^url = "https://www.ncqa.org/fhir/ValueSet/hedis-supplemental-data-sources-h001"
 * ^experimental = true
 * ^status = #draft
+* https://oloveluck.github.io/cql-to-sql/CodeSystem/standin#no-scenario-reaches-this-set "No BCS-E scenario reaches this value set"
 
