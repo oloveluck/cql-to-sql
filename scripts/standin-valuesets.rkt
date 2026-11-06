@@ -6,7 +6,9 @@
 ;;; expansions are NCQA's Value Set Directory, which is licensed separately and not in this repo. So
 ;;; that the scenarios (scenarios/bcse) can be evaluated end to end, this writes one FSH ValueSet per
 ;;; declared url: the codes the scenarios use where a scenario reaches the set (the `test-codes`
-;;; table), empty otherwise. Every stand-in is `experimental` and says it is not the NCQA expansion;
+;;; table), otherwise a single placeholder code from this project's own code system, which no scenario's
+;;; data uses (so the set matches nothing real, and is a valid ValueSet: an empty `compose` is not,
+;;; and SUSHI and fsh write an empty one differently). Every stand-in is `experimental` and says it is not the NCQA expansion;
 ;;; a result computed with them is a test of the logic, not a HEDIS rate.
 ;;;
 ;;;   racket scripts/standin-valuesets.rkt   -> scenarios/bcse/input/fsh/standin-valuesets.fsh
@@ -79,16 +81,20 @@
 ;; fsh-id : String -> String   the url's last segment, a valid FHIR id
 (define (fsh-id url) (let ([seg (last (string-split url "/"))]) (substring seg 0 (min 64 (string-length seg)))))
 
+;; the placeholder an otherwise-empty stand-in includes: matches no scenario data
+(define placeholder (list "https://oloveluck.github.io/cql-to-sql/CodeSystem/standin" "no-scenario-reaches-this-set" "No BCS-E scenario reaches this value set"))
+
 (define (quote-fsh s) (string-append "\"" (regexp-replace* #rx"\"" s "\\\\\"") "\""))
 
 ;; value-set-fsh : (cons name url) -> String
 (define (value-set-fsh nv)
   (match-define (cons name url) nv)
-  (define codes (hash-ref test-codes url '()))
+  (define reached (hash-ref test-codes url '()))
+  (define codes (if (null? reached) (list placeholder) reached))
   (string-append
    (format "ValueSet: ~a\nId: ~a\nTitle: ~a\n" (fsh-name name) (fsh-id url) (quote-fsh (string-append name " (TEST-ONLY stand-in)")))
    (format "Description: ~a\n" (quote-fsh (format "TEST-ONLY stand-in for NCQA's \"~a\", not the NCQA Value Set Directory expansion: ~a."
-                                                   name (if (null? codes) "empty (no scenario reaches it)" "the codes the BCS-E scenarios use"))))
+                                                   name (if (null? reached) "a placeholder code only (no scenario reaches it)" "the codes the BCS-E scenarios use"))))
    (format "* ^url = ~a\n* ^experimental = true\n* ^status = #draft\n" (quote-fsh url))
    (apply string-append (for/list ([c codes]) (format "* ~a#~a ~a\n" (car c) (cadr c) (quote-fsh (caddr c)))))))
 

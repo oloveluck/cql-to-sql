@@ -163,6 +163,46 @@ Collapse, AnyTrue/AllTrue, Today.
 7. **Wrap-up.** DuckDB dialect, output as SQL-on-FHIR SQLQuery/SQLView Library, `ig/` with
    `Library/$cql-to-sql`.
 
+## BCS-E scenarios (HEDIS, measurement year 2025)
+
+NCQA's HEDIS core IG (`ncqa.hedis.core.main.v2025-2025.1.0.tar`) and the BCS-E measure bundles
+(`BCSE_Details`/`BCSE_Reporting-2025.3.0.bundle.json`) are at the repo root, as uploaded.
+`scenarios/bcse` holds test members for the measure: a FSH project on the HEDIS core profiles.
+- **19 scenarios**, one per path through the measure:
+  - numerator by claim and by Observation, including the window's first day and the day before it;
+  - not screened;
+  - age 41, 42 on the last day, and 75;
+  - male;
+  - an enrollment gap and a late enrollment start;
+  - bilateral, left + right, and left-only mastectomy;
+  - hospice, palliative care, deceased;
+  - Medicare screened, and Medicare long-term care, which only the Medicare group excludes.
+- **Score keys:** each scenario is a Bundle with an NCQA-style `<id>.scorekey` Parameters giving
+  the expected value of every population define (`Initial population`, `Exclusion`, `Denominator`,
+  `Numerator`, and the `- Medicare` forms). The values come from the measure's CQL, not from an
+  interpreter run.
+- **Value sets:** test-only stand-ins (`scripts/standin-valuesets.rkt`) for the 167 NCQA value
+  sets the CQL declares. Real codes are used where a scenario reaches a set, and a placeholder
+  that matches nothing elsewhere. Results with them test the logic, not a HEDIS rate.
+- **Setup:** `racket scripts/install-hedis.rkt` puts the package where SUSHI and fsh look. fsh's
+  copy is repackaged with `<resourceType>-<id>.json` names, or the family's package index sees no
+  HEDIS profile. Run one `sushi build scenarios/bcse` first, so its dependencies are cached.
+- **Status:**
+  - The scenarios build with SUSHI (0 errors) and with fsh, identically (256/256 resources).
+  - They validate against the HEDIS + CARIN BB profiles: `racket scripts/bcse-check.rkt`, 89
+    examples, 0 invalid.
+  - `tests/bcse-scenarios-test.rkt` checks that, and that every score key is consistent.
+- **Pending:** evaluating BCSE_Details over the scenarios and comparing with the score keys needs
+  the cql compiler to translate NCQA's libraries (13/43 compile today; Niko). Then the same Bundles
+  and score keys feed phase 6, the per-patient SQL vs. interpreter comparison.
+- **Found on the way, for the shared repos (not patched here):**
+  - fsh fails on an integer literal inside a parameterized RuleSet
+    (`regexp-replace*: contract violation … given: 1`; worked around in `rulesets.fsh`).
+  - fsh writes `compose: {}` for a ValueSet with no rules, where SUSHI writes none.
+  - `fhir/sd/sd-index` finds conformance resources only by `StructureDefinition-*.json`-style file
+    names, so a package with other names (NCQA's) is invisible to fsh and the validator, and
+    validation then passes by failing open.
+
 ## Open questions
 
 - What counts as "the same": proposed, the SQL MeasureReport equals the interpreter's (phase 6),

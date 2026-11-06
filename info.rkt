@@ -12,5 +12,6 @@
 (define pkg-authors '(oloveluck))
 (define license 'MIT)
 (define deps '("base" "fhir" "fhirpath" "cql" "sql-on-fhir" "db-lib"))
-(define build-deps '("rackunit-lib"))
+;; fsh: tests/bcse-scenarios-test.rkt compiles and checks the BCS-E scenarios (fsh/check)
+(define build-deps '("rackunit-lib" "fsh"))
 (define test-omit-paths '("scribblings"))
