@@ -1,3 +1,5 @@
 compiled/
 doc/
 *.db
+vendor/packages/
+fsh-generated/
