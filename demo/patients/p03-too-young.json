@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "35: not in initial population"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p03-too-young",
+        "gender": "female",
+        "birthDate": "1990-02-14"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p03-too-young-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p03-too-young"
+        },
+        "effectiveDateTime": "2025-04-01T10:00:00Z"
+      }
+    }
+  ]
+}

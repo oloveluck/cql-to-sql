@@ -1,0 +1,21 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "denominator, no mammogram"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p02-no-mammogram",
+        "gender": "female",
+        "birthDate": "1965-08-20"
+      }
+    }
+  ]
+}

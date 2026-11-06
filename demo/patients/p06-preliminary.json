@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "mammogram not final"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p06-preliminary",
+        "gender": "female",
+        "birthDate": "1975-04-04"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p06-preliminary-obs1",
+        "status": "preliminary",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p06-preliminary"
+        },
+        "effectiveDateTime": "2025-05-05T12:00:00Z"
+      }
+    }
+  ]
+}

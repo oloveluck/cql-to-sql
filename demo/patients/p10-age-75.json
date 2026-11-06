@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "75 on the last day: out"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p10-age-75",
+        "gender": "female",
+        "birthDate": "1950-12-31"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p10-age-75-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p10-age-75"
+        },
+        "effectiveDateTime": "2025-02-02T09:00:00Z"
+      }
+    }
+  ]
+}

@@ -9,6 +9,17 @@ style, `contract-out`, `module+ test` in every module, floors that only rise).
 
 A diagram of the target architecture will be added later; revise this plan to match it.
 
+## Hackathon demo (`demo/`, done)
+
+Two hours left, so a thin end-to-end slice instead of the phases below: a BCS-E-shaped measure
+(women 42–74, a mammogram Observation in 2025), 12 hand-made patients, a two-code test value set,
+two hand-written ViewDefinitions, and the measure's SQL written by hand in the translator's
+target shape. `racket demo/run.rkt` builds MeasureReports from the interpreter and from SQLite
+and compares them: 13 of 13 identical (12 individual + summary). Decisions taken for it: SQLite
+only (Aidbox optional, views only), hand-written views and SQL, synthetic value set, "the same"
+= equal MeasureReports. See `demo/README.md`. Afterwards: generate the views and the SQL
+(phases 4–6), then BCS-E.
+
 ## Target measure: HEDIS MY2025 Breast Cancer Screening (BCS-E)
 
 Uploaded to the repo root (2e22c7f): `BCSE_Details-2025.3.0.bundle.json` and

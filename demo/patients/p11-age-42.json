@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "42 on the last day: in"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p11-age-42",
+        "gender": "female",
+        "birthDate": "1983-12-31"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p11-age-42-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p11-age-42"
+        },
+        "effectiveDateTime": "2025-07-07T09:00:00Z"
+      }
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "74 on the last day: in"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p09-age-74",
+        "gender": "female",
+        "birthDate": "1951-12-31"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p09-age-74-obs1",
+        "status": "corrected",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p09-age-74"
+        },
+        "effectiveDateTime": "2025-02-02T09:00:00Z"
+      }
+    }
+  ]
+}

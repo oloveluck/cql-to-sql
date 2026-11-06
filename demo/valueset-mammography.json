@@ -1,0 +1,22 @@
+{
+  "resourceType": "ValueSet",
+  "id": "demo-mammography",
+  "url": "http://example.org/fhir/ValueSet/demo-mammography",
+  "name": "DemoMammography",
+  "title": "Mammography (demo)",
+  "status": "active",
+  "description": "A two-code stand-in for NCQA's licensed Mammography value set, for the cql-to-sql demo.",
+  "compose": {
+    "include": [
+      { "system": "http://loinc.org", "concept": [ { "code": "24606-6", "display": "MG Breast Screening" } ] },
+      { "system": "http://snomed.info/sct", "concept": [ { "code": "71651007", "display": "Mammography" } ] }
+    ]
+  },
+  "expansion": {
+    "timestamp": "2025-01-01T00:00:00Z",
+    "contains": [
+      { "system": "http://loinc.org", "code": "24606-6", "display": "MG Breast Screening" },
+      { "system": "http://snomed.info/sct", "code": "71651007", "display": "Mammography" }
+    ]
+  }
+}

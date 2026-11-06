@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "mammogram before the period"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p05-mammogram-2023",
+        "gender": "female",
+        "birthDate": "1960-07-07"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p05-mammogram-2023-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p05-mammogram-2023"
+        },
+        "effectiveDateTime": "2023-06-01T08:00:00Z"
+      }
+    }
+  ]
+}

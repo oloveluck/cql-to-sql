@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "male: not in initial population"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p04-male",
+        "gender": "male",
+        "birthDate": "1970-01-01"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p04-male-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p04-male"
+        },
+        "effectiveDateTime": "2025-04-01T10:00:00Z"
+      }
+    }
+  ]
+}

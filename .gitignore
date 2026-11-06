@@ -2,3 +2,4 @@ compiled/
 doc/
 *.db
 package/
+demo/out/

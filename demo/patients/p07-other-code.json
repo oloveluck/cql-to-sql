@@ -1,0 +1,40 @@
+{
+  "resourceType": "Bundle",
+  "type": "collection",
+  "meta": {
+    "tag": [
+      {
+        "display": "an observation outside the value set"
+      }
+    ]
+  },
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p07-other-code",
+        "gender": "female",
+        "birthDate": "1972-09-09"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p07-other-code-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p07-other-code"
+        },
+        "effectiveDateTime": "2025-06-06T12:00:00Z"
+      }
+    }
+  ]
+}
