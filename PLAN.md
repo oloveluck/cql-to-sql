@@ -11,10 +11,14 @@ A diagram of the target architecture will be added later; revise this plan to ma
 
 ## Setup (done)
 
-- Racket 9.3: `arch -arm64 brew install minimal-racket` (the shell runs under Rosetta).
-- Sibling repos in `~/github/ebmeds/`: `fhir`, `fhirpath`, `cql`, `sql-on-fhir`.
-- Install, from `~/github/ebmeds`:
-  `raco pkg install --no-docs --link --auto --batch fhir/fhir fhir/fhir-spec fhirpath cql sql-on-fhir cql-to-sql`
+All paths are relative to this repo's root; the dependencies are cloned next to it.
+
+- Racket 9.3: `brew install minimal-racket` (in a Rosetta shell on Apple silicon, prefix with
+  `arch -arm64`).
+- Dependencies, cloned as siblings of this repo:
+  `for r in fhir fhirpath cql sql-on-fhir; do git clone https://github.com/oloveluck/$r.git ../$r; done`
+- Install, from this repo's root:
+  `raco pkg install --no-docs --link --auto --batch ../fhir/fhir ../fhir/fhir-spec ../fhirpath ../cql ../sql-on-fhir .`
 - Test: `raco test -p cql-to-sql` (the README's `raco test cql-to-sql` does not work).
 - SQL TCK report: `racket tests/tck.rkt -v`.
 
