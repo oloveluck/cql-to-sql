@@ -1,0 +1,18 @@
+# BCS-E test scenarios: members of a health plan, one per path through NCQA's Breast Cancer
+# Screening (BCS-E) measure for measurement year 2025, on the HEDIS core IG's profiles.
+# Builds with SUSHI (`sushi build .`) and with fsh (`raco fsh . --package-dir ../../vendor/packages`).
+id: io.github.oloveluck.cql-to-sql.bcse-scenarios
+canonical: https://oloveluck.github.io/cql-to-sql/bcse-scenarios
+name: BCSEScenarios
+title: BCS-E test scenarios
+status: draft
+version: 0.1.0
+fhirVersion: 4.0.1
+FSHOnly: true
+publisher:
+  name: cql-to-sql
+dependencies:
+  ncqa.hedis.core.main.v2025: 2025.1.0
+  hl7.fhir.us.core: 3.1.1
+  hl7.fhir.us.carin-bb: 1.1.0
+  hl7.fhir.uv.sdc.r4: 3.0.0

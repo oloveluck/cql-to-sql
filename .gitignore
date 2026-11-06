@@ -3,3 +3,5 @@ doc/
 *.db
 package/
 demo/out/
+vendor/packages/
+fsh-generated/
