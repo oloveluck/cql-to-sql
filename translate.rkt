@@ -28,17 +28,42 @@
 (provide
  (struct-out term)
  (struct-out tenv)
+ (struct-out def-info)
  (struct-out exn:fail:untranslatable)
  (contract-out
   [translate (-> any/c tenv? term?)]
-  [make-tenv (->* () (#:dialect dialect?) tenv?)]
+  [make-tenv (->* () (#:dialect dialect?
+                      #:aliases hash?
+                      #:lets hash?
+                      #:defs hash?
+                      #:params hash?
+                      #:valuesets hash?
+                      #:schema any/c
+                      #:context (or/c symbol? string? #f)) tenv?)]
   [translated-ops (-> (listof string?))]))     ; the ELM operator names with a translation
 
 (struct term (sql type) #:transparent)
-(struct tenv (dialect aliases lets))
+(struct def-info (table alias col type kind) #:transparent)
+(struct tenv (dialect aliases lets defs params valuesets schema context))
 (struct exn:fail:untranslatable exn:fail (node) #:transparent)
 
-(define (make-tenv #:dialect [d sqlite]) (tenv d (hash) (hash)))
+(define (make-tenv #:dialect [d sqlite]
+                   #:aliases [aliases (hash)]
+                   #:lets [lets (hash)]
+                   #:defs [defs (hash)]
+                   #:params [params (hash)]
+                   #:valuesets [valuesets (hash)]
+                   #:schema [schema #f]
+                   #:context [context #f])
+  (tenv d aliases lets defs params valuesets schema context))
+
+(define (tenv-with-aliases env aliases)
+  (match-define (tenv d _ l defs params vs sc ctx) env)
+  (tenv d aliases l defs params vs sc ctx))
+
+(define (tenv-with-lets env lets)
+  (match-define (tenv d a _ defs params vs sc ctx) env)
+  (tenv d a lets defs params vs sc ctx))
 
 ;; untranslatable : ELM FormatString Any ... -> (raises)
 (define (untranslatable node fmt . args)
@@ -91,6 +116,13 @@
     [(elm-is operand type) (is-test e (translate operand env) (type-spec->type type 'Any))]
     [(elm-to operand to-type) (apply-op (string-append "To" to-type) (list (translate operand env)) to-type env e)]
     [(elm-component prec operand) (component e prec (translate operand env) env)]
+    [(elm-parameter-ref name lib) (parameter-ref e name lib env)]
+    [(elm-expression-ref name lib) (expression-ref e name lib env)]
+    [(elm-precision-op op prec ops) (precision-op e op prec ops env)]
+    [(elm-timing op prec a b) (timing-expr e op prec a b env)]
+    [(elm-between kind prec a b) (between-expr e kind prec a b env)]
+    [(elm-function-ref name lib ops sig) (function-ref e name lib ops sig env)]
+    [(elm-retrieve data-type tid cprop ccomp codes) (retrieve-expr e data-type tid cprop ccomp codes env)]
     [_ (untranslatable e "~a has no SQL translation yet" (elm-kind e))]))
 
 ;; elm-kind : ELM -> String   the node's struct name, for messages
@@ -140,7 +172,16 @@
 
 ;; field : Term String CqlType TEnv -> Term   a member of a JSON-encoded value
 (define (field t name type env)
-  (extracted (D env 'json-extract (term-sql t) (sql-lit (string-append "$." name))) type))
+  (match (term-sql t)
+    [(sql-call "json_object" (list* (sql-lit "low") low-val _ (sql-lit "high") high-val _))
+     (match name
+       ["low" (term low-val type)]
+       ["high" (term high-val type)]
+       ["lowClosed" (term sql-true 'Boolean)]
+       ["highClosed" (term sql-true 'Boolean)]
+       [_ (extracted (D env 'json-extract (term-sql t) (sql-lit (string-append "$." name))) type)])]
+    [_
+     (extracted (D env 'json-extract (term-sql t) (sql-lit (string-append "$." name))) type)]))
 
 ;; ---- types -------------------------------------------------------------------------------------
 
@@ -170,6 +211,12 @@
                      [scope (hash-ref (tenv-aliases env) scope (lambda () (untranslatable e "alias ~a is not in scope" scope)))]
                      [else (untranslatable e "a property without a source")]))
   (match (term-type base)
+    [(list 'Resource res-type)
+     (define col (fhir-path->column-name path))
+     (match (term-sql base)
+       [(sql-ref alias _) (term (sql-ref alias col) (resource-col-type res-type col))]
+       [(? string? s) (term (sql-ref s col) (resource-col-type res-type col))]
+       [_ (term (sql-ref (term-sql base) col) (resource-col-type res-type col))])]
     [(list 'Tuple fields)
      (define ft (cond [(assq (string->symbol path) fields) => cdr] [else 'Any]))
      (field base path ft env)]
@@ -183,6 +230,38 @@
        [_ (untranslatable e "Quantity has no property ~a" path)])]
     [t (untranslatable e "property ~a of a ~a value" path t)]))
 
+(define (snake s)
+  (string-downcase (regexp-replace* #px"([a-z])([A-Z])" s "\\1_\\2")))
+
+(define (fhir-path->column-name p)
+  (match p
+    ["birthDate.value" "birth_date"]
+    ["birthDate" "birth_date"]
+    ["gender.value" "gender"]
+    ["gender" "gender"]
+    ["status.value" "status"]
+    ["status" "status"]
+    ["effective.value" "effective"]
+    ["effective" "effective"]
+    ["performed.value" "performed_datetime"]
+    ["performed" "performed_datetime"]
+    ["occurrence.value" "occurrence_datetime"]
+    ["occurrence" "occurrence_datetime"]
+    ["id.value" "id"]
+    ["id" "id"]
+    [_ (snake (car (string-split p ".")))]))
+
+(define (resource-col-type res col)
+  (match col
+    ["gender" 'String]
+    ["birth_date" 'Date]
+    ["status" 'String]
+    ["effective" 'DateTime]
+    ["effective_datetime" 'DateTime]
+    ["performed_datetime" 'DateTime]
+    ["occurrence_datetime" 'DateTime]
+    [_ 'String]))
+
 ;; ---- queries over lists ------------------------------------------------------------------------
 
 ;; query : ELM ... -> Term   sources (lists, each a json_each), with/without as EXISTS, where,
@@ -190,48 +269,89 @@
 ;; singleton source)
 (define (query e sources lets rels where ret distinct? sort agg env)
   (when agg (untranslatable e "an aggregate clause"))
-  (define srcs (for/list ([s sources]) (cons (car s) (translate (cdr s) env))))
-  (define singleton? (for/and ([s srcs]) (not (list-type? (term-type (cdr s))))))
-  (unless (or singleton? (for/and ([s srcs]) (list-type? (term-type (cdr s)))))
-    (untranslatable e "a query mixing list and single-value sources"))
-  ;; each source alias is a FROM item; its value is the row's `value` column
-  (define aliases
-    (for/fold ([h (tenv-aliases env)]) ([s srcs])
-      (hash-set h (car s) (extracted (sql-ref (car s) "value")
-                                     (if singleton? (term-type (cdr s)) (element-type (term-type (cdr s))))))))
-  (define env1 (tenv (tenv-dialect env) aliases (tenv-lets env)))
-  (define env2 (for/fold ([en env1]) ([l lets])
-                 (tenv (tenv-dialect en) (tenv-aliases en) (hash-set (tenv-lets en) (car l) (translate (cdr l) en)))))
-  (define from
-    (for/list ([s srcs])
-      (if singleton?
-          (sql-subquery (select (cons (term-sql (cdr s)) "value")) (car s))
-          (sql-table-fn (D env 'json-each (term-sql (cdr s))) (car s)))))
-  (define conds
-    (append (for/list ([r rels]) (relationship r env2))
-            (if where (list (truthy (translate where env2))) '())))
-  (define value
-    (cond [ret (translate ret env2)]
-          [(= (length srcs) 1) (hash-ref aliases (car (car srcs)))]
-          [else (tuple-term (for/list ([s srcs]) (cons (string->symbol (car s)) (hash-ref aliases (car s)))) env2)]))
-  (define order (sort-clause e sort value env2))
-  (define where-sql (if (null? conds) #f (apply sql-and conds)))
+  (define retrieve-source? (and (pair? sources) (elm-retrieve? (cdar sources))))
   (cond
-    [singleton?
-     (term (sql-scalar (select (term-sql value) #:from from #:where where-sql)) (term-type value))]
+    [retrieve-source?
+     (match-define (cons alias ret-node) (car sources))
+     (match-define (elm-retrieve data-type _ code-prop code-comp codes) ret-node)
+     (define table-name (base-resource-name data-type))
+     (define tbl-alias (string-downcase alias))
+     (define vs-url
+       (match codes
+         [(elm-term-ref "ValueSetRef" vs-name _)
+          (hash-ref (tenv-valuesets env) vs-name vs-name)]
+         [(? string? u) u]
+         [_ #f]))
+     (define from-item
+       (if vs-url
+           (sql-join #f
+                     (sql-table table-name tbl-alias)
+                     (sql-table "valueset_code" "vs")
+                     (sql-and (sql-bin "=" (sql-ref "vs" "url") (sql-lit vs-url))
+                              (sql-bin "=" (sql-ref "vs" "system") (sql-ref tbl-alias "code_system"))
+                              (sql-bin "=" (sql-ref "vs" "code") (sql-ref tbl-alias "code"))))
+           (sql-table table-name tbl-alias)))
+     (define inner-aliases (hash-set (tenv-aliases env) alias (term (sql-ref tbl-alias "id") (list 'Resource (res-type-name data-type)))))
+     (define inner-env (tenv-with-aliases env inner-aliases))
+     (define where-sql (if where (truthy (translate where inner-env)) #f))
+     (define sel (select #:distinct? #t
+                         (cons (sql-ref tbl-alias "patient_id") "patient_id")
+                         (cons (sql-ref tbl-alias "id") "id")
+                         #:from (list from-item)
+                         #:where where-sql))
+     (term sel 'Relation)]
     [else
-     (define rows (select #:distinct? (and ret distinct? #t) (cons (embed value env2) "v") #:from from #:where where-sql #:order-by order))
-     ;; json_group_array over an ordered subquery keeps that order (SQLite); a null source list is a null result
-     (define agg-sql (sql-scalar (select (D env 'json-group-array (sql-ref "q" "v")) #:from (list (sql-subquery rows "q")))))
-     (define null-source (apply sql-or (for/list ([s srcs]) (sql-null-test (term-sql (cdr s)) #f))))
-     (term (sql-case (list (cons null-source sql-null)) agg-sql) (list 'List (term-type value)))]))
+     (define srcs (for/list ([s sources]) (cons (car s) (translate (cdr s) env))))
+     (define singleton? (for/and ([s srcs]) (not (list-type? (term-type (cdr s))))))
+     (unless (or singleton? (for/and ([s srcs]) (list-type? (term-type (cdr s)))))
+       (untranslatable e "a query mixing list and single-value sources"))
+     ;; each source alias is a FROM item; its value is the row's `value` column
+     (define aliases
+       (for/fold ([h (tenv-aliases env)]) ([s srcs])
+         (hash-set h (car s) (extracted (sql-ref (car s) "value")
+                                        (if singleton? (term-type (cdr s)) (element-type (term-type (cdr s))))))))
+     (define env1 (tenv-with-aliases env aliases))
+     (define env2 (for/fold ([en env1]) ([l lets])
+                    (tenv-with-lets en (hash-set (tenv-lets en) (car l) (translate (cdr l) en)))))
+     (define from
+       (for/list ([s srcs])
+         (if singleton?
+             (sql-subquery (select (cons (term-sql (cdr s)) "value")) (car s))
+             (sql-table-fn (D env 'json-each (term-sql (cdr s))) (car s)))))
+     (define conds
+       (append (for/list ([r rels]) (relationship r env2))
+               (if where (list (truthy (translate where env2))) '())))
+     (define value
+       (cond [ret (translate ret env2)]
+             [(= (length srcs) 1) (hash-ref aliases (car (car srcs)))]
+             [else (tuple-term (for/list ([s srcs]) (cons (string->symbol (car s)) (hash-ref aliases (car s)))) env2)]))
+     (define order (sort-clause e sort value env2))
+     (define where-sql (if (null? conds) #f (apply sql-and conds)))
+     (cond
+       [singleton?
+        (term (sql-scalar (select (term-sql value) #:from from #:where where-sql)) (term-type value))]
+       [else
+        (define rows (select #:distinct? (and ret distinct? #t) (cons (embed value env2) "v") #:from from #:where where-sql #:order-by order))
+        ;; json_group_array over an ordered subquery keeps that order (SQLite); a null source list is a null result
+        (define agg-sql (sql-scalar (select (D env 'json-group-array (sql-ref "q" "v")) #:from (list (sql-subquery rows "q")))))
+        (define null-source (apply sql-or (for/list ([s srcs]) (sql-null-test (term-sql (cdr s)) #f))))
+        (term (sql-case (list (cons null-source sql-null)) agg-sql) (list 'List (term-type value)))])]))
+
+(define (base-resource-name s)
+  (define res (res-type-name s))
+  (snake res))
+
+(define (res-type-name s)
+  (match (regexp-match #rx"^{http://hl7.org/fhir}(.*)$" s)
+    [(list _ n) n]
+    [_ s]))
 
 ;; relationship : elm-relationship TEnv -> SqlExpr   with: EXISTS; without: NOT EXISTS
 (define (relationship r env)
   (match-define (elm-relationship kind alias expr such-that) r)
   (define src (translate expr env))
   (define elem (if (list-type? (term-type src)) (element-type (term-type src)) (term-type src)))
-  (define inner (tenv (tenv-dialect env) (hash-set (tenv-aliases env) alias (extracted (sql-ref alias "value") elem)) (tenv-lets env)))
+  (define inner (tenv-with-aliases env (hash-set (tenv-aliases env) alias (extracted (sql-ref alias "value") elem))))
   (define from (if (list-type? (term-type src))
                    (sql-table-fn (D env 'json-each (term-sql src)) alias)
                    (sql-subquery (select (cons (term-sql src) "value")) alias)))
@@ -281,15 +401,173 @@
 
 ;; component : ELM Symbol Term TEnv -> Term   `year from x`: the lexeme's digits, null below its precision
 (define (component e prec t env)
-  (define parts (if (eq? (term-type t) 'Time) time-parts date-parts))
-  (match (assq prec parts)
-    [(list _ start len)
-     (define s (term-sql t))
-     (term (sql-case (list (cons (sql-bin ">=" (D env 'length s) (sql-lit (+ start len -1)))
-                                 (D env 'to-integer (D env 'substr s (sql-lit start) (sql-lit len)))))
-                     sql-null)
-           'Integer)]
-    [_ (untranslatable e "~a from a ~a" prec (term-type t))]))
+  (match prec
+    ['date (term (D env 'substr (term-sql t) (sql-lit 1) (sql-lit 10)) 'Date)]
+    ['time (term (D env 'substr (term-sql t) (sql-lit 12) (sql-lit 8)) 'Time)]
+    [_
+     (define parts (if (eq? (term-type t) 'Time) time-parts date-parts))
+     (match (assq prec parts)
+       [(list _ start len)
+        (define s (term-sql t))
+        (term (sql-case (list (cons (sql-bin ">=" (D env 'length s) (sql-lit (+ start len -1)))
+                                    (D env 'to-integer (D env 'substr s (sql-lit start) (sql-lit len)))))
+                        sql-null)
+              'Integer)]
+       [_ (untranslatable e "~a from a ~a" prec (term-type t))])]))
+
+;; parameter-ref : ELM String String|#f TEnv -> Term
+(define (parameter-ref e name lib env)
+  (match name
+    [(or "Measurement Period" "Measurement period")
+     (term (D env 'json-object (sql-lit "low") (sql-param "period_start")
+                               (sql-lit "high") (sql-param "period_end")
+                               (sql-lit "lowClosed") (sql-lit "true")
+                               (sql-lit "highClosed") (sql-lit "true"))
+           '(Interval DateTime))]
+    [_
+     (term (sql-param (param-name name)) 'Any)]))
+
+(define (param-name s)
+  (string-downcase (regexp-replace* #px"[^a-zA-Z0-9]+" s "_")))
+
+;; expression-ref : ELM String String|#f TEnv -> Term
+(define (expression-ref e name lib env)
+  (cond
+    [(equal? name "Patient")
+     (term (sql-ref "p" "id") '(Resource "Patient"))]
+    [(hash-has-key? (tenv-defs env) name)
+     (define dinfo (hash-ref (tenv-defs env) name))
+     (match (def-info-kind dinfo)
+       ['relation
+        (term (def-info-table dinfo) 'Relation)]
+       [_
+        (term (sql-ref (def-info-alias dinfo) (def-info-col dinfo)) (def-info-type dinfo))])]
+    [(hash-has-key? (tenv-aliases env) name)
+     (hash-ref (tenv-aliases env) name)]
+    [else (untranslatable e "expression reference ~a is not in scope" name)]))
+
+;; precision-op : ELM String String (listof ELM) TEnv -> Term
+(define (precision-op e op prec ops env)
+  (match op
+    [(or "CalculateAgeAt" "CalculateAge")
+     (match ops
+       [(list birth as-of)
+        (define tb (translate birth env))
+        (define ta (translate as-of env))
+        (term (D env 'age-in-years-at (term-sql tb) (term-sql ta)) 'Integer)]
+       [(list birth)
+        (define tb (translate birth env))
+        (term (D env 'age-in-years-at (term-sql tb) (sql-call "date" (list (sql-lit "now")))) 'Integer)]
+       [_ (untranslatable e "CalculateAgeAt with ~a operands" (length ops))])]
+    [_ (untranslatable e "precision operation ~a" op)]))
+
+;; timing-expr : ELM Symbol String|#f ELM ELM TEnv -> Term
+(define (timing-expr e op prec a b env)
+  (when (or prec (eq? op 'overlaps)) (untranslatable e "timing ~a with precision ~a" op prec))
+  (define ta (translate a env))
+  (define tb (translate b env))
+  (match op
+    [(or 'in 'during)
+     (cond
+       [(and (temporal-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define lo (field tb "low" (element-type (term-type tb)) env))
+        (define hi (field tb "high" (element-type (term-type tb)) env))
+        (term (sql-between (D env 'julianday (term-sql ta))
+                           (D env 'julianday (term-sql lo))
+                           (D env 'julianday (term-sql hi)))
+              'Boolean)]
+       [(and (interval-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define alo (field ta "low" (element-type (term-type ta)) env))
+        (define ahi (field ta "high" (element-type (term-type ta)) env))
+        (define blo (field tb "low" (element-type (term-type tb)) env))
+        (define bhi (field tb "high" (element-type (term-type tb)) env))
+        (term (sql-and (sql-bin ">=" (term-sql alo) (term-sql blo))
+                       (sql-bin "<=" (term-sql ahi) (term-sql bhi)))
+              'Boolean)]
+       [else (untranslatable e "timing ~a between ~a and ~a" op (term-type ta) (term-type tb))])]
+    ['before
+     (cond
+       [(and (temporal-type? (term-type ta)) (temporal-type? (term-type tb)))
+        (term (sql-bin "<" (term-sql ta) (term-sql tb)) 'Boolean)]
+       [(and (interval-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define ahi (field ta "high" (element-type (term-type ta)) env))
+        (define blo (field tb "low" (element-type (term-type tb)) env))
+        (term (sql-bin "<" (term-sql ahi) (term-sql blo)) 'Boolean)]
+       [(and (temporal-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define blo (field tb "low" (element-type (term-type tb)) env))
+        (term (sql-bin "<" (term-sql ta) (term-sql blo)) 'Boolean)]
+       [else (untranslatable e "timing before on ~a and ~a" (term-type ta) (term-type tb))])]
+    ['after
+     (cond
+       [(and (temporal-type? (term-type ta)) (temporal-type? (term-type tb)))
+        (term (sql-bin ">" (term-sql ta) (term-sql tb)) 'Boolean)]
+       [(and (interval-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define alo (field ta "low" (element-type (term-type ta)) env))
+        (define bhi (field tb "high" (element-type (term-type tb)) env))
+        (term (sql-bin ">" (term-sql alo) (term-sql bhi)) 'Boolean)]
+       [(and (temporal-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define bhi (field tb "high" (element-type (term-type ta)) env))
+        (term (sql-bin ">" (term-sql ta) (term-sql bhi)) 'Boolean)]
+       [else (untranslatable e "timing after on ~a and ~a" (term-type ta) (term-type tb))])]
+    ['overlaps
+     (cond
+       [(and (interval-type? (term-type ta)) (interval-type? (term-type tb)))
+        (define alo (field ta "low" (element-type (term-type ta)) env))
+        (define ahi (field ta "high" (element-type (term-type ta)) env))
+        (define blo (field tb "low" (element-type (term-type tb)) env))
+        (define bhi (field tb "high" (element-type (term-type tb)) env))
+        (term (sql-and (sql-bin "<=" (term-sql alo) (term-sql bhi))
+                       (sql-bin ">=" (term-sql ahi) (term-sql blo)))
+              'Boolean)]
+       [else (untranslatable e "timing overlaps on ~a and ~a" (term-type ta) (term-type tb))])]
+    [_ (untranslatable e "timing operation ~a" op)]))
+
+;; between-expr : ELM Any String|#f ELM ELM TEnv -> Term
+(define (between-expr e kind prec a b env)
+  (define ta (translate a env))
+  (define tb (translate b env))
+  (cond
+    [(interval-type? (term-type tb))
+     (define lo (field tb "low" (element-type (term-type tb)) env))
+     (define hi (field tb "high" (element-type (term-type tb)) env))
+     (match kind
+       ['proper-between
+        (term (sql-and (sql-bin ">" (term-sql ta) (term-sql lo))
+                       (sql-bin "<" (term-sql ta) (term-sql hi)))
+              'Boolean)]
+       [_
+        (term (sql-and (sql-bin ">=" (term-sql ta) (term-sql lo))
+                       (sql-bin "<=" (term-sql ta) (term-sql hi)))
+              'Boolean)])]
+    [else (untranslatable e "between over non-interval")]))
+
+;; function-ref : ELM String String|#f (listof ELM) Any TEnv -> Term
+(define (function-ref e name lib ops sig env)
+  (match lib
+    [(or "FHIRHelpers" #f)
+     (match name
+       [(or "ToString" "ToDateTime" "ToDate" "ToTime" "ToBoolean" "ToInteger" "ToDecimal" "ToQuantity" "ToConcept" "ToCode")
+        (if (pair? ops)
+            (let ([arg (translate (car ops) env)])
+              (match name
+                ["ToString" (term (term-sql arg) 'String)]
+                ["ToDateTime" (term (term-sql arg) 'DateTime)]
+                ["ToDate" (term (term-sql arg) 'Date)]
+                ["ToTime" (term (term-sql arg) 'Time)]
+                ["ToBoolean" (term (term-sql arg) 'Boolean)]
+                ["ToInteger" (term (term-sql arg) 'Integer)]
+                ["ToDecimal" (term (term-sql arg) 'Decimal)]
+                ["ToQuantity" (term (term-sql arg) 'Quantity)]
+                ["ToConcept" (term (term-sql arg) 'Concept)]
+                ["ToCode" (term (term-sql arg) 'Code)]))
+            (untranslatable e "FHIRHelpers.~a with no arguments" name))]
+       [_ (untranslatable e "FHIRHelpers.~a" name)])]
+    [_ (untranslatable e "function call ~a.~a" lib name)]))
+
+;; retrieve-expr : ELM String String|#f String|#f String|#f ELM|#f TEnv -> Term
+(define (retrieve-expr e data-type tid cprop ccomp codes env)
+  (define table-name (base-resource-name data-type))
+  (term (sql-table table-name #f) (list 'Resource (res-type-name data-type))))
 
 ;; temporal-compare : String SqlExpr SqlExpr TEnv -> SqlExpr   CQL comparison of two ISO lexemes:
 ;; decided by their common prefix when it differs; when it is equal, by the full values if their
@@ -759,7 +1037,23 @@
 ;; exists: any non-null element
 (def-op! "Exists"
   (lambda (args rt env e)
-    (term (sql-exists (select (sql-lit 1) #:from (list (each (car args) env "j")) #:where (sql-null-test (jv "j") #t))) 'Boolean)))
+    (define arg (car args))
+    (cond
+      [(eq? (term-type arg) 'Relation)
+       (match (term-sql arg)
+         [(? string? tbl)
+          (term (sql-exists (select (sql-lit 1) #:from (list (sql-table tbl "m"))
+                                    #:where (sql-bin "=" (sql-ref "m" "patient_id") (sql-ref "p" "id"))))
+                'Boolean)]
+         [(sql-select _ _ _ _ _ _ _ _)
+          (term (sql-exists (select (sql-lit 1) #:from (list (sql-subquery (term-sql arg) "m"))
+                                    #:where (sql-bin "=" (sql-ref "m" "patient_id") (sql-ref "p" "id"))))
+                'Boolean)]
+         [_ (term (sql-exists (select (sql-lit 1) #:from (list (sql-table (format "~a" (term-sql arg)) "m"))
+                                      #:where (sql-bin "=" (sql-ref "m" "patient_id") (sql-ref "p" "id"))))
+                  'Boolean)])]
+      [else
+       (term (sql-exists (select (sql-lit 1) #:from (list (each arg env "j")) #:where (sql-null-test (jv "j") #t))) 'Boolean)])))
 (def-op! "Count"
   (lambda (args rt env e)
     (term (sql-scalar (select (sql-call "count" (list (jv "j"))) #:from (list (each (car args) env "j")))) 'Integer)))
@@ -793,14 +1087,55 @@
   (sql-exists (select (sql-lit 1) #:from (list (each l env "j")) #:where (sql-bin "IS" (jv "j") (term-sql x)))))
 (def-op! "In" (lambda (args rt env e)
                 (match-define (list x l) args)
-                (unless (list-type? (term-type l)) (untranslatable e "In over a ~a" (term-type l)))
-                (term (member-sql x l env) 'Boolean)))
+                (cond
+                  [(interval-type? (term-type l))
+                   (define lo (field l "low" (element-type (term-type l)) env))
+                   (define hi (field l "high" (element-type (term-type l)) env))
+                   (define lc (field l "lowClosed" 'Boolean env))
+                   (define hc (field l "highClosed" 'Boolean env))
+                   (define lo-cond
+                     (sql-case (list (cons (sql-null-test (term-sql lo) #f) sql-true)
+                                     (cons (term-sql lc) (sql-bin ">=" (term-sql x) (term-sql lo))))
+                               (sql-bin ">" (term-sql x) (term-sql lo))))
+                   (define hi-cond
+                     (sql-case (list (cons (sql-null-test (term-sql hi) #f) sql-true)
+                                     (cons (term-sql hc) (sql-bin "<=" (term-sql x) (term-sql hi))))
+                               (sql-bin "<" (term-sql x) (term-sql hi))))
+                   (define both-null (sql-and (sql-null-test (term-sql lo) #f) (sql-null-test (term-sql hi) #f)))
+                   (term (sql-case (list (cons (sql-null-test (term-sql x) #f) sql-null)
+                                         (cons both-null sql-false))
+                                   (sql-and lo-cond hi-cond))
+                         'Boolean)]
+                  [(list-type? (term-type l))
+                   (match (term-sql l)
+                     [(sql-call "json_array" items)
+                      (term (sql-case (list (cons (apply sql-or (for/list ([it items]) (sql-bin "IS" (term-sql x) it))) sql-true))
+                                      sql-false)
+                            'Boolean)]
+                     [_ (term (member-sql x l env) 'Boolean)])]
+                  [else (untranslatable e "In over a ~a" (term-type l))])))
 (def-op! "Contains" (lambda (args rt env e)
                       (match-define (list l x) args)
                       (unless (list-type? (term-type l)) (untranslatable e "Contains over a ~a" (term-type l)))
                       (term (member-sql x l env) 'Boolean)))
 (def-op! "First" (lambda (args rt env e) (term (D env 'json-extract (term-sql (car args)) (sql-lit "$[0]")) (element-type (term-type (car args))))))
 (def-op! "Last" (lambda (args rt env e) (term (D env 'json-extract (term-sql (car args)) (sql-lit "$[#-1]")) (element-type (term-type (car args))))))
+(def-op! "Start" (lambda (args rt env e)
+                   (define t (car args))
+                   (unless (interval-type? (term-type t)) (untranslatable e "Start of a non-interval"))
+                   (field t "low" (element-type (term-type t)) env)))
+(def-op! "End" (lambda (args rt env e)
+                 (define t (car args))
+                 (unless (interval-type? (term-type t)) (untranslatable e "End of a non-interval"))
+                 (field t "high" (element-type (term-type t)) env)))
+(def-op! "CalculateAgeAt"
+  (lambda (args rt env e)
+    (match-define (list birth as-of) args)
+    (term (D env 'age-in-years-at (term-sql birth) (term-sql as-of)) 'Integer)))
+(def-op! "CalculateAge"
+  (lambda (args rt env e)
+    (define birth (car args))
+    (term (D env 'age-in-years-at (term-sql birth) (sql-call "date" (list (sql-lit "now")))) 'Integer)))
 (def-op! "SingletonFrom"
   (lambda (args rt env e)
     (define l (term-sql (car args)))
@@ -840,6 +1175,7 @@
   (check-equal? (sql (elm-datetime (lit "Integer" "2012") (lit "Integer" "1") (lit "Integer" "1") (lit "Integer" "10") #f #f #f #f))
                 "'2012-01-01T10'")
   (check-equal? (sql (elm-time (lit "Integer" "10") (lit "Integer" "5") #f #f)) "'10:05'")
-  (check-exn exn:fail:untranslatable? (lambda () (translate (elm-retrieve "{http://hl7.org/fhir}Condition" #f #f #f #f) env)))
+  (check-equal? (ty (elm-retrieve "{http://hl7.org/fhir}Condition" #f #f #f #f)) '(Resource "Condition"))
+  (check-equal? (sql->string (term-sql (translate (elm-retrieve "{http://hl7.org/fhir}Condition" #f #f #f #f) env))) "condition")
   (check-exn exn:fail:untranslatable? (lambda () (translate (elm-unary "Frobnicate" (lit "Integer" "1") #f) env)))
   (check-true (and (member "Add" (translated-ops)) #t)))

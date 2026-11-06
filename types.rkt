@@ -37,7 +37,7 @@
   [unify (-> cql-type/c cql-type/c cql-type/c)]       ; the common type of two operands
   [system-name->type (-> string? cql-type/c)]))       ; "{urn:hl7-org:elm-types:r1}Integer" / "Integer"
 
-(define scalar-names '(Null Any Boolean Integer Long Decimal String Date DateTime Time Quantity Ratio Code Concept))
+(define scalar-names '(Null Any Boolean Integer Long Decimal String Date DateTime Time Quantity Ratio Code Concept Relation))
 
 (define cql-type/c
   (flat-rec-contract t
@@ -50,7 +50,7 @@
 ;; type-encoding : CqlType -> Encoding
 (define (type-encoding t)
   (match t
-    [(or 'Null 'Any 'Boolean 'Integer 'Long 'Decimal 'String 'Date 'DateTime 'Time) 'native]
+    [(or 'Null 'Any 'Boolean 'Integer 'Long 'Decimal 'String 'Date 'DateTime 'Time 'Relation) 'native]
     [(list 'Resource _) 'native]          ; a row reference, not a value
     [_ 'json]))
 

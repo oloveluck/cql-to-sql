@@ -39,6 +39,7 @@
                       " END")]
       [(sql-null-test a neg?) (format "(~a IS ~aNULL)" (expr a) (if neg? "NOT " ""))]
       [(sql-cast a t) (format "CAST(~a AS ~a)" (expr a) t)]
+      [(sql-between a b c) (format "(~a BETWEEN ~a AND ~a)" (expr a) (expr b) (expr c))]
       [(sql-exists s) (format "EXISTS (~a)" (query s))]
       [(sql-scalar s) (format "(~a)" (query s))]
       [(sql-in a s) (format "(~a IN (~a))" (expr a) (query s))]
@@ -47,7 +48,10 @@
     (match f
       [(sql-table n a) (if (and a (not (equal? a n))) (format "~a AS ~a" (quote-ident n) (quote-ident a)) (quote-ident n))]
       [(sql-subquery s a) (format "(~a) AS ~a" (query s) (quote-ident a))]
-      [(sql-table-fn c a) (format "~a AS ~a" (expr c) (quote-ident a))]))
+      [(sql-table-fn c a) (format "~a AS ~a" (expr c) (quote-ident a))]
+      [(sql-join kind left right on)
+       (define k (case kind [(inner) "INNER JOIN"] [(left) "LEFT JOIN"] [(cross) "CROSS JOIN"] [else "JOIN"]))
+       (format "~a ~a ~a ON ~a" (from-item left) k (from-item right) (expr on))]))
   (define (query q)
     (match q
       [(sql-select distinct? items from where group order limit offset)
@@ -66,7 +70,8 @@
        (string-append "WITH "
                       (string-join (for/list ([c ctes]) (format "~a AS (~a)" (quote-ident (car c)) (query (cdr c)))) ", ")
                       " " (query body))]
-      [_ (raise-argument-error 'sql->string "a SQL query or expression" q)]))
+      [(or (sql-table _ _) (sql-subquery _ _) (sql-table-fn _ _) (sql-join _ _ _ _)) (from-item q)]
+      [_ (raise-argument-error 'sql->string "a SQL query, expression, or from-item" q)]))
   (expr x))
 
 ;; quote-ident : String -> String   bare when it is a plain identifier, else "double quoted"

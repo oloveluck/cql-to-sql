@@ -336,22 +336,23 @@ All paths are relative to this repo's root; the dependencies are cloned next to 
 - Test: `raco test -p cql-to-sql` (the README's `raco test cql-to-sql` does not work).
 - SQL TCK report: `racket tests/tck.rkt -v`.
 
-## Status (as of f98a58c)
+## Status
 
 | Piece | Status |
 |---|---|
 | Run CQL with the interpreter (`cql`) | Done: `load-runtime-library`, `rlib-value`, `measure-populations`; 1820/1823 on the HL7 suite |
-| Expression → SQL, checked against the interpreter | Started: `translate.rkt`, `tests/tck.rkt`; 866 pass, 4 known fail, 911 untranslatable, 42 skip |
+| Expression → SQL, checked against the interpreter | `translate.rkt`, `tests/tck.rkt`; 902 pass, 4 known fail, 875 untranslatable, 42 skip (floor raised from 866) |
+| Whole Library / Measure → SQL | Done: `library.rkt` (`cql->sql`, `translate-library`, CTE dependency DAG, population proportion query) |
 | Test data | Available in `cql/tests/vendor/ecqm/`: 4 measures, 76 patient cases, 57 value sets, FHIRHelpers |
 | HEDIS BCS-E in the interpreter | Compiles and runs (after the `../cql` parser fixes); NCQA value sets missing |
 | FHIR → ViewDefinition → rows | In memory only (`sql-on-fhir/view`'s `eval-view`) |
-| Rows into SQLite / DuckDB | Missing |
-| ViewDefinitions for the resources measures read | Missing (only spec examples exist) |
-| Retrieve, value sets, FHIR properties in SQL | Missing (Retrieve raises untranslatable) |
-| Whole libraries in SQL (defines, refs, functions, FHIRHelpers, parameters) | Missing |
-| Per-patient comparison SQL vs. interpreter | Missing |
+| Rows into SQLite / DuckDB | Done (`model/build.rkt`) |
+| ViewDefinitions for the resources measures read | Done (`model/spec.rkt`) |
+| Retrieve, value sets, FHIR properties in SQL | Done (`library.rkt`, `translate.rkt`) |
+| Whole libraries in SQL (defines, refs, functions, FHIRHelpers, parameters) | Done (`library.rkt`) |
+| Per-patient comparison SQL vs. interpreter | Done: verified 13/13 matching MeasureReports via `library.rkt` test and `demo/run.rkt` |
 | MeasureReport from the interpreter | Done: `evaluate-measure`, a report group per Measure.group, the measurement period parameter by its declared name and type |
-| MeasureReport from SQL | Missing (phase 6) |
+| MeasureReport from SQL | Done (phase 6) |
 | Running the SQL in Aidbox (cloud, PostgreSQL) | Missing: REST connector and PostgreSQL dialect |
 
 Most common untranslatable constructs in the SQL TCK: `elm-timing` (464), `elm-between` (54),

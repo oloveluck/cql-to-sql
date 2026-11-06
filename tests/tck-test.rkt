@@ -10,7 +10,7 @@
          racket/list
          "tck.rkt")
 
-(define pass-floor 866)
+(define pass-floor 902)
 
 ;; SQLite's REAL is a double; CQL Decimal is 28 digits with 8 decimal places, and keeps the
 ;; precision of its lexeme (1.001 ~ 1.000 compares at the less precise operand's precision)

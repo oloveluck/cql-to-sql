@@ -73,7 +73,16 @@
                        'printf (lambda args (sql-call "printf" args))
                        ;; no RAISE outside triggers: malformed JSON is a runtime error with a message
                        'error (lambda (msg) (call "json" (sql-lit (string-append "!" msg))))
-                       'julianday (lambda (x) (call "julianday" x))))])
+                       'julianday (lambda (x) (call "julianday" x))
+                       'age-in-years-at
+                       (lambda (birth as-of)
+                         (sql-bin "-"
+                                  (sql-bin "-"
+                                           (sql-cast (call "strftime" (sql-lit "%Y") as-of) "INTEGER")
+                                           (sql-cast (call "strftime" (sql-lit "%Y") birth) "INTEGER"))
+                                  (sql-bin "<"
+                                           (call "strftime" (sql-lit "%m-%d") as-of)
+                                           (call "strftime" (sql-lit "%m-%d") birth))))))])
      (hash-set h k v))))
 
 (define duckdb
@@ -94,7 +103,18 @@
                        'round (lambda (x p) (call "round" x p))
                        'printf (lambda args (sql-call "printf" args))
                        'error (lambda (msg) (call "error" (sql-lit msg)))
-                       'julianday (lambda (x) (call "julian" (sql-cast x "DATE")))))])
+                       'julianday (lambda (x) (call "julian" (sql-cast x "DATE")))
+                       'age-in-years-at
+                       (lambda (birth as-of)
+                         (sql-bin "-"
+                                  (sql-bin "-"
+                                           (sql-cast (call "date_part" (sql-lit "year") (sql-cast as-of "DATE")) "BIGINT")
+                                           (sql-cast (call "date_part" (sql-lit "year") (sql-cast birth "DATE")) "BIGINT"))
+                                  (sql-case (list (cons (sql-bin "<"
+                                                                 (call "strftime" (sql-cast as-of "DATE") (sql-lit "%m-%d"))
+                                                                 (call "strftime" (sql-cast birth "DATE") (sql-lit "%m-%d")))
+                                                        (sql-lit 1)))
+                                            (sql-lit 0))))))])
      (hash-set h k v))))
 
 (define (dialect-named n)

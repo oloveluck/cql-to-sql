@@ -33,9 +33,9 @@
 
 (provide (struct-out sql-lit) (struct-out sql-param) (struct-out sql-ref) (struct-out sql-bin)
          (struct-out sql-un) (struct-out sql-call) (struct-out sql-case) (struct-out sql-null-test)
-         (struct-out sql-cast) (struct-out sql-exists) (struct-out sql-scalar) (struct-out sql-in)
+         (struct-out sql-cast) (struct-out sql-between) (struct-out sql-exists) (struct-out sql-scalar) (struct-out sql-in)
          (struct-out sql-select) (struct-out sql-table) (struct-out sql-subquery) (struct-out sql-table-fn)
-         (struct-out sql-union-all) (struct-out sql-with)
+         (struct-out sql-join) (struct-out sql-union-all) (struct-out sql-with)
          select sql-null sql-true sql-false sql-and sql-or)
 
 (struct sql-lit (v) #:prefab)
@@ -47,6 +47,7 @@
 (struct sql-case (clauses else) #:prefab)
 (struct sql-null-test (a negated?) #:prefab)
 (struct sql-cast (a type) #:prefab)
+(struct sql-between (a b c) #:prefab)
 (struct sql-exists (select) #:prefab)
 (struct sql-scalar (select) #:prefab)
 (struct sql-in (a select) #:prefab)
@@ -55,6 +56,7 @@
 (struct sql-table (name alias) #:prefab)
 (struct sql-subquery (select alias) #:prefab)
 (struct sql-table-fn (call alias) #:prefab)
+(struct sql-join (kind left right on) #:prefab)
 (struct sql-union-all (queries) #:prefab)
 (struct sql-with (ctes body) #:prefab)
 
