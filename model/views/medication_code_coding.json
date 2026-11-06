@@ -1,0 +1,42 @@
+{
+  "name": "medication_code_coding",
+  "resource": "Medication",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "medication_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "code_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "system",
+          "path": "system",
+          "type": "string"
+        },
+        {
+          "name": "code",
+          "path": "code",
+          "type": "code"
+        },
+        {
+          "name": "display",
+          "path": "display",
+          "type": "string"
+        }
+      ],
+      "forEach": "code.coding"
+    }
+  ],
+  "status": "active"
+}

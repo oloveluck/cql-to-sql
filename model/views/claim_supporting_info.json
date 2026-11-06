@@ -1,0 +1,37 @@
+{
+  "name": "claim_supporting_info",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "supporting_info_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "sequence",
+          "path": "sequence",
+          "type": "integer"
+        }
+      ],
+      "forEach": "supportingInfo"
+    }
+  ],
+  "status": "active"
+}

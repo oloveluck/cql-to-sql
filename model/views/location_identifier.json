@@ -1,0 +1,37 @@
+{
+  "name": "location_identifier",
+  "resource": "Location",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "location_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "identifier_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "system",
+          "path": "system",
+          "type": "string"
+        },
+        {
+          "name": "value",
+          "path": "value",
+          "type": "string"
+        }
+      ],
+      "forEach": "identifier"
+    }
+  ],
+  "status": "active"
+}

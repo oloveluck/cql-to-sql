@@ -1,0 +1,49 @@
+{
+  "name": "claim_item_diagnosis_sequence",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "item_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "item",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "diagnosis_sequence_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "value",
+              "path": "$this",
+              "type": "integer"
+            }
+          ],
+          "forEach": "diagnosisSequence"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

@@ -1,0 +1,77 @@
+{
+  "name": "observation",
+  "resource": "Observation",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "observation_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "effective_datetime",
+          "path": "effective.ofType(dateTime)",
+          "type": "dateTime"
+        },
+        {
+          "name": "effective_start",
+          "path": "effective.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "effective_end",
+          "path": "effective.ofType(Period).end",
+          "type": "dateTime"
+        },
+        {
+          "name": "value_quantity_value",
+          "path": "value.ofType(Quantity).value",
+          "type": "decimal"
+        },
+        {
+          "name": "value_quantity_unit",
+          "path": "value.ofType(Quantity).code",
+          "type": "string"
+        },
+        {
+          "name": "value_string",
+          "path": "value.ofType(string)",
+          "type": "string"
+        },
+        {
+          "name": "value_boolean",
+          "path": "value.ofType(boolean)",
+          "type": "boolean"
+        },
+        {
+          "name": "value_integer",
+          "path": "value.ofType(integer)",
+          "type": "integer"
+        },
+        {
+          "name": "value_datetime",
+          "path": "value.ofType(dateTime)",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

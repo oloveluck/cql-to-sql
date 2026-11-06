@@ -42,6 +42,23 @@ FHIR data ──ViewDefinitions (R1–R2)──▶ relational model (tables)
                                      MeasureReports ── compared with the interpreter's and the score keys
 ```
 
+**Status: the relational model (R1–R4) is built** — `model/`, see `model/README.md`:
+- **R1** `model/requirements.rkt` reads the measure's ELM: 143 elements BCS-E reads, each with its
+  R4 cardinality; all covered by the model (a test keeps it so).
+- **R2** `model/spec.rkt` declares the model and generates **86 ViewDefinitions** (`model/views/`)
+  and a data dictionary (`model/SCHEMA.md`): normalized child tables, R6 paths, keys, positions,
+  statuses and negations, extensions, data source.
+- **R3** `model/r4-to-r6.rkt` (lossless, with its inverse) and `model/build.rkt` (data → SQLite,
+  indexed). Loaded: the 1,000-member BCS-E population (11,770 resources, 31,064 rows) and the
+  eCQM test patients. The 19 scenarios are next (they need `scripts/install-hedis.rkt` and a
+  SUSHI or fsh build first).
+- **R4** `model/check.rkt`: R4 → R6 → R4 round trip lossless on both corpora; all 309 columns
+  equal an independent walk of the data on both. It found that the view engine drops invalid
+  FHIR values the interpreter tolerates (zone-less dateTimes, `"true"` strings in the eCQM data):
+  `model/repair.rkt` repairs them, opt-in and counted.
+- `tests/model-test.rkt` runs all of it (about 5 s).
+- **Next: R5**, the CQL translated to SQL over these tables, producing the cohort table.
+
 ### R1. What the model must contain: the fields the cohort definition reads
 
 The model needs exactly what the cohort definition (the CQL behind the population criteria)
@@ -138,25 +155,30 @@ the parent. Either way the rules are:
 - **The model is R6** (decided). The scenarios, the HEDIS profiles and the measure's CQL are R4
   (FHIR 4.0.1), so the data is converted R4 → R6 before flattening, and the ViewDefinitions use
   R6 paths. Column names stay version-neutral (`performed_start` whichever path fills it).
-  Checked against the R4 and R6 core packages, 10 of the elements BCS-E reads changed; Claim,
-  ExplanationOfBenefit, Patient, Coverage, Condition and DiagnosticReport did not:
+  Checked against the R4 and R6 core packages (elements and status code systems), these changed;
+  the rest of what the model reads did not:
 
   | R4 | R6 |
   |---|---|
   | `Encounter.class` (Coding, 0..1) | `class` (CodeableConcept, 0..*) |
   | `Encounter.period` | `actualPeriod` |
+  | `Encounter.status` `finished`, `arrived`, `triaged`, `onleave` | `completed`, `in-progress`, `in-progress`, `on-hold` (R4 code kept when merged) |
   | `Encounter.diagnosis.condition` (Reference) | `condition` (CodeableReference, 0..*) |
-  | `Encounter.diagnosis.rank` | removed (`use`) |
+  | `Encounter.diagnosis.rank` | removed (kept in the cross-version extension) |
   | `Encounter.participant.individual` | `actor` |
   | `Procedure.performed[x]` | `occurrence[x]` |
   | `Procedure.outcome` (CodeableConcept) | `outcome` (CodeableReference, 0..*) |
-  | `Procedure.reasonReference` | `reason` (CodeableReference) |
-  | `MedicationDispense.medication[x]` | `medication` (CodeableReference) |
-  | `Medication.amount` | `totalVolume` |
+  | `Procedure.reasonCode` / `reasonReference` | `reason` (CodeableReference) |
+  | `MedicationDispense.medication[x]`, status `stopped` | `medication` (CodeableReference), `unfulfilled` |
+  | `Medication.amount` (Ratio) | `packageSize.amountPerItem` (Ratio); `totalVolume` was R5 only, gone in R6 |
+  | `Claim.patient`, `ExplanationOfBenefit.patient` | `subject` |
 
-- **R4 → R6 conversion:** a targeted converter for these fields first (small, testable: every
-  R1 value equal before and after); HL7's cross-version StructureMaps through Owen's `fml`
-  package later, for everything else. `sql-on-fhir` is R6 already, so local flattening then
+  The first version of this table missed the status codes, the Claim/EOB `patient` rename and
+  R6's removal of `totalVolume`; building the model found them.
+- **R4 → R6 conversion (done, `model/r4-to-r6.rkt`):** a targeted converter for these fields,
+  lossless (R4 values without an R6 place go into HL7's cross-version extensions; its inverse
+  restores every resource of both corpora exactly); HL7's cross-version StructureMaps through
+  Owen's `fml` package later, for everything else. `sql-on-fhir` is R6 already, so local flattening then
   works as is. The interpreter keeps reading the R4 originals: the comparison also tests that the
   conversion lost nothing the measure needs.
 - **The translator maps CQL's R4 paths to the model's columns**, never to R6 paths: the model is

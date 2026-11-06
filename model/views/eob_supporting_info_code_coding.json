@@ -1,0 +1,59 @@
+{
+  "name": "eob_supporting_info_code_coding",
+  "resource": "ExplanationOfBenefit",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "eob_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "supporting_info_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "supportingInfo",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "code_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "system",
+              "path": "system",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "path": "code",
+              "type": "code"
+            },
+            {
+              "name": "display",
+              "path": "display",
+              "type": "string"
+            }
+          ],
+          "forEach": "code.coding"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

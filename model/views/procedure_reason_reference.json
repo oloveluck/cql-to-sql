@@ -1,0 +1,37 @@
+{
+  "name": "procedure_reason_reference",
+  "resource": "Procedure",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "procedure_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "reason_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "reference",
+          "path": "reference.reference",
+          "type": "string"
+        }
+      ],
+      "forEach": "reason"
+    }
+  ],
+  "status": "active"
+}

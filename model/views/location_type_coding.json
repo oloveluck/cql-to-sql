@@ -1,0 +1,54 @@
+{
+  "name": "location_type_coding",
+  "resource": "Location",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "location_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "type_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "type",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "coding_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "system",
+              "path": "system",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "path": "code",
+              "type": "code"
+            },
+            {
+              "name": "display",
+              "path": "display",
+              "type": "string"
+            }
+          ],
+          "forEach": "coding"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

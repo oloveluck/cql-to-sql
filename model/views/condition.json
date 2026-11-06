@@ -1,0 +1,72 @@
+{
+  "name": "condition",
+  "resource": "Condition",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "condition_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "clinical_status",
+          "path": "clinicalStatus.coding.first().code",
+          "type": "code"
+        },
+        {
+          "name": "verification_status",
+          "path": "verificationStatus.coding.first().code",
+          "type": "code"
+        },
+        {
+          "name": "recorded_date",
+          "path": "recordedDate",
+          "type": "dateTime"
+        },
+        {
+          "name": "onset_datetime",
+          "path": "onset.ofType(dateTime)",
+          "type": "dateTime"
+        },
+        {
+          "name": "onset_start",
+          "path": "onset.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "onset_end",
+          "path": "onset.ofType(Period).end",
+          "type": "dateTime"
+        },
+        {
+          "name": "abatement_datetime",
+          "path": "abatement.ofType(dateTime)",
+          "type": "dateTime"
+        },
+        {
+          "name": "abatement_start",
+          "path": "abatement.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "abatement_end",
+          "path": "abatement.ofType(Period).end",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

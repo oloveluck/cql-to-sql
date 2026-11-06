@@ -1,0 +1,42 @@
+{
+  "name": "patient",
+  "resource": "Patient",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "patient_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "gender",
+          "path": "gender",
+          "type": "code"
+        },
+        {
+          "name": "birth_date",
+          "path": "birthDate",
+          "type": "date"
+        },
+        {
+          "name": "deceased_boolean",
+          "path": "deceased.ofType(boolean)",
+          "type": "boolean"
+        },
+        {
+          "name": "deceased_datetime",
+          "path": "deceased.ofType(dateTime)",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

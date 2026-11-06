@@ -1,0 +1,52 @@
+{
+  "name": "medication_dispense",
+  "resource": "MedicationDispense",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "medication_dispense_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "when_handed_over",
+          "path": "whenHandedOver",
+          "type": "dateTime"
+        },
+        {
+          "name": "days_supply_value",
+          "path": "daysSupply.value",
+          "type": "decimal"
+        },
+        {
+          "name": "quantity_value",
+          "path": "quantity.value",
+          "type": "decimal"
+        },
+        {
+          "name": "medication_id",
+          "path": "medication.reference.getReferenceKey(Medication)",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

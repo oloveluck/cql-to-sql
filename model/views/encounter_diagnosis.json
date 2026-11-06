@@ -1,0 +1,42 @@
+{
+  "name": "encounter_diagnosis",
+  "resource": "Encounter",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "encounter_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "diagnosis_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "condition_id",
+          "path": "condition.reference.getReferenceKey(Condition)",
+          "type": "string"
+        },
+        {
+          "name": "rank",
+          "path": "extension('http://hl7.org/fhir/4.0/StructureDefinition/extension-Encounter.diagnosis.rank').value.ofType(positiveInt)",
+          "type": "integer"
+        }
+      ],
+      "forEach": "diagnosis"
+    }
+  ],
+  "status": "active"
+}

@@ -1,0 +1,59 @@
+{
+  "name": "claim_diagnosis_coding",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "diagnosis_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "diagnosis",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "diagnosis2_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "system",
+              "path": "system",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "path": "code",
+              "type": "code"
+            },
+            {
+              "name": "display",
+              "path": "display",
+              "type": "string"
+            }
+          ],
+          "forEach": "diagnosis.ofType(CodeableConcept).coding"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

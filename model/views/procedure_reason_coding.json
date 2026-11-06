@@ -1,0 +1,59 @@
+{
+  "name": "procedure_reason_coding",
+  "resource": "Procedure",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "procedure_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "reason_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "reason",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "concept_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "system",
+              "path": "system",
+              "type": "string"
+            },
+            {
+              "name": "code",
+              "path": "code",
+              "type": "code"
+            },
+            {
+              "name": "display",
+              "path": "display",
+              "type": "string"
+            }
+          ],
+          "forEach": "concept.coding"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

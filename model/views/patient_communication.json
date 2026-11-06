@@ -1,0 +1,42 @@
+{
+  "name": "patient_communication",
+  "resource": "Patient",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "patient_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "communication_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "language_system",
+          "path": "language.coding.first().system",
+          "type": "string"
+        },
+        {
+          "name": "language_code",
+          "path": "language.coding.first().code",
+          "type": "code"
+        },
+        {
+          "name": "preferred",
+          "path": "preferred",
+          "type": "boolean"
+        }
+      ],
+      "forEach": "communication"
+    }
+  ],
+  "status": "active"
+}

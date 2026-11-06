@@ -1,0 +1,104 @@
+{
+  "name": "practitioner_role_extension_part",
+  "resource": "PractitionerRole",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "practitioner_role_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "extension_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "extension",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "extension2_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "url",
+              "path": "url",
+              "type": "string"
+            },
+            {
+              "name": "value_boolean",
+              "path": "value.ofType(boolean)",
+              "type": "boolean"
+            },
+            {
+              "name": "value_string",
+              "path": "value.ofType(string)",
+              "type": "string"
+            },
+            {
+              "name": "value_code",
+              "path": "value.ofType(code)",
+              "type": "code"
+            },
+            {
+              "name": "value_integer",
+              "path": "value.ofType(integer)",
+              "type": "integer"
+            },
+            {
+              "name": "value_datetime",
+              "path": "value.ofType(dateTime)",
+              "type": "dateTime"
+            },
+            {
+              "name": "value_date",
+              "path": "value.ofType(date)",
+              "type": "date"
+            },
+            {
+              "name": "value_coding_system",
+              "path": "value.ofType(Coding).system",
+              "type": "string"
+            },
+            {
+              "name": "value_coding_code",
+              "path": "value.ofType(Coding).code",
+              "type": "code"
+            },
+            {
+              "name": "value_concept_system",
+              "path": "value.ofType(CodeableConcept).coding.first().system",
+              "type": "string"
+            },
+            {
+              "name": "value_concept_code",
+              "path": "value.ofType(CodeableConcept).coding.first().code",
+              "type": "code"
+            },
+            {
+              "name": "value_period_start",
+              "path": "value.ofType(Period).start",
+              "type": "dateTime"
+            },
+            {
+              "name": "value_period_end",
+              "path": "value.ofType(Period).end",
+              "type": "dateTime"
+            }
+          ],
+          "forEach": "extension"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

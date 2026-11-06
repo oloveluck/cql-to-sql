@@ -1,0 +1,37 @@
+{
+  "name": "medication",
+  "resource": "Medication",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "medication_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "amount_numerator_value",
+          "path": "packageSize.amountPerItem.numerator.value",
+          "type": "decimal"
+        },
+        {
+          "name": "amount_numerator_unit",
+          "path": "packageSize.amountPerItem.numerator.code",
+          "type": "string"
+        },
+        {
+          "name": "amount_denominator_value",
+          "path": "packageSize.amountPerItem.denominator.value",
+          "type": "decimal"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

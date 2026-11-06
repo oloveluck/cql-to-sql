@@ -1,0 +1,27 @@
+{
+  "name": "practitioner_role",
+  "resource": "PractitionerRole",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "practitioner_role_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "practitioner_id",
+          "path": "practitioner.getReferenceKey(Practitioner)",
+          "type": "string"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

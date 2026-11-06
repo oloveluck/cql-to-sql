@@ -1,0 +1,57 @@
+{
+  "name": "claim_item",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "item_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "sequence",
+          "path": "sequence",
+          "type": "integer"
+        },
+        {
+          "name": "serviced_date",
+          "path": "serviced.ofType(date)",
+          "type": "date"
+        },
+        {
+          "name": "serviced_start",
+          "path": "serviced.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "serviced_end",
+          "path": "serviced.ofType(Period).end",
+          "type": "dateTime"
+        },
+        {
+          "name": "quantity_value",
+          "path": "quantity.value",
+          "type": "decimal"
+        }
+      ],
+      "forEach": "item"
+    }
+  ],
+  "status": "active"
+}

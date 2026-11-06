@@ -1,0 +1,52 @@
+{
+  "name": "procedure",
+  "resource": "Procedure",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "procedure_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "encounter_id",
+          "path": "encounter.getReferenceKey(Encounter)",
+          "type": "string"
+        },
+        {
+          "name": "performed_datetime",
+          "path": "occurrence.ofType(dateTime)",
+          "type": "dateTime"
+        },
+        {
+          "name": "performed_start",
+          "path": "occurrence.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "performed_end",
+          "path": "occurrence.ofType(Period).end",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

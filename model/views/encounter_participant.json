@@ -1,0 +1,37 @@
+{
+  "name": "encounter_participant",
+  "resource": "Encounter",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "encounter_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "participant_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "practitioner_id",
+          "path": "actor.getReferenceKey(Practitioner)",
+          "type": "string"
+        }
+      ],
+      "forEach": "participant"
+    }
+  ],
+  "status": "active"
+}

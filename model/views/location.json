@@ -1,0 +1,22 @@
+{
+  "name": "location",
+  "resource": "Location",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "location_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

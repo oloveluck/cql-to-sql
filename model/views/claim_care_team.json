@@ -1,0 +1,42 @@
+{
+  "name": "claim_care_team",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "care_team_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "sequence",
+          "path": "sequence",
+          "type": "integer"
+        },
+        {
+          "name": "provider_id",
+          "path": "provider.getReferenceKey(Practitioner)",
+          "type": "string"
+        }
+      ],
+      "forEach": "careTeam"
+    }
+  ],
+  "status": "active"
+}

@@ -1,0 +1,54 @@
+{
+  "name": "eob_item_adjudication",
+  "resource": "ExplanationOfBenefit",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "eob_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "item_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        }
+      ],
+      "forEach": "item",
+      "select": [
+        {
+          "column": [
+            {
+              "name": "adjudication_idx",
+              "path": "%rowIndex",
+              "type": "integer"
+            },
+            {
+              "name": "amount_value",
+              "path": "amount.value",
+              "type": "decimal"
+            },
+            {
+              "name": "amount_currency",
+              "path": "amount.currency",
+              "type": "code"
+            }
+          ],
+          "forEach": "adjudication"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

@@ -1,0 +1,47 @@
+{
+  "name": "encounter",
+  "resource": "Encounter",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "encounter_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "status_r4",
+          "path": "extension('http://hl7.org/fhir/4.0/StructureDefinition/extension-Encounter.status').value.ofType(code)",
+          "type": "code"
+        },
+        {
+          "name": "period_start",
+          "path": "actualPeriod.start",
+          "type": "dateTime"
+        },
+        {
+          "name": "period_end",
+          "path": "actualPeriod.end",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

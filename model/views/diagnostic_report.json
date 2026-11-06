@@ -1,0 +1,47 @@
+{
+  "name": "diagnostic_report",
+  "resource": "DiagnosticReport",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "diagnostic_report_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "effective_datetime",
+          "path": "effective.ofType(dateTime)",
+          "type": "dateTime"
+        },
+        {
+          "name": "effective_start",
+          "path": "effective.ofType(Period).start",
+          "type": "dateTime"
+        },
+        {
+          "name": "effective_end",
+          "path": "effective.ofType(Period).end",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}

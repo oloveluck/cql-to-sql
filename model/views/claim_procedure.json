@@ -1,0 +1,47 @@
+{
+  "name": "claim_procedure",
+  "resource": "Claim",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "claim_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "subject.getReferenceKey(Patient)",
+          "type": "string"
+        }
+      ]
+    },
+    {
+      "column": [
+        {
+          "name": "procedure_idx",
+          "path": "%rowIndex",
+          "type": "integer"
+        },
+        {
+          "name": "sequence",
+          "path": "sequence",
+          "type": "integer"
+        },
+        {
+          "name": "procedure_id",
+          "path": "procedure.ofType(Reference).getReferenceKey(Procedure)",
+          "type": "string"
+        },
+        {
+          "name": "date",
+          "path": "date",
+          "type": "dateTime"
+        }
+      ],
+      "forEach": "procedure"
+    }
+  ],
+  "status": "active"
+}

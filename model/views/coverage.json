@@ -1,0 +1,42 @@
+{
+  "name": "coverage",
+  "resource": "Coverage",
+  "resourceType": "ViewDefinition",
+  "select": [
+    {
+      "column": [
+        {
+          "name": "coverage_id",
+          "path": "getResourceKey()",
+          "type": "id"
+        },
+        {
+          "name": "patient_id",
+          "path": "beneficiary.getReferenceKey(Patient)",
+          "type": "string"
+        },
+        {
+          "name": "data_source",
+          "path": "meta.tag.where(system = 'https://ncqa.org/fhir/CodeSystem/hedis-data-source').code.first()",
+          "type": "code"
+        },
+        {
+          "name": "status",
+          "path": "status",
+          "type": "code"
+        },
+        {
+          "name": "period_start",
+          "path": "period.start",
+          "type": "dateTime"
+        },
+        {
+          "name": "period_end",
+          "path": "period.end",
+          "type": "dateTime"
+        }
+      ]
+    }
+  ],
+  "status": "active"
+}
