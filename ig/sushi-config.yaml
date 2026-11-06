@@ -16,7 +16,7 @@ publisher:
 menu:
   Home: index.html
   Specification: spec.html
-  Operation: OperationDefinition-Library-cql-to-sql.html
+  Operation: OperationDefinition-LibraryCqlToSql.html
   Artifacts: artifacts.html
 
 pages:

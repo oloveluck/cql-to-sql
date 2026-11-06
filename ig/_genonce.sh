@@ -1,5 +1,6 @@
 #!/bin/bash
 set -e
+export PATH="/opt/homebrew/lib/ruby/gems/4.0.0/bin:/opt/homebrew/opt/ruby/bin:/opt/homebrew/opt/openjdk/bin:$PATH"
 export JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS -Dfile.encoding=UTF-8"
 publisher_jar=publisher.jar
 input_cache_path=./input-cache
