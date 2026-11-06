@@ -13,8 +13,8 @@ A diagram of the target architecture will be added later; revise this plan to ma
 
 Uploaded to the repo root (2e22c7f): `BCSE_Details-2025.3.0.bundle.json` and
 `BCSE_Reporting-2025.3.0.bundle.json` (Measure + 43 Libraries, CQL and ELM), the measure's visual
-flow diagram (PDF), and the HEDIS Core IG package (`ncqa.hedis.core.main.v2025-2025.1.0.tar`, kept
-locally, ignored by git).
+flow diagram (PDF), and the HEDIS Core IG package (`ncqa.hedis.core.main.v2025-2025.1.0.tar`; its
+extracted `package/` is ignored by git).
 
 - Initial population: women 42–74, continuously enrolled with a medical benefit, Medicare /
   Commercial / Medicaid / Exchange product line. Exclusions: death, hospice, bilateral mastectomy,
