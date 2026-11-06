@@ -1,0 +1,521 @@
+{
+  "resourceType": "Bundle",
+  "type": "transaction",
+  "entry": [
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p01-numerator",
+        "gender": "female",
+        "birthDate": "1970-05-01"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p01-numerator"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p01-numerator-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p01-numerator"
+        },
+        "effectiveDateTime": "2025-03-10T09:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p01-numerator-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p02-no-mammogram",
+        "gender": "female",
+        "birthDate": "1965-08-20"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p02-no-mammogram"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p03-too-young",
+        "gender": "female",
+        "birthDate": "1990-02-14"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p03-too-young"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p03-too-young-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p03-too-young"
+        },
+        "effectiveDateTime": "2025-04-01T10:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p03-too-young-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p04-male",
+        "gender": "male",
+        "birthDate": "1970-01-01"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p04-male"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p04-male-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p04-male"
+        },
+        "effectiveDateTime": "2025-04-01T10:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p04-male-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p05-mammogram-2023",
+        "gender": "female",
+        "birthDate": "1960-07-07"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p05-mammogram-2023"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p05-mammogram-2023-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p05-mammogram-2023"
+        },
+        "effectiveDateTime": "2023-06-01T08:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p05-mammogram-2023-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p06-preliminary",
+        "gender": "female",
+        "birthDate": "1975-04-04"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p06-preliminary"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p06-preliminary-obs1",
+        "status": "preliminary",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p06-preliminary"
+        },
+        "effectiveDateTime": "2025-05-05T12:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p06-preliminary-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p07-other-code",
+        "gender": "female",
+        "birthDate": "1972-09-09"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p07-other-code"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p07-other-code-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "8302-2"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p07-other-code"
+        },
+        "effectiveDateTime": "2025-06-06T12:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p07-other-code-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p08-snomed-amended",
+        "gender": "female",
+        "birthDate": "1958-12-01"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p08-snomed-amended"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p08-snomed-amended-obs1",
+        "status": "amended",
+        "code": {
+          "coding": [
+            {
+              "system": "http://snomed.info/sct",
+              "code": "71651007"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p08-snomed-amended"
+        },
+        "effectiveDateTime": "2025-12-31T20:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p08-snomed-amended-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p09-age-74",
+        "gender": "female",
+        "birthDate": "1951-12-31"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p09-age-74"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p09-age-74-obs1",
+        "status": "corrected",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p09-age-74"
+        },
+        "effectiveDateTime": "2025-02-02T09:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p09-age-74-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p10-age-75",
+        "gender": "female",
+        "birthDate": "1950-12-31"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p10-age-75"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p10-age-75-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p10-age-75"
+        },
+        "effectiveDateTime": "2025-02-02T09:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p10-age-75-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p11-age-42",
+        "gender": "female",
+        "birthDate": "1983-12-31"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p11-age-42"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p11-age-42-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p11-age-42"
+        },
+        "effectiveDateTime": "2025-07-07T09:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p11-age-42-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Patient",
+        "id": "p12-age-41",
+        "gender": "female",
+        "birthDate": "1984-01-01"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Patient/p12-age-41"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Observation",
+        "id": "p12-age-41-obs1",
+        "status": "final",
+        "code": {
+          "coding": [
+            {
+              "system": "http://loinc.org",
+              "code": "24606-6"
+            }
+          ]
+        },
+        "subject": {
+          "reference": "Patient/p12-age-41"
+        },
+        "effectiveDateTime": "2025-07-07T09:00:00Z"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "Observation/p12-age-41-obs1"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ViewDefinition",
+        "name": "patient",
+        "status": "active",
+        "resource": "Patient",
+        "select": [
+          {
+            "column": [
+              {
+                "name": "id",
+                "path": "getResourceKey()",
+                "type": "id"
+              },
+              {
+                "name": "gender",
+                "path": "gender",
+                "type": "code"
+              },
+              {
+                "name": "birth_date",
+                "path": "birthDate",
+                "type": "date"
+              }
+            ]
+          }
+        ],
+        "id": "demo-patient"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "ViewDefinition/demo-patient"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "ViewDefinition",
+        "name": "observation",
+        "status": "active",
+        "resource": "Observation",
+        "select": [
+          {
+            "column": [
+              {
+                "name": "id",
+                "path": "getResourceKey()",
+                "type": "id"
+              },
+              {
+                "name": "patient_id",
+                "path": "subject.getReferenceKey(Patient)",
+                "type": "string"
+              },
+              {
+                "name": "status",
+                "path": "status",
+                "type": "code"
+              },
+              {
+                "name": "effective",
+                "path": "effective.ofType(dateTime)",
+                "type": "dateTime"
+              }
+            ]
+          },
+          {
+            "forEach": "code.coding",
+            "column": [
+              {
+                "name": "code_system",
+                "path": "system",
+                "type": "uri"
+              },
+              {
+                "name": "code",
+                "path": "code",
+                "type": "code"
+              }
+            ]
+          }
+        ],
+        "id": "demo-observation"
+      },
+      "request": {
+        "method": "PUT",
+        "url": "ViewDefinition/demo-observation"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Parameters",
+        "parameter": [
+          {
+            "name": "type",
+            "valueCode": "view"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "ViewDefinition/demo-patient/$materialize"
+      }
+    },
+    {
+      "resource": {
+        "resourceType": "Parameters",
+        "parameter": [
+          {
+            "name": "type",
+            "valueCode": "view"
+          }
+        ]
+      },
+      "request": {
+        "method": "POST",
+        "url": "ViewDefinition/demo-observation/$materialize"
+      }
+    }
+  ]
+}
