@@ -9,6 +9,45 @@ style, `contract-out`, `module+ test` in every module, floors that only rise).
 
 A diagram of the target architecture will be added later; revise this plan to match it.
 
+## Target measure: HEDIS MY2025 Breast Cancer Screening (BCS-E)
+
+Uploaded to the repo root (2e22c7f): `BCSE_Details-2025.3.0.bundle.json` and
+`BCSE_Reporting-2025.3.0.bundle.json` (Measure + 43 Libraries, CQL and ELM), the measure's visual
+flow diagram (PDF), and the HEDIS Core IG package (`ncqa.hedis.core.main.v2025-2025.1.0.tar`, kept
+locally, ignored by git).
+
+- Initial population: women 42–74, continuously enrolled with a medical benefit, Medicare /
+  Commercial / Medicaid / Exchange product line. Exclusions: death, hospice, bilateral mastectomy,
+  gender-affirming chest surgery with gender dysphoria, palliative care, I-SNP/LTI, frailty with
+  advanced illness. Numerator: a mammogram from October 1 two years before the period to its end.
+- Reads Patient, Coverage, Claim, ExplanationOfBenefit, Encounter, Procedure, Condition,
+  Observation, DiagnosticReport, MedicationDispense: the Synthea data in Aidbox and our
+  ViewDefinitions must cover the claims and coverage resources, not only clinical ones.
+- **Compiles and runs in the `cql` interpreter** after the parser fixes in `../cql` (below): all 44
+  libraries compile; `raco cql BCSE_Details.cql --data <dir> --valuesets <dir> --libraries <dir>`
+  evaluates the populations.
+- **Missing: the NCQA value sets** (~224 referenced, none in the bundles; NCQA's Value Set
+  Directory is licensed). Without them, value set membership is an error, so only patients whose
+  data never reaches a value set check evaluate.
+- **Licensing to confirm:** HEDIS content is NCQA's; this repo is public and MIT. Confirm the
+  bundles and PDF may be published, or move them out of the repo (and its history).
+
+### Parser fixes in `../cql` (uncommitted there)
+
+The BCS-E libraries exposed misparses where brag, which has no greediness, closed an open term
+early. The grammar now has a closed and an `-open` form per precedence level, so a query or an
+if-then-else is only ever the rightmost operand and the parse is unique:
+- `if c then x else L.f(y)` parsed as `(if c then x else L).f(y)`.
+- `… else (xs) i where i > 1` and `exists (Q) a where P or R` closed the where clause early (a
+  silent wrong answer when the rest did not reference the alias).
+- `distinct (xs) s sort by …`, `flatten (Q) items."f"(p)`, `x in (rs) r return …`: a query as
+  the operand of distinct/flatten and membership.
+- `sort by "Interval"()`: a fluent function in `sort by` applies to the row (`$this`).
+- `raco cql f.cql --libraries dir` ignored `--libraries` when only compiling; includes now resolve.
+
+Results: HL7 CQL suite 1820/1823 (unchanged), ELM corpus 769/803 ELM-equal (was 766, floor
+raised), eCQM 71/76 (unchanged), 461 unit tests (8 new).
+
 ## Setup (done)
 
 All paths are relative to this repo's root; the dependencies are cloned next to it.
@@ -29,6 +68,7 @@ All paths are relative to this repo's root; the dependencies are cloned next to 
 | Run CQL with the interpreter (`cql`) | Done: `load-runtime-library`, `rlib-value`, `measure-populations`; 1820/1823 on the HL7 suite |
 | Expression → SQL, checked against the interpreter | Started: `translate.rkt`, `tests/tck.rkt`; 866 pass, 4 known fail, 911 untranslatable, 42 skip |
 | Test data | Available in `cql/tests/vendor/ecqm/`: 4 measures, 76 patient cases, 57 value sets, FHIRHelpers |
+| HEDIS BCS-E in the interpreter | Compiles and runs (after the `../cql` parser fixes); NCQA value sets missing |
 | FHIR → ViewDefinition → rows | In memory only (`sql-on-fhir/view`'s `eval-view`) |
 | Rows into SQLite / DuckDB | Missing |
 | ViewDefinitions for the resources measures read | Missing (only spec examples exist) |
@@ -43,6 +83,10 @@ Collapse, AnyTrue/AllTrue, Today.
 
 ## Phases
 
+0. **BCS-E end to end in the interpreter.** Get the NCQA value sets; ViewDefinitions and Synthea
+   test data in Aidbox covering Coverage, Claim and ExplanationOfBenefit; patients that land in
+   each population (initial population, each exclusion, numerator), so the comparison is not
+   vacuous. This is the measure the later phases translate.
 1. **Expression coverage for what measures use.** Timing operators (before, during, overlaps,
    in), between, date/time arithmetic, interval set operations, Today/ToDateTime. Raise the TCK
    floor with each step.
@@ -86,7 +130,10 @@ Collapse, AnyTrue/AllTrue, Today.
 
 - What counts as "the same": SQL vs. interpreter per define, or vs. the expected MeasureReport
   (where the interpreter agrees on 71 of 76)? Not decided yet.
-- Which CQL matters most: the eCQM corpus, or EBMEDS rules?
+- Which CQL matters most: BCS-E is the target now; the eCQM corpus stays as a second test set.
+- Where do the NCQA value sets come from, and may they be stored in Aidbox / the repo?
+- Licensing of the uploaded NCQA files in this public repo.
+- The `../cql` parser fixes: commit and push to oloveluck/cql (needs Owen's OK / access).
 - Division of phases between team members and Owen.
 - Aidbox: is the cloud instance shared? Tests create ViewDefinitions, `sof.*` tables and load
   76 test patients, so use a dedicated instance or a prefix (e.g. `cql2sql_`) with cleanup.
