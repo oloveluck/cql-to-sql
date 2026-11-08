@@ -14,7 +14,7 @@
 
 (require racket/contract racket/list racket/string json
          (only-in cql/run rlib-value)
-         (only-in cql/value cql-null? cql-null-list? cql-tuple? cql-tuple-fields fhir-node? fhir-node-json render)
+         (only-in cql/value cql-null? cql-null-list? cql-tuple? cql-tuple-fields model-node? model-node-data render)
          "measure.rkt")
 
 (provide
@@ -52,7 +52,7 @@
   (cond [(or (cql-null? v) (cql-null-list? v) (eq? v #f) (null? v)) (quote ())]
         [(eq? v #t) '("yes")]
         [(list? v) (remove-duplicates (append-map value-lines v))]
-        [(fhir-node? v) (let ([js (fhir-node-json v)])
+        [(model-node? v) (let ([js (model-node-data v)])
                           (if (and (hash? js) (hash-ref js 'resourceType #f)) (list (resource-line js)) (list (render v))))]
         [(cql-tuple? v) (append-map value-lines (for/list ([(_k x) (cql-tuple-fields v)]) x))]
         [else (let ([s (render v)]) (if (equal? s "null") (quote ()) (list s)))]))
